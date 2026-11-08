@@ -1,0 +1,1118 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>JML SEO &amp; AEO Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: purple masthead, sticky phase rail + track filter; each phase = header, one schematic, then compact task rows */
+:root{
+  --purple:#4C0099; --lime:#B1EB1E; --lime-soft:#EEF9D0; --red:#B3261E;
+  --bg:#FFFFFF; --surface:#F7F5FA; --fg:#1A1A1A; --muted:#5B536B; --line:#E3DCEC;
+  --heading:#4C0099; --dot:#4C0099; --chip:#EFEAF6; --node-text:#1A1A1A; --tint:#F1EBF8;
+  --display:"DM Serif Display",Georgia,serif;
+  --body:"DM Sans",Arial,sans-serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#130A20; --surface:#1D1230; --fg:#ECE7F3; --muted:#AFA4C2; --line:#33264B;
+  --heading:#F2ECFA; --dot:#B1EB1E; --chip:#2A1C42; --node-text:#ECE7F3; --tint:#2A1C42; --lime-soft:#2C3A12; --red:#F2827A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#130A20; --surface:#1D1230; --fg:#ECE7F3; --muted:#AFA4C2; --line:#33264B;
+  --heading:#F2ECFA; --dot:#B1EB1E; --chip:#2A1C42; --node-text:#ECE7F3; --tint:#2A1C42; --lime-soft:#2C3A12; --red:#F2827A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--purple)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--heading);text-wrap:balance;margin:0}
+h4{font-size:.98rem;margin:0;font-weight:700}
+p{margin:0}
+a{color:inherit}
+.mono{font-family:var(--mono);font-size:.82em;overflow-wrap:anywhere}
+.label{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+
+/* Masthead */
+.mast{background:var(--purple);color:#fff}
+.mast .wrap{padding-block:26px 30px;display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:end}
+.mast img{width:120px;display:block}
+.mast h1{color:#fff;font-size:clamp(2rem,5vw,3.1rem);line-height:1.05}
+.mast .label{color:var(--lime);margin-bottom:.5rem}
+.mast p{color:#E9E1F5;max-width:58ch;margin-top:.6rem}
+@media (max-width:620px){.mast .wrap{grid-template-columns:1fr;gap:16px}.mast img{width:100px}}
+
+/* Rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.rail .wrap{display:flex;gap:12px;align-items:center;padding-block:9px;flex-wrap:wrap}
+.phases{display:flex;gap:5px;overflow-x:auto;flex:1 1 420px;min-width:0;scrollbar-width:thin;padding-bottom:2px}
+.phases a{font-family:var(--mono);font-size:.72rem;text-decoration:none;padding:5px 8px;border-radius:4px;background:var(--chip);white-space:nowrap;color:var(--fg)}
+.phases a:hover,.phases a:focus-visible{background:var(--purple);color:#fff;outline:none}
+.filter{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.filter button{font:500 .8rem var(--body);background:transparent;color:var(--fg);border:0;padding:6px 11px;cursor:pointer}
+.filter button+button{border-left:1px solid var(--line)}
+.filter button[aria-pressed="true"]{background:var(--purple);color:#fff}
+.filter button:focus-visible{outline:2px solid var(--lime);outline-offset:-2px}
+
+main{padding-block:8px 72px}
+section{padding-top:48px;scroll-margin-top:64px;display:grid;gap:16px}
+.ph{display:grid;grid-template-columns:64px 1fr;gap:2px 16px;align-items:baseline}
+.ph .num{font-family:var(--display);font-size:2.6rem;line-height:1;color:var(--purple);grid-row:span 2}
+:root[data-theme="dark"] .ph .num{color:var(--lime)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ph .num{color:var(--lime)}}
+.ph h2{font-size:clamp(1.6rem,3.4vw,2.1rem)}
+.ph .meta{color:var(--muted);font-size:.9rem}
+.ph .meta b{color:var(--fg);font-weight:500}
+.lede{max-width:66ch;color:var(--fg)}
+.sub{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.sub h3{font-size:1.3rem}
+
+/* Chips */
+.pl{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;vertical-align:2px;white-space:nowrap}
+.pl.seo{background:var(--chip);color:var(--heading);border:1px solid var(--purple)}
+.pl.aeo{background:var(--purple);color:#fff;border:1px solid var(--purple)}
+.pl.s{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.pl.loc{background:var(--lime);color:#1A1A1A;border:1px solid var(--lime)}
+
+/* Figures */
+figure{margin:0;border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:16px;display:grid;gap:10px;min-width:0}
+figure .scroll{overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;max-width:820px;margin-inline:auto}
+figure svg.wide{max-width:none}
+figcaption{font-size:.86rem;color:var(--muted);max-width:72ch}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+svg text{font-family:var(--body);font-size:13px;fill:var(--node-text)}
+svg .b{font-weight:700}
+svg .s{font-size:11px}
+svg .mono-t{font-family:var(--mono);font-size:10.5px;fill:var(--muted)}
+.n-p{fill:var(--purple)} .on-p{fill:#fff}
+.n-o{fill:var(--bg);stroke:var(--purple);stroke-width:1.5}
+.n-l{fill:var(--lime);stroke:var(--lime)}
+.on-l{fill:#1A1A1A}
+.n-dash{stroke-dasharray:6 4}
+.n-tint{fill:var(--lime-soft)}
+.ln{fill:none;stroke:var(--muted);stroke-width:1.5}
+.ln-d{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 4}
+.grid-l{stroke:var(--line);stroke-width:1}
+.dot{fill:var(--dot);stroke:var(--bg);stroke-width:2}
+#arw path,#arw2 path{fill:var(--muted)}
+
+/* Tasks */
+.tasks{border-top:1px solid var(--line)}
+.t{display:grid;grid-template-columns:52px minmax(0,1fr) 180px;gap:4px 16px;padding:11px 0;border-bottom:1px solid var(--line);align-items:start}
+.t .id{font-family:var(--mono);font-size:.76rem;color:var(--muted);padding-top:2px}
+.t p,.t ul{color:var(--fg);font-size:.92rem;max-width:66ch;margin-top:3px}
+.t ul{padding-left:1.1rem}
+.t li{margin:.1rem 0}
+.t .m{font-size:.78rem;color:var(--muted);display:grid;gap:3px;align-content:start;padding-top:2px}
+.t .own{font-family:var(--mono);font-size:.72rem;color:var(--fg)}
+.t .out::before{content:"→ "}
+@media (max-width:700px){.t{grid-template-columns:44px minmax(0,1fr)}.t .m{grid-column:2;grid-auto-flow:column;justify-content:start;gap:12px}}
+
+/* Branch */
+.br{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.br .q{background:var(--surface);padding:7px 12px;font-weight:700;font-size:.88rem;border-bottom:1px solid var(--line)}
+.br .q .label{color:var(--muted);margin-right:8px;font-weight:400}
+.br .o{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.br .o > div{padding:8px 12px;font-size:.86rem;min-width:0}
+.br .o > div + div{border-left:1px solid var(--line)}
+@media (max-width:520px){.br .o > div + div{border-left:0;border-top:1px solid var(--line)}}
+.br .o b{display:block;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--heading)}
+
+/* Gate */
+.gate{background:var(--purple);color:#fff;border-radius:6px;padding:14px 18px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px}
+.gate .label{color:var(--lime);grid-row:1 / span 3;padding-top:3px}
+.gate > :not(.label){grid-column:2;min-width:0}
+.gate h4{color:#fff;font-size:1rem}
+.gate ul{margin:0;padding-left:1.1rem;color:#E9E1F5;font-size:.9rem}
+.gate p{color:#E9E1F5;font-size:.88rem}
+@media (max-width:560px){.gate{grid-template-columns:1fr}.gate .label{grid-row:auto}.gate > :not(.label){grid-column:1}}
+
+/* Tiles, steps, cards */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;display:grid;gap:4px;align-content:start;min-width:0}
+.tile b{font-size:.92rem}
+.tile .lvl{font-family:var(--mono);font-size:.72rem;color:var(--heading)}
+.tile small{color:var(--muted);font-size:.8rem;line-height:1.35}
+.tile.alt{border-style:dashed}
+.tile.big b{font-family:var(--display);font-weight:400;font-size:1.25rem;color:var(--heading)}
+.steps{display:flex;flex-wrap:wrap;gap:8px 0;align-items:stretch}
+.steps > div{display:flex;align-items:center}
+.steps > div + div::before{content:"";width:22px;height:2px;background:var(--muted);margin-inline:2px;position:relative}
+.steps span{background:var(--bg);border:1.5px solid var(--purple);border-radius:5px;padding:6px 10px;font-size:.84rem;font-weight:500;white-space:nowrap}
+.steps span.g{background:var(--purple);color:#fff;border-color:var(--purple)}
+.steps span.opt{border-style:dashed}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:760px){.cols3{grid-template-columns:1fr}}
+.card{background:var(--bg);border:1px solid var(--line);border-top:4px solid var(--purple);border-radius:6px;padding:10px 12px;display:grid;gap:6px;align-content:start;min-width:0}
+.card.l{border-top-color:var(--lime)} .card.m{border-top-color:var(--muted)}
+.card h4{font-size:.95rem}
+.card .eff{font-size:.84rem}
+.card ul{margin:0;padding-left:1.1rem;font-size:.86rem}
+.card .bots{font-family:var(--mono);font-size:.74rem;color:var(--muted);line-height:1.6}
+pre.code{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-family:var(--mono);font-size:.8rem;line-height:1.55;overflow-x:auto}
+pre.code .c{color:var(--muted)}
+
+/* Prompt grid */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:600px}
+th{background:var(--purple);color:#fff;text-align:left;font-weight:500;padding:8px 10px;font-size:.78rem}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:middle}
+td.k{font-weight:700;white-space:nowrap}
+.pg td.c{text-align:center;font-variant-numeric:tabular-nums}
+.r{display:inline-block;min-width:44px;padding:2px 6px;border-radius:3px;font-family:var(--mono);font-size:.74rem}
+.r.rec{background:var(--lime);color:#1A1A1A}
+.r.cit{background:var(--purple);color:#fff}
+.r.men{border:1px solid var(--purple);color:var(--heading)}
+.r.no{color:var(--muted)}
+.keyrow{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);align-items:center}
+
+/* Anatomy mock */
+.anat{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px 18px;align-items:center}
+.anat .mk{background:var(--bg);border:1px solid var(--line);padding:8px 12px;font-size:.86rem;border-radius:4px}
+.anat .mk.h{font-family:var(--display);font-size:1.1rem;color:var(--heading)}
+.anat .mk.ans{background:var(--lime-soft);border-color:var(--lime)}
+.anat .note{font-size:.84rem;color:var(--muted);border-left:2px solid var(--purple);padding-left:10px}
+@media (max-width:640px){.anat{grid-template-columns:1fr}.anat .note{margin-bottom:6px}}
+
+/* Leak funnel */
+.leak{display:grid;gap:6px}
+.leak .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center}
+.leak .bar{background:var(--purple);color:#fff;border-radius:4px;padding:7px 12px;font-size:.86rem;font-weight:500;justify-self:end}
+.leak .bar span{font-family:var(--mono);opacity:.8;margin-right:6px}
+.leak .fix{font-size:.84rem}
+.leak .fix b{color:var(--heading)}
+@media (max-width:640px){.leak .row{grid-template-columns:1fr}.leak .bar{justify-self:stretch;width:auto !important}}
+
+/* Never */
+.never{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.never div{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:.88rem;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.never div::before{content:"✕";color:var(--red);font-weight:700}
+.never b{display:block}
+.never small{color:var(--muted);font-size:.8rem}
+
+.rules td.n{font-family:var(--mono);font-size:.8rem;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);align-items:center}
+.roles{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.84rem;color:var(--muted)}
+.roles b{font-family:var(--mono);font-size:.76rem;color:var(--heading);margin-right:4px}
+footer{border-top:1px solid var(--line);margin-top:48px;padding-block:18px;color:var(--muted);font-size:.84rem}
+/* Collapsible deep dives */
+details.more{margin:10px 0 16px 68px;border:1.5px solid var(--lime);border-radius:8px;background:var(--surface);overflow:hidden}
+details.more.risk{border-color:var(--red)}
+details.more > summary{cursor:pointer;list-style:none;background:var(--lime);color:#1A1A1A;padding:12px 16px;display:flex;gap:12px;align-items:center;font-weight:700;font-size:.98rem;line-height:1.3}
+details.more > summary::-webkit-details-marker{display:none}
+details.more > summary::before{content:"+";flex:none;width:24px;height:24px;border-radius:5px;background:#1A1A1A;color:var(--lime);display:inline-grid;place-items:center;font-family:var(--mono);font-weight:500;font-size:1rem}
+details.more.risk > summary::before{background:#B3261E;color:#fff}
+details.more[open] > summary::before{content:"−"}
+details.more[open] > summary{border-bottom:1.5px solid var(--lime)}
+details.more > summary .hint{font-weight:500;color:#3E4F0A;font-size:.8rem;font-family:var(--mono);margin-left:auto;text-align:right}
+details.more > summary:hover{filter:brightness(.96)}
+details.more > summary:focus-visible{outline:2px solid var(--purple);outline-offset:-4px}
+.more .in{padding:14px 16px 16px;display:grid;gap:14px;min-width:0}
+.more .in h5{margin:4px 0 0;font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--heading);font-weight:500}
+.more .in p,.more .in li{font-size:.9rem;max-width:72ch}
+.more .in ul,.more .in ol{margin:0;padding-left:1.1rem;display:grid;gap:3px}
+.more table{min-width:640px}
+.more td,.more th{font-size:.84rem}
+.more .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.risk-chip{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:3px;background:#B3261E;color:#fff;flex:none}
+.lvl-h{color:var(--red);font-weight:700}
+.lvl-m{color:var(--heading);font-weight:700}
+.lvl-l{color:var(--muted);font-weight:700}
+.warn{border:1px solid var(--red);border-radius:6px;padding:10px 12px;font-size:.88rem;background:var(--bg)}
+.warn b{color:var(--red)}
+.flowin{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flowin span{border:1.5px solid var(--purple);border-radius:5px;padding:5px 9px;font-size:.82rem;background:var(--bg)}
+.flowin span.to{border:0;background:none;color:var(--muted);font-family:var(--mono)}
+.flowin span.g{background:var(--purple);color:#fff}
+.note{background:var(--surface);border-left:4px solid var(--lime);padding:10px 14px;border-radius:0 6px 6px 0;font-size:.9rem;max-width:80ch}
+@media (max-width:700px){details.more{margin-left:0}details.more > summary .hint{display:none}}
+/* Tools */
+.t .tools{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.tl{display:inline-block;font-family:var(--mono);font-size:.68rem;padding:2px 6px;border-radius:3px;border:1px solid var(--line);background:var(--bg);color:var(--heading);white-space:nowrap}
+.tl.jml{background:var(--lime);border-color:var(--lime);color:#1A1A1A}
+.tl.risk{border-color:var(--red);color:var(--red)}
+.stack{display:grid;gap:10px}
+.stack .row{display:grid;grid-template-columns:190px minmax(0,1fr);gap:14px;align-items:start;border-top:1px solid var(--line);padding-top:12px}
+.stack .row:first-child{border-top:0;padding-top:0}
+.stack .job b{display:block;font-size:.95rem}
+.stack .job small{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.stack .tiles{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.tile .badge{justify-self:start;font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:3px;border:1px solid var(--line);color:var(--muted)}
+.tile .badge.def{background:var(--purple);border-color:var(--purple);color:#fff}
+.tile .badge.own{background:var(--lime);border-color:var(--lime);color:#1A1A1A}
+.tile .badge.rk{border-color:var(--red);color:var(--red)}
+.tile.rk{border-color:var(--red)}
+@media (max-width:700px){.stack .row{grid-template-columns:1fr;gap:8px}}
+.off{display:none !important}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}.phases a,.filter button{transition:background .15s,color .15s}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzYgMjUwLjY3Ij4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsKICAgICAgICBmaWxsOiAjYjFlYjFlOwogICAgICB9CgogICAgICAuY2xzLTEsIC5jbHMtMiB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogI2ZmZjsKICAgICAgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPGc+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik05My4xLDY4Ljk5bDE1LjI0LjkyLTcuMzQsMTUuMzVjLS45MywxLjk2LS4xLDQuMzIsMS44NSw1LjI1LDEuOTYuOTQsNC4zMi4xLDUuMjUtMS44NWw3LjUtMTUuNjksMTIuNzUsMTIuODgtLjAyLTMwLjEyaDBzMC0uNjIsMC0uNjJ2LTEuNDRzMC00LjI0LDAtNC4yNHYtNC4xMXMwLTYuODYsMC02Ljg2bC0zLjkxLDMuMTctMS4xLjg5LS4zLjI0LTEuMTIuOTEtMi4wNywxLjY4LTEuMTIuOTEtMi4xOCwxLjc2LTEuMTIuOTEtLjc3LjYzLTIzLjc4LDE5LjMzczEuNDMuMDYsMi4yNC4xMVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEwOS4yMiwxNjkuODNjLTIuODEtLjAzLTUuMTIsMi4zMi01LjA2LDUuMDQtLjA1LDIuNjUsMi4xNiw1LjAzLDQuOTksNS4wNCwyLjgyLjAxLDUuMS0yLjI1LDUuMS01LjA0cy0yLjI2LTUuMDItNS4wMi01LjA0Wk0xMDkuMTksMTcyLjM0Yy0xLjQyLjAzLTIuNTEsMS4xMS0yLjU0LDIuNSwwLC41LS4zNi44Ny0uODQuODYtLjQ3LDAtLjgyLS4zOC0uODItLjg3di0uMDhjLjAxLTEuOSwxLjUxLTMuNjgsMy4zOS00LC4yNy0uMDUuNTQtLjA3LjgxLS4wOC40NiwwLC44My4zOS44My44NC0uMDEuNDYtLjM3LjgxLS44My44MloiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEyOC4zNSwxNjEuNzV2LTY0LjM5bC02LjQ2LTYuNDZjLTEuMjMsNS44Mi02LjQsMTAuMTgtMTIuNTgsMTAuMTgtNC42NywwLTguNzUtMi40OS0xMS4wMS02LjIydjY2LjZjMCw0LjAxLS45MSw3Ljk5LTIuODcsMTEuNS0yLjc4LDQuOTYtOC4xOSwxMC4yNi0xOC41OSwxMC4yNi0xMS42MywwLTE2Ljc0LTcuMTktMTguOTYtMTMuMDMtMS4xOS0zLjEtMS43LTYuNDEtMS43LTkuNzN2LTkuNDNoLTI4LjkxYzAsMTQuMjEtLjYxLDYxLjE3LDUwLjkxLDYxLjE3czUwLjE4LTUwLjQ1LDUwLjE4LTUwLjQ1Wk0xMTguMzksMTgzLjQ5Yy0uMTUuNTYtLjgxLjgtMS4yOC40Ni0uMDgtLjA1LS4xNC0uMTItLjIxLS4xOC0xLjE0LTEuMTMtMi4yNy0yLjI3LTMuNDEtMy40MS0uMDYtLjA2LS4xLS4xMi0uMTUtLjItMS43NywxLjMxLTMuNywxLjc1LTUuNzksMS4yMy0xLjYzLS40LTIuOTItMS4zMy0zLjg4LTIuNy0xLjg4LTIuNjktMS40OS02LjM5LjkzLTguNjgsMi40Mi0yLjI5LDYuMTMtMi40Niw4Ljc4LS4zNiwxLjQzLDEuMTMsMi4yNSwyLjYzLDIuNDgsNC40NC4yMiwxLjgxLS4yNywzLjQ1LTEuMzksNC45NC4wNy4wNS4xNC4wOC4yLjE0LDEuMTUsMS4xNCwyLjI5LDIuMjksMy40MywzLjQzLjI2LjI1LjM5LjU0LjMuOVoiLz4KICAgIDxnPgogICAgICA8Zz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik01My40NiwxMzAuMjljLTEuMDgtLjczLTIuMjMtMS4zNi0zLjQzLTEuODYtMi40OS0xLjA1LTUuMTQtMS41OS03Ljg2LTEuNTlzLTUuMzcuNTMtNy44NiwxLjU5Yy0xLjIuNTEtMi4zNSwxLjEzLTMuNDMsMS44Ni0uMjkuMTktLjU3LjM5LS44NC42LS42OC41MS0uNzgsMS40OS0uMjEsMi4xMmgwYy41LjU3LDEuMzUuNjUsMS45Ni4xOSwxLjEzLS44NSwyLjM1LTEuNTUsMy42Ni0yLjExLDIuMTMtLjksNC40LTEuMzYsNi43My0xLjM2czQuNi40Niw2LjczLDEuMzZjMS4zMS41NSwyLjUzLDEuMjYsMy42NSwyLjEuNi40NSwxLjQ2LjM3LDEuOTYtLjE5aDBjLjU2LS42My40Ny0xLjYxLS4yMS0yLjEyLS4yNy0uMjEtLjU1LS40LS44My0uNTlaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDcuNzksMTMzLjcyYy0xLjc4LS43NS0zLjY4LTEuMTQtNS42My0xLjE0cy0zLjg0LjM4LTUuNjMsMS4xNGMtLjkzLjM5LTEuODEuODgtMi42NCwxLjQ2LS43MS41LS44MywxLjUtLjI1LDIuMTVoMGMuNDkuNTUsMS4zMS42NSwxLjkxLjIzLjY2LS40NiwxLjM2LS44NSwyLjEtMS4xNiwxLjQyLS42LDIuOTQtLjkxLDQuNS0uOTFzMy4wNy4zMSw0LjUuOTFjLjc0LjMxLDEuNDQuNywyLjEsMS4xNi42LjQyLDEuNDIuMzIsMS45MS0uMjNoMGMuNTgtLjY1LjQ2LTEuNjYtLjI1LTIuMTUtLjgyLS41Ny0xLjctMS4wNi0yLjYzLTEuNDVaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDUuNTUsMTM5LjAyYy0xLjA3LS40NS0yLjIxLS42OC0zLjM5LS42OHMtMi4zMS4yMy0zLjM5LjY4Yy0uMzEuMTMtLjYuMjgtLjg5LjQ0LS44LjQ1LS45OCwxLjU0LS4zNiwyLjIyaDBjLjQ1LjUxLDEuMi42NCwxLjc5LjMuODYtLjQ5LDEuODQtLjc1LDIuODUtLjc1czEuOTkuMjYsMi44NC43NGMuNTkuMzMsMS4zNC4yLDEuNzktLjNoMGMuNjEtLjY5LjQ0LTEuNzctLjM3LTIuMjItLjI4LS4xNi0uNTgtLjMtLjg4LS40M1oiLz4KICAgICAgPC9nPgogICAgICA8Y2lyY2xlIGNsYXNzPSJjbHMtMiIgY3g9IjQyLjE2IiBjeT0iMTQ1LjMiIHI9IjEuNzUiLz4KICAgIDwvZz4KICA8L2c+CiAgPGc+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTQzLjc4LDE2MC4wMnYtMTkuNzRoNi42M2wzLjk4LDEzLjQ3LDMuOTQtMTMuNDdoNi42NHYxOS43NGgtNC4xMXYtMTUuNTRsLTQuMzUsMTUuNTRoLTQuMjZsLTQuMzQtMTUuNTR2MTUuNTRoLTQuMTFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE3Mi40OCwxNTAuMDhsLTMuODItLjYyYy40My0xLjM4LDEuMTctMi40MSwyLjIxLTMuMDdzMi42LTEsNC42Ny0xYzEuODgsMCwzLjI3LjIsNC4xOS42LjkyLjQsMS41Ni45MSwxLjk0LDEuNTIuMzcuNjEuNTYsMS43NC41NiwzLjM5bC0uMDUsNC40MmMwLDEuMjYuMDcsMi4xOC4yLDIuNzguMTQuNi4zOSwxLjI0Ljc2LDEuOTJoLTQuMTZjLS4xMS0uMjUtLjI0LS42Mi0uNC0xLjEyLS4wNy0uMjItLjEyLS4zNy0uMTUtLjQ0LS43Mi42My0xLjQ5LDEuMS0yLjMsMS40MS0uODIuMzEtMS42OS40Ny0yLjYyLjQ3LTEuNjQsMC0yLjkyLS40LTMuODctMS4yLS45NC0uOC0xLjQxLTEuODEtMS40MS0zLjAzLDAtLjgxLjIxLTEuNTMuNjQtMi4xNi40My0uNjMsMS4wMy0xLjEyLDEuOC0xLjQ1Ljc3LS4zNCwxLjg5LS42MywzLjM0LS44OCwxLjk2LS4zMywzLjMzLS42NCw0LjA4LS45M3YtLjM4YzAtLjczLS4yLTEuMjUtLjYtMS41NnMtMS4xNS0uNDYtMi4yNi0uNDZjLS43NSwwLTEuMzMuMTMtMS43NS40LS40Mi4yNi0uNzYuNzMtMS4wMiwxLjM5Wk0xNzguMSwxNTMuMTVjLS41NC4xNi0xLjM5LjM1LTIuNTYuNThzLTEuOTMuNDQtMi4yOS42NmMtLjU1LjM1LS44Mi43OS0uODIsMS4zM3MuMjIuOTkuNjYsMS4zN2MuNDQuMzksMSwuNTgsMS42OC41OC43NiwwLDEuNDgtLjIyLDIuMTctLjY3LjUxLS4zNC44NC0uNzYsMS0xLjI1LjExLS4zMi4xNi0uOTQuMTYtMS44NHYtLjc1WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOTAuNCwxNjAuMDJoLTQuMnYtMTQuM2gzLjl2Mi4wM2MuNjctLjk2LDEuMjctMS41OSwxLjgtMS45LjUzLS4zLDEuMTQtLjQ2LDEuODItLjQ2Ljk2LDAsMS44OC4yNCwyLjc3LjcxbC0xLjMsMy4zYy0uNzEtLjQxLTEuMzctLjYyLTEuOTgtLjYycy0xLjA5LjE1LTEuNS40NGMtLjQxLjI5LS43My44Mi0uOTYsMS41OC0uMjQuNzYtLjM1LDIuMzYtLjM1LDQuNzl2NC40MloiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTk4LjE1LDE2MC4wMnYtMTkuNzRoNC4ydjEwLjQ4bDQuOTItNS4wNGg1LjE4bC01LjQzLDUuMjIsNS44Miw5LjA4aC00LjUzbC0zLjk5LTYuNDItMS45NiwxLjg1djQuNThoLTQuMloiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjI0LjU0LDE1NS40Nmw0LjE5LjYzYy0uNTQsMS4zOC0xLjM5LDIuNDQtMi41NSwzLjE2LTEuMTYuNzItMi42MiwxLjA4LTQuMzYsMS4wOC0yLjc2LDAtNC44MS0uODEtNi4xMy0yLjQ0LTEuMDUtMS4zLTEuNTctMi45NC0xLjU3LTQuOTMsMC0yLjM3LjY5LTQuMjMsMi4wNy01LjU3LDEuMzgtMS4zNCwzLjEyLTIuMDEsNS4yMi0yLjAxLDIuMzYsMCw0LjIzLjcsNS42LDIuMTEsMS4zNywxLjQxLDIuMDIsMy41NiwxLjk2LDYuNDZoLTEwLjUzYy4wMywxLjEyLjM3LDIsMS4wMiwyLjYyLjY1LjYyLDEuNDYuOTQsMi40Mi45NC42NiwwLDEuMjEtLjE2LDEuNjYtLjQ4LjQ1LS4zMi43OS0uODQsMS4wMi0xLjU2Wk0yMjQuNzgsMTUxLjY0Yy0uMDMtMS4xLS4zNC0xLjkzLS45NC0yLjUtLjYtLjU3LTEuMzMtLjg1LTIuMTgtLjg1LS45MiwwLTEuNjguMy0yLjI3LjktLjYuNi0uODksMS40Mi0uODgsMi40NWg2LjI4WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yMzkuNjcsMTQ1LjcydjMuMDJoLTIuODd2NS43NmMwLDEuMTcuMDMsMS44NS4wOCwyLjA0cy4xOC4zNS4zNy40OGMuMTkuMTMuNDMuMTkuNzEuMTkuMzksMCwuOTUtLjEyLDEuNjktLjM2bC4zNiwyLjk0Yy0uOTguMzgtMi4wOC41Ny0zLjMyLjU3LS43NiwwLTEuNDQtLjExLTIuMDUtLjM0cy0xLjA1LS41My0xLjM0LS44OWMtLjI4LS4zNi0uNDgtLjg1LS41OS0xLjQ3LS4wOS0uNDQtLjEzLTEuMzMtLjEzLTIuNjd2LTYuMjNoLTEuOTN2LTMuMDJoMS45M3YtMi44NGw0LjIyLTIuMjF2NS4wNWgyLjg3WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yNDIuNTgsMTQzLjc4di0zLjVoNC4ydjMuNWgtNC4yWk0yNDIuNTgsMTYwLjAydi0xNC4zaDQuMnYxNC4zaC00LjJaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2NS41NSwxNjAuMDJoLTQuMnYtNy4zYzAtMS41NC0uMDktMi41NC0uMjctMy0uMTgtLjQ1LS40Ny0uODEtLjg4LTEuMDYtLjQtLjI1LS44OS0uMzgtMS40Ni0uMzgtLjczLDAtMS4zOC4xOC0xLjk2LjU0LS41OC4zNi0uOTguODMtMS4xOSwxLjQzLS4yMS41OS0uMzIsMS42OS0uMzIsMy4yOXY2LjQ4aC00LjJ2LTE0LjNoMy45djIuMWMxLjM5LTEuNjIsMy4xMy0yLjQyLDUuMjQtMi40Mi45MywwLDEuNzguMTUsMi41NC40NS43Ny4zLDEuMzUuNjgsMS43NCwxLjE1LjM5LjQ3LjY3LDEsLjgyLDEuNTkuMTUuNTkuMjMsMS40NC4yMywyLjU0djguODlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2OS40MiwxNjAuOTZsNC44LjUzYy4wOC41LjI2Ljg1LjU1LDEuMDQuNC4yNywxLjAzLjQsMS44OC40LDEuMSwwLDEuOTItLjE1LDIuNDctLjQ0LjM3LS4yLjY1LS41Mi44NC0uOTYuMTMtLjMxLjE5LS44OS4xOS0xLjc0di0yLjA5Yy0xLjI2LDEuNTQtMi44NCwyLjMyLTQuNzYsMi4zMi0yLjEzLDAtMy44My0uODEtNS4wNy0yLjQ0LS45OC0xLjI4LTEuNDctMi44OC0xLjQ3LTQuNzksMC0yLjQuNjQtNC4yMywxLjkyLTUuNDksMS4yOC0xLjI3LDIuODctMS45LDQuNzgtMS45czMuNTkuNzgsNC44NiwyLjMzdi0yLjAxaDMuOTR2MTIuODNjMCwxLjY5LS4xNSwyLjk1LS40NiwzLjc4LS4zMS44My0uNzQsMS40OS0xLjMsMS45Ny0uNTYuNDgtMS4zLjg1LTIuMjQsMS4xMi0uOTMuMjctMi4xMS40LTMuNTQuNC0yLjY5LDAtNC42LS40MS01LjczLTEuMjUtMS4xMy0uODMtMS42OS0xLjg4LTEuNjktMy4xNiwwLS4xMywwLS4yOC4wMS0uNDZaTTI3My4xOCwxNTIuNTdjMCwxLjUyLjMzLDIuNjMuOTgsMy4zM3MxLjQ2LDEuMDYsMi40MiwxLjA2YzEuMDMsMCwxLjktLjM2LDIuNi0xLjA4LjcxLS43MiwxLjA2LTEuNzksMS4wNi0zLjIxcy0uMzQtMi41OC0xLjAyLTMuMy0xLjU0LTEuMDgtMi41Ny0xLjA4LTEuODQuMzUtMi40OSwxLjA2Yy0uNjUuNzEtLjk4LDEuNzgtLjk4LDMuMjNaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI5Ny4xOSwxNjAuMDJ2LTE5LjU4aDQuNDN2MTYuMjVoMTEuMDF2My4zM2gtMTUuNDRaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxOC45LDE1MC4wOGwtMy44Mi0uNjJjLjQzLTEuMzgsMS4xNy0yLjQxLDIuMjEtMy4wN3MyLjYtMSw0LjY3LTFjMS44OCwwLDMuMjcuMiw0LjE5LjYuOTIuNCwxLjU2LjkxLDEuOTQsMS41Mi4zNy42MS41NiwxLjc0LjU2LDMuMzlsLS4wNSw0LjQyYzAsMS4yNi4wNywyLjE4LjIsMi43OC4xNC42LjM5LDEuMjQuNzYsMS45MmgtNC4xNmMtLjExLS4yNS0uMjQtLjYyLS40LTEuMTItLjA3LS4yMi0uMTItLjM3LS4xNS0uNDQtLjcyLjYzLTEuNDksMS4xLTIuMywxLjQxLS44Mi4zMS0xLjY5LjQ3LTIuNjIuNDctMS42NCwwLTIuOTItLjQtMy44Ny0xLjItLjk0LS44LTEuNDEtMS44MS0xLjQxLTMuMDMsMC0uODEuMjEtMS41My42NC0yLjE2LjQzLS42MywxLjAzLTEuMTIsMS44LTEuNDUuNzctLjM0LDEuODktLjYzLDMuMzQtLjg4LDEuOTYtLjMzLDMuMzMtLjY0LDQuMDgtLjkzdi0uMzhjMC0uNzMtLjItMS4yNS0uNi0xLjU2cy0xLjE1LS40Ni0yLjI2LS40NmMtLjc1LDAtMS4zMy4xMy0xLjc1LjQtLjQyLjI2LS43Ni43My0xLjAyLDEuMzlaTTMyNC41MywxNTMuMTVjLS41NC4xNi0xLjM5LjM1LTIuNTYuNThzLTEuOTMuNDQtMi4yOS42NmMtLjU1LjM1LS44Mi43OS0uODIsMS4zM3MuMjIuOTkuNjYsMS4zN2MuNDQuMzksMSwuNTgsMS42OC41OC43NiwwLDEuNDgtLjIyLDIuMTctLjY3LjUxLS4zNC44NC0uNzYsMS0xLjI1LjExLS4zMi4xNi0uOTQuMTYtMS44NHYtLjc1WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMzIuNjIsMTYwLjAydi0xOS43NGg0LjJ2Ny4xMWMxLjMtMS4zMywyLjgzLTEuOTksNC42MS0xLjk5LDEuOTQsMCwzLjU0LjYzLDQuOCwxLjg5LDEuMjcsMS4yNiwxLjksMy4wNywxLjksNS40M3MtLjY1LDQuMzItMS45NCw1LjY0Yy0xLjI5LDEuMzItMi44NiwxLjk4LTQuNywxLjk4LS45MSwwLTEuOC0uMi0yLjY5LS42MS0uODgtLjQxLTEuNjQtMS4wMS0yLjI4LTEuODF2Mi4xaC0zLjlaTTMzNi43OSwxNTIuNTZjMCwxLjQ4LjI2LDIuNTguNzgsMy4yOS43MywxLjAxLDEuNywxLjUxLDIuOSwxLjUxLjkzLDAsMS43Mi0uMzYsMi4zNy0xLjA3LjY1LS43MS45OC0xLjg0Ljk4LTMuMzcsMC0xLjYzLS4zMy0yLjgxLS45OS0zLjUzLS42Ni0uNzItMS41LTEuMDgtMi41My0xLjA4cy0xLjg1LjM1LTIuNTEsMS4wNmMtLjY3LjcxLTEsMS43OC0xLDMuMjFaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTYzLjg2LDc2LjQxaDEzLjAzdjIyLjg2YzAsNC44LS40Myw4LjQ1LTEuMjgsMTAuOTUtLjg1LDIuNS0yLjU2LDQuNjMtNS4xNCw2LjM3LTIuNTcsMS43NC01Ljg3LDIuNjEtOS44OSwyLjYxLTQuMjUsMC03LjU0LS41Ny05Ljg3LTEuNzItMi4zMy0xLjE1LTQuMTQtMi44My01LjQxLTUuMDQtMS4yNy0yLjIxLTIuMDItNC45NC0yLjI1LTguMTlsMTIuNDItMS42OWMuMDIsMS44Ni4xOCwzLjIzLjQ5LDQuMTMuMzEuOS44MiwxLjYzLDEuNTUsMi4xOC41LjM2LDEuMjEuNTUsMi4xMi41NSwxLjQ1LDAsMi41Mi0uNTQsMy4yLTEuNjIuNjgtMS4wOCwxLjAyLTIuOSwxLjAyLTUuNDZ2LTI1LjkyWiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOTQuNDIsOTcuODhsLTExLjE2LTEuMThjLjQyLTEuOTUsMS4wMy0zLjQ5LDEuODItNC42MS43OS0xLjEyLDEuOTQtMi4wOSwzLjQzLTIuOTEsMS4wNy0uNTksMi41NC0xLjA1LDQuNDItMS4zOCwxLjg3LS4zMywzLjktLjQ5LDYuMDgtLjQ5LDMuNSwwLDYuMzEuMiw4LjQ0LjU5czMuODksMS4yMSw1LjMxLDIuNDVjLjk5Ljg2LDEuNzgsMi4wOCwyLjM1LDMuNjYuNTcsMS41OC44NiwzLjA4Ljg2LDQuNTJ2MTMuNDZjMCwxLjQ0LjA5LDIuNTYuMjcsMy4zNy4xOC44MS41OCwxLjg1LDEuMTksMy4xMWgtMTAuOTZjLS40NC0uNzgtLjczLTEuMzgtLjg2LTEuNzktLjEzLS40MS0uMjctMS4wNi0uNC0xLjk0LTEuNTMsMS40Ny0zLjA1LDIuNTMtNC41NiwzLjE2LTIuMDcuODQtNC40NywxLjI2LTcuMiwxLjI2LTMuNjMsMC02LjM5LS44NC04LjI4LTIuNTNzLTIuODMtMy43Ni0yLjgzLTYuMjNjMC0yLjMxLjY4LTQuMjIsMi4wNC01LjcxLDEuMzYtMS40OSwzLjg2LTIuNiw3LjUyLTMuMzMsNC4zOC0uODgsNy4yMi0xLjUsOC41Mi0xLjg1LDEuMy0uMzUsMi42OC0uODIsNC4xMy0xLjM5LDAtMS40NC0uMy0yLjQ0LS44OS0zLjAxLS41OS0uNTctMS42NC0uODYtMy4xMy0uODYtMS45MSwwLTMuMzUuMzEtNC4zLjkyLS43NS40OC0xLjM1LDEuMzgtMS44MSwyLjdaTTIwNC41NSwxMDQuMDJjLTEuNjEuNTctMy4yOCwxLjA4LTUuMDIsMS41Mi0yLjM3LjYzLTMuODcsMS4yNS00LjUxLDEuODctLjY1LjYzLS45OCwxLjM1LS45OCwyLjE1LDAsLjkyLjMyLDEuNjcuOTYsMi4yNS42NC41OCwxLjU4Ljg4LDIuODMuODhzMi41MS0uMzIsMy42My0uOTVjMS4xMi0uNjMsMS45MS0xLjQsMi4zOC0yLjMxLjQ3LS45MS43LTIuMDkuNy0zLjU0di0xLjg3WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yMTkuNjIsODguMDFoMTIuMzJsNi4yOSwyMC4yOSw1Ljg0LTIwLjI5aDExLjUxbC0xMi4wOSwzMi41NmMtMS4zOCwzLjcxLTIuNzgsNi4yMi00LjIyLDcuNTItMi4wMywxLjg0LTUuMTIsMi43Ni05LjI2LDIuNzYtMS42OCwwLTQuMjgtLjIzLTcuOC0uNjlsLS45Mi04LjE1YzEuNjguNTQsMy41NS44LDUuNjIuOCwxLjM4LDAsMi40OS0uMzIsMy4zNC0uOTUuODUtLjYzLDEuNTctMS43NiwyLjE2LTMuMzlsLTEyLjc5LTMwLjQ3WiIvPgogICAgPC9nPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTM0OC43NCwxNzQuN2gtMjA1LjY5di01LjY0aDIwNS42OXY1LjY0Wk0xNDQuMjUsMTczLjQ5aDIwMy4yOHYtMy4yM2gtMjAzLjI4djMuMjNaIi8+CiAgICAgIDxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTQzLjQ3IiB5PSIxNjkuNSIgd2lkdGg9IjE2OS4xOCIgaGVpZ2h0PSI0Ljc2Ii8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4=" alt="Jay Marketing Lab">
+    <div>
+      <div class="label">Internal playbook · Marketing &amp; Growth · October 2026</div>
+      <h1>SEO &amp; AEO Playbook</h1>
+      <p>How we take every SEO and AEO client from signed scope to steady growth in Google, Bing and AI answers. Use the switch to show one track.</p>
+    </div>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Playbook sections">
+  <div class="wrap">
+    <div class="phases">
+      <a href="#map">Map</a><a href="#expect">Expect</a><a href="#tools">Tools</a><a href="#p0">0 Intake</a><a href="#p1">1 Baseline</a><a href="#p2">2 Audit</a><a href="#p3">3 Strategy</a><a href="#p4">4 Fix</a><a href="#p5">5 Optimize</a><a href="#p6">6 Create</a><a href="#p7">7 Authority</a><a href="#p8">8 Monitor</a><a href="#p9">9 Refresh</a><a href="#never">Never do</a><a href="#rules">Rules</a>
+    </div>
+    <div class="filter" role="group" aria-label="Show track">
+      <button id="f-all" data-f="all" aria-pressed="true">All</button>
+      <button id="f-seo" data-f="seo" aria-pressed="false">SEO</button>
+      <button id="f-aeo" data-f="aeo" aria-pressed="false">AEO</button>
+      <button id="f-loc" data-f="loc" aria-pressed="false">Local</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- MAP -->
+<section id="map">
+  <figure>
+    <div class="scroll">
+    <svg class="wide" viewBox="0 0 1080 670" role="img" aria-label="Workflow map. Intake, Baseline, Gate 1. Audit in four parallel tracks: Technical, On-page and content, Local, AI visibility. Strategy, Gate 2. Three monthly work tracks: Fix, Optimize, Create. Gate 3, Authority, Monitor and report. A monthly loop feeds the work tracks; a quarterly review leads to Refresh, Scale or Exit." style="min-width:900px">
+      <defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="n-p" x="20" y="40" width="130" height="56" rx="5"/><text class="b on-p" x="85" y="64" text-anchor="middle">0 Intake</text><text class="s on-p" x="85" y="82" text-anchor="middle">scope, access</text>
+      <rect class="n-p" x="180" y="40" width="130" height="56" rx="5"/><text class="b on-p" x="245" y="64" text-anchor="middle">1 Baseline</text><text class="s on-p" x="245" y="82" text-anchor="middle">measure the start</text>
+      <path class="n-o" d="M380,36 L420,68 L380,100 L340,68 Z"/><text class="b" x="380" y="72" text-anchor="middle">G1</text>
+      <text class="mono-t" x="430" y="64">can we measure</text><text class="mono-t" x="430" y="79">results?</text>
+      <path class="ln" d="M150,68 H176" marker-end="url(#arw)"/><path class="ln" d="M310,68 H336" marker-end="url(#arw)"/>
+      <text class="mono-t" x="640" y="64">no at any gate:</text><text class="mono-t" x="640" y="79">fix first, then return</text>
+      <path class="ln" d="M380,100 V136 H20 V316"/>
+      <text class="mono-t" x="400" y="140">2 Audit: four tracks at the same time</text>
+      <path class="ln" d="M20,172 H36" marker-end="url(#arw)"/><path class="ln" d="M20,220 H36" marker-end="url(#arw)"/><path class="ln" d="M20,268 H36" marker-end="url(#arw)"/><path class="ln" d="M20,316 H36" marker-end="url(#arw)"/>
+      <rect class="n-o" x="40" y="154" width="500" height="36" rx="5"/><text x="56" y="177"><tspan class="b">2T Technical</tspan><tspan class="s" dx="10">crawling · indexing · speed · mobile · schema</tspan></text>
+      <rect class="n-o" x="40" y="202" width="500" height="36" rx="5"/><text x="56" y="225"><tspan class="b">2O On-page &amp; content</tspan><tspan class="s" dx="10">titles · gaps · cannibalization · trust</tspan></text>
+      <rect class="n-o n-dash" x="40" y="250" width="500" height="36" rx="5"/><text x="56" y="273"><tspan class="b">2L Local</tspan><tspan class="s" dx="10">listings · NAP · reviews · map grid (if local)</tspan></text>
+      <rect class="n-l" x="40" y="298" width="500" height="36" rx="5"/><text class="on-l" x="56" y="321"><tspan class="b on-l">2A AI visibility</tspan><tspan class="s on-l" dx="10">prompt tests · citations · AI crawlers · extractability</tspan></text>
+      <path class="ln" d="M540,172 H566 M540,220 H566 M540,268 H566 M540,316 H566 M566,172 V316"/>
+      <path class="ln" d="M566,244 H592" marker-end="url(#arw)"/>
+      <rect class="n-p" x="596" y="216" width="120" height="56" rx="5"/><text class="b on-p" x="656" y="240" text-anchor="middle">3 Strategy</text><text class="s on-p" x="656" y="258" text-anchor="middle">keywords, roadmap</text>
+      <path class="ln" d="M716,244 H738" marker-end="url(#arw)"/>
+      <path class="n-o" d="M782,212 L822,244 L782,276 L742,244 Z"/><text class="b" x="782" y="248" text-anchor="middle">G2</text>
+      <text class="mono-t" x="782" y="296" text-anchor="middle">roadmap approved,</text><text class="mono-t" x="782" y="310" text-anchor="middle">every fix owned?</text>
+      <path class="ln" d="M822,244 H1050 V378 H20 V514"/>
+      <text class="mono-t" x="600" y="370">then three work tracks run every month</text>
+      <path class="ln" d="M20,418 H36" marker-end="url(#arw)"/><path class="ln" d="M20,466 H36" marker-end="url(#arw)"/><path class="ln" d="M20,514 H36" marker-end="url(#arw)"/>
+      <rect class="n-o" x="40" y="400" width="500" height="36" rx="5"/><text x="56" y="423"><tspan class="b">4 Fix foundations</tspan><tspan class="s" dx="10">technical fixes · schema · AI crawler rules · listings</tspan></text>
+      <rect class="n-o" x="40" y="448" width="500" height="36" rx="5"/><text x="56" y="471"><tspan class="b">5 Optimize existing</tspan><tspan class="s" dx="10">positions 8–20 · answer-first rewrites · proof</tspan></text>
+      <rect class="n-o" x="40" y="496" width="500" height="36" rx="5"/><text x="56" y="519"><tspan class="b">6 Create new content</tspan><tspan class="s" dx="10">briefs · expert input · clusters · publish</tspan></text>
+      <path class="ln" d="M540,418 H566 M540,466 H566 M540,514 H566 M566,418 V514"/>
+      <path class="ln" d="M566,466 H578" marker-end="url(#arw)"/>
+      <path class="n-o" d="M622,434 L662,466 L622,498 L582,466 Z"/><text class="b" x="622" y="470" text-anchor="middle">G3</text>
+      <text class="mono-t" x="622" y="518" text-anchor="middle">publish QA?</text>
+      <path class="ln" d="M662,466 H688" marker-end="url(#arw)"/>
+      <rect class="n-p" x="692" y="438" width="140" height="56" rx="5"/><text class="b on-p" x="762" y="462" text-anchor="middle">7 Authority</text><text class="s on-p" x="762" y="480" text-anchor="middle">links, reviews, citations</text>
+      <path class="ln" d="M832,466 H858" marker-end="url(#arw)"/>
+      <rect class="n-p" x="862" y="438" width="178" height="56" rx="5"/><text class="b on-p" x="951" y="462" text-anchor="middle">8 Monitor &amp; report</text><text class="s on-p" x="951" y="480" text-anchor="middle">weekly · monthly</text>
+      <path class="ln-d" d="M920,494 V560 H290 V538" marker-end="url(#arw)"/>
+      <text class="mono-t" x="605" y="580" text-anchor="middle">monthly loop: what we learn feeds the next round of work</text>
+      <path class="ln" d="M1010,494 V596" marker-end="url(#arw)"/>
+      <rect class="n-o" x="842" y="600" width="218" height="52" rx="5"/><text class="b" x="951" y="622" text-anchor="middle">9 Refresh · Scale · Exit</text><text class="s" x="951" y="640" text-anchor="middle">decided at quarterly review</text>
+    </svg>
+    </div>
+    <figcaption>The whole engagement. Phases 0 to 3 take the first 3 to 4 weeks. Phases 4 to 8 then repeat every month. Diamonds are gates: the work stops until the answer is yes.</figcaption>
+  </figure>
+
+  <div class="figs">
+    <figure>
+      <svg viewBox="0 36 760 216" role="img" aria-label="AEO sits on top of SEO. The SEO foundation supports three AEO pillars: answers, proof and presence.">
+        <text class="mono-t" x="20" y="54">AEO LAYER</text>
+        <text class="mono-t" x="740" y="54" text-anchor="end">ChatGPT · Perplexity · Copilot reward this layer most</text>
+        <rect class="n-o" x="20" y="66" width="232" height="90" rx="5"/><text class="b" x="136" y="100" text-anchor="middle">Answers</text><text class="s" x="136" y="120" text-anchor="middle">direct answer first,</text><text class="s" x="136" y="136" text-anchor="middle">makes sense on its own</text>
+        <rect class="n-o" x="264" y="66" width="232" height="90" rx="5"/><text class="b" x="380" y="100" text-anchor="middle">Proof</text><text class="s" x="380" y="120" text-anchor="middle">numbers, sources, named</text><text class="s" x="380" y="136" text-anchor="middle">experts, update dates</text>
+        <rect class="n-o" x="508" y="66" width="232" height="90" rx="5"/><text class="b" x="624" y="100" text-anchor="middle">Presence</text><text class="s" x="624" y="120" text-anchor="middle">reviews, directories, press</text><text class="s" x="624" y="136" text-anchor="middle">say the same thing</text>
+        <rect class="n-p" x="20" y="168" width="720" height="56" rx="5"/><text class="b on-p" x="380" y="192" text-anchor="middle">SEO foundation</text><text class="s on-p" x="380" y="210" text-anchor="middle">found and indexed · fast · well-built pages · authority</text>
+        <text class="mono-t" x="20" y="244">Google AI Overviews and AI Mode run on Google's normal ranking, so they lean on the foundation</text>
+      </svg>
+      <figcaption>AEO is a layer on top of SEO, not a replacement. A page that can't rank rarely gets pulled into Google's AI answers.</figcaption>
+    </figure>
+  </div>
+
+  <div class="legend"><span class="label">Task labels</span><span><span class="pl s">Shared</span> both</span><span><span class="pl seo">SEO</span> Google and Bing results</span><span><span class="pl aeo">AEO</span> AI answers</span><span><span class="pl loc">Local</span> businesses serving an area</span></div>
+  <div class="roles"><span class="label" style="color:var(--muted)">Roles</span><span><b>AL</b>Account lead</span><span><b>SS</b>SEO team</span><span><b>CW</b>Content writer</span><span><b>DV</b>Client's developers</span><span><b>AU</b>AI &amp; automation</span><span><b>CL</b>Client</span></div>
+
+  <div class="cols3">
+    <div class="card"><h4>Month one: audit and roadmap</h4><ul><li>Baseline in search and AI answers</li><li>Technical, content, local and AI audit</li><li>Approved 90-day roadmap</li></ul></div>
+    <div class="card"><h4>Every month after</h4><ul><li>Technical fixes, or briefs for the client's developers</li><li>Page rewrites and new pages</li><li>Listings, reviews, links, AI citations</li><li>Monthly report</li></ul></div>
+    <div class="card m"><h4>Quoted separately</h4><ul><li>Redesigns and migrations (JML web services)</li><li>Pages beyond the monthly count</li><li>Video, translation, paid placements</li></ul></div>
+  </div>
+</section>
+
+<!-- EXPECT -->
+<section id="expect">
+  <div class="ph"><div class="num">→</div><h2>What we tell clients to expect</h2><div class="meta"><b>Before signing and at kickoff</b> · SEO is slow; saying so early keeps clients through month three</div></div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 760 150" role="img" aria-label="What to expect: early signs in months 1 to 3, clicks and leads from month 4, new sites from month 6 to 12." style="min-width:560px">
+      <line class="ln" x1="40" y1="118" x2="740" y2="118"/>
+      <text class="mono-t" x="40" y="138" text-anchor="middle">M0</text><text class="mono-t" x="215" y="138" text-anchor="middle">M3</text><text class="mono-t" x="390" y="138" text-anchor="middle">M6</text><text class="mono-t" x="565" y="138" text-anchor="middle">M9</text><text class="mono-t" x="740" y="138" text-anchor="middle">M12</text>
+      <rect class="n-o" x="40" y="14" width="175" height="26" rx="3"/><text class="s" x="50" y="31">Early signs</text>
+      <rect class="n-p" x="215" y="48" width="525" height="26" rx="3"/><text class="s on-p" x="227" y="65">Clicks and leads grow: established sites</text>
+      <rect class="n-l" x="390" y="82" width="350" height="26" rx="3"/><text class="s on-l" x="402" y="99">New site or domain: meaningful leads</text>
+    </svg>
+    </div>
+    <figcaption>The shape of a typical engagement. Use it in sales calls, proposals and the kickoff.</figcaption>
+  </figure>
+  <div class="cols3">
+    <div class="card"><span class="label">Months 1–3</span><h4>Early signs</h4><ul><li>Fixes shipped, pages indexed</li><li>Impressions and rankings moving</li><li>AI mention rate in the prompt tests</li></ul></div>
+    <div class="card"><span class="label">Months 4–6+</span><h4>Clicks and leads</h4><ul><li>Organic clicks grow</li><li>Leads tracked as key events</li><li>Brand searches rise with AI mentions</li></ul></div>
+    <div class="card l"><span class="label">New site or domain</span><h4>6 to 12 months</h4><ul><li>Foundations and local first</li><li>Meaningful leads later in year one</li></ul></div>
+  </div>
+  <div class="note"><b>We never promise</b> a ranking position, a "#1", or an AI citation. Nobody controls those, and a promise we can't keep loses the client at renewal.</div>
+  <div class="note"><b>To do for JML's own site (AL):</b> publish a "What to expect from SEO and AEO" page with this timeline and what we report each month. Sales links to it in proposals, and it gives AI tools our own answer to cite when prospects ask how long SEO takes.</div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="ph"><div class="num">⚙</div><h2>Tool stack</h2><div class="meta"><b>What we use for each job</b> · Purple = our default · Lime = JML's own tool · Red = high risk</div></div>
+  <figure>
+    <div class="stack">
+      <div class="row"><div class="job"><b>Technical SEO</b><small>Phases 2, 4, 8</small></div><div class="tiles"><div class="tile" data-p="seo"><span class="badge def">Our default</span><b>Screaming Frog SEO Spider</b><small>Full crawls for audits and weekly checks: indexing, redirects, canonicals, structure, JavaScript rendering.</small></div><div class="tile" data-p="seo"><span class="badge def">Our default</span><b>DebugBear</b><small>Page speed in detail: Core Web Vitals over time, and exactly which file or script holds a page back.</small></div><div class="tile" data-p="seo aeo"><span class="badge ">Google · free</span><b>Google Search Console</b><small>Indexing status, real-visitor speed, manual actions, crawl errors.</small></div><div class="tile" data-p="seo"><span class="badge ">Google · free</span><b>PageSpeed Insights</b><small>Quick one-off speed check of a single page.</small></div></div></div>
+      <div class="row"><div class="job"><b>On-page and content</b><small>Phases 2, 3, 5, 6</small></div><div class="tiles"><div class="tile" data-p="seo"><span class="badge def">Our default</span><b>Screaming Frog SEO Spider</b><small>Titles, descriptions, headings, duplicates and thin pages across the whole site.</small></div><div class="tile" data-p="seo"><span class="badge def">Our default</span><b>Semrush</b><small>Keyword research, content gaps, rank tracking, pages competing with each other.</small></div></div></div>
+      <div class="row"><div class="job"><b>Local SEO</b><small>Phases 1, 2, 4, 7</small></div><div class="tiles"><div class="tile" data-p="loc"><span class="badge own">JML in-house</span><b>Self-Driving SEO</b><small>Our own tool for local measurement: map rankings and local visibility. Usually more accurate than outside tools, so it comes first.</small></div><div class="tile" data-p="loc"><span class="badge ">As needed</span><b>Whitespark</b><small>Citation finding and a second local rank tracker when Self-Driving SEO doesn't cover a case.</small></div><div class="tile" data-p="loc"><span class="badge ">Google · free</span><b>Google Business Profile</b><small>The listing itself, its insights and review replies. Full method in the GBP Optimization Playbook.</small></div></div></div>
+      <div class="row"><div class="job"><b>AI visibility</b><small>Phases 1, 2, 8</small></div><div class="tiles"><div class="tile" data-p="aeo"><span class="badge def">Our default</span><b>DataForSEO API</b><small>Runs the prompt set across AI engines and returns AI visibility scores for the baseline and monthly reports.</small></div><div class="tile" data-p="aeo"><span class="badge ">Spot checks</span><b>ChatGPT, Perplexity, Gemini</b><small>Five prompts by hand each week, to catch big changes between monthly runs.</small></div></div></div>
+      <div class="row"><div class="job"><b>Measurement</b><small>Phases 1, 8</small></div><div class="tiles"><div class="tile" data-p="seo aeo loc"><span class="badge ">Client's choice</span><b>GA4 or PostHog</b><small>Leads as key events, AI referral traffic, direct visits.</small></div><div class="tile" data-p="seo aeo loc"><span class="badge ">Google · free</span><b>Google Tag Manager</b><small>Key event tags without touching site code.</small></div><div class="tile" data-p="seo aeo"><span class="badge ">Bing · free</span><b>Bing Webmaster Tools</b><small>Bing indexing (Copilot runs on it) and IndexNow.</small></div></div></div>
+      <div class="row"><div class="job"><b>Schema</b><small>Phase 4</small></div><div class="tiles"><div class="tile" data-p="seo aeo"><span class="badge ">Google · free</span><b>Rich Results Test</b><small>Checks schema the way Google reads it, including schema added by scripts.</small></div><div class="tile" data-p="seo aeo"><span class="badge ">schema.org · free</span><b>Schema Markup Validator</b><small>Checks every schema type, including ones Google doesn't show results for.</small></div></div></div>
+      <div class="row"><div class="job"><b>Links and indexing</b><small>Phases 6, 7</small></div><div class="tiles"><div class="tile" data-p="seo"><span class="badge def">Our default</span><b>Semrush</b><small>Backlink gap against competitors, and the link profile audit.</small></div><div class="tile" data-p="seo"><span class="badge ">As needed</span><b>Indexification</b><small>Gets backlinks we've earned indexed when Google hasn't found them. Not for the client's own pages.</small></div><div class="tile rk" data-p="seo"><span class="badge rk">High risk</span><b>Spamzilla</b><small>Finds expired domains in the client's field, with link history and spam checks. Only for the last-resort tactic in 7.2.</small></div></div></div>
+    </div>
+    <figcaption>Each task below names the tool it uses, in the right-hand column.</figcaption>
+  </figure>
+</section>
+
+<!-- PHASE 0 -->
+<section id="p0">
+  <div class="ph"><div class="num">0</div><h2>Intake and access</h2><div class="meta"><b>Week 0</b> · Every login in hand before the audit starts</div></div>
+
+  <figure>
+    <div class="tiles">
+      <div class="tile" data-p="seo aeo"><b>Search Console</b><span class="lvl">Full user · domain property</span><small>Request from client</small></div>
+      <div class="tile" data-p="seo aeo"><b>GA4 or PostHog</b><span class="lvl">Editor</span><small>Request from client</small></div>
+      <div class="tile" data-p="seo aeo"><b>Tag Manager</b><span class="lvl">Publish</span><small>Request from client</small></div>
+      <div class="tile" data-p="seo aeo"><b>Website CMS</b><span class="lvl">Admin</span><small>Plus a developer contact, if any</small></div>
+      <div class="tile alt" data-p="seo aeo"><b>Bing Webmaster</b><span class="lvl">We set it up</span><small>Import from Search Console. Nothing to request.</small></div>
+      <div class="tile" data-p="loc"><b>Local listings</b><span class="lvl">Manager, or we create</span><small>Google, Apple, Bing, Yelp, trade directories</small></div>
+    </div>
+    <figcaption>What we need on day one. No CRM, booking system, DNS or CDN access. Dashed tile: we handle it ourselves.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="s"><span class="id">0.1</span><div><h4>Confirm the signed scope</h4><p>Domains, locations, pages per month, minimum term, start date.</p></div><div class="m"><span class="own">AL</span><span class="out">Scope summary</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.2</span><div><h4>Explain month one</h4><p>The audit is the first 3 to 4 weeks of the work. No ranking changes expected yet.</p></div><div class="m"><span class="own">AL</span><span class="out">Welcome email</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.3</span><div><h4>Set the ownership rule</h4><p>The client owns every account and all content. JML is only a user.</p></div><div class="m"><span class="own">AL</span><span class="out">Welcome email</span></div></div>
+    <div class="t" data-p="seo aeo"><span class="id">0.4</span><div><h4>Request access <span class="pl seo">SEO</span> <span class="pl aeo">AEO</span></h4><p>Everything on the board above, logged in and tested.</p></div><div class="m"><span class="own">SS · CL</span><span class="out">Access checklist</span></div></div>
+    <div class="t" data-p="loc"><span class="id">0.4L</span><div><h4>Get local listings in hand <span class="pl loc">Local</span></h4>
+      <div class="br"><div class="q"><span class="label">Branch</span>Does the listing exist?</div><div class="o"><div><b>Yes</b>Get Manager access, or claim it. Optimized in 4.8.</div><div><b>No</b>We create it on the client's account and start verification now. It can take weeks.</div></div></div>
+    </div><div class="m"><span class="own">SS · CL</span><span class="out">Listing list</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.5</span><div><h4>Measure in analytics, not the CRM</h4><p>Leads are key events in GA4 or PostHog. Ask for a one-off sales export only if it tells us something about the audience.</p></div><div class="m"><span class="own">AL</span><span class="out">Analytics tool confirmed</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.6</span><div><h4>Check the site's state</h4>
+      <div class="br"><div class="q"><span class="label">Branch</span>Stable, changing, or new?</div><div class="o"><div><b>Stable</b>Carry on.</div><div><b>Redesign planned</b>Save every URL now and build the redirect map before launch.</div><div><b>New site or domain</b>Expect 6 to 12 months to real leads. Put it in writing.</div></div></div>
+    </div><div class="m"><span class="own">SS · AL</span><span class="out">Site status</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.7</span><div><h4>Kickoff call (60 min)</h4><ul><li>Best-earning services, and the area served</li><li>The words customers use, and the 5 questions they always ask</li><li>Competitors, past SEO work, rules on claims</li></ul></div><div class="m"><span class="own">AL · SS · CL</span><span class="out">Kickoff notes</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.8</span><div><h4>Decide who writes</h4>
+      <div class="br"><div class="q"><span class="label">Branch</span>Does the client have a writer?</div><div class="o"><div><b>No</b>We write from expert interviews.</div><div><b>Yes</b>They write; we brief and edit. Keep them on side.</div><div><b>Hybrid</b>We write money pages; they write guides.</div></div></div>
+    </div><div class="m"><span class="own">AL</span><span class="out">Content owner</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.9</span><div><h4>Decide who fulfills</h4>
+      <div class="br"><div class="q"><span class="label">Branch</span>White-label partner involved?</div><div class="o"><div><b>No</b>Carry on.</div><div><b>Yes</b>Tactics in writing, client's accounts only, the Never do list applies, and we check every deliverable.</div></div></div>
+    </div><div class="m"><span class="own">AL</span><span class="out">Partner terms</span></div></div>
+    <div class="t" data-p="s"><span class="id">0.10</span><div><h4>Set up the workspace</h4><p>Folder, task board, change log, keyword map, prompt sheet, report template.</p></div><div class="m"><span class="own">AL</span><span class="out">Workspace ready</span></div></div>
+  </div>
+</section>
+
+<!-- PHASE 1 -->
+<section id="p1">
+  <div class="ph"><div class="num">1</div><h2>Baseline</h2><div class="meta"><b>Week 1</b> · Record the starting point, so every later result can be proven</div></div>
+
+  <figure>
+    <div class="tiles">
+      <div class="tile big" data-p="seo"><span class="label">Search Console</span><b>Clicks &amp; rankings</b><small>16 months exported</small></div>
+      <div class="tile big" data-p="s"><span class="label">GA4 / PostHog</span><b>Leads</b><small>key events per month</small></div>
+      <div class="tile big" data-p="loc"><span class="label">Map grid</span><b>Map pack</b><small>position across the area</small></div>
+      <div class="tile big" data-p="aeo"><span class="label">Prompt tests</span><b>AI mention rate</b><small>see the grid below</small></div>
+      <div class="tile big" data-p="aeo"><span class="label">GSC + analytics</span><b>Brand demand</b><small>branded searches, direct visits</small></div>
+    </div>
+    <figcaption>The five numbers on the baseline snapshot. Every monthly report compares against them.</figcaption>
+  </figure>
+
+  <figure data-p="aeo">
+    <div class="tbl">
+      <table class="pg">
+        <thead><tr><th>Stage</th><th>Example prompt</th><th>ChatGPT</th><th>Perplexity</th><th>Google AI</th><th>Gemini</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Problem</td><td>how do I stop my water heater leaking</td><td class="c"><span class="r no">0/5</span></td><td class="c"><span class="r men">1/5</span></td><td class="c"><span class="r no">0/5</span></td><td class="c"><span class="r no">0/5</span></td></tr>
+          <tr><td class="k">Solution</td><td>best water heater installer in San Diego</td><td class="c"><span class="r men">2/5</span></td><td class="c"><span class="r cit">3/5</span></td><td class="c"><span class="r men">1/5</span></td><td class="c"><span class="r no">0/5</span></td></tr>
+          <tr><td class="k">Comparison</td><td>[client] vs [competitor] for tankless</td><td class="c"><span class="r cit">4/5</span></td><td class="c"><span class="r cit">5/5</span></td><td class="c"><span class="r men">3/5</span></td><td class="c"><span class="r men">2/5</span></td></tr>
+          <tr><td class="k">Decision</td><td>[client] tankless install price</td><td class="c"><span class="r rec">5/5</span></td><td class="c"><span class="r cit">4/5</span></td><td class="c"><span class="r men">2/5</span></td><td class="c"><span class="r men">3/5</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="keyrow"><span class="label">Example data</span><span><span class="r rec">n/5</span> recommended</span><span><span class="r cit">n/5</span> cited with a link</span><span><span class="r men">n/5</span> mentioned</span><span><span class="r no">0/5</span> absent</span></div>
+    <figcaption>How the AI baseline looks. 20 to 30 prompts across four buying stages, each run 5 times per engine through the DataForSEO API, because AI answers change from run to run. We report rates, never single runs.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">1.1</span><div><h4>Export the Search Console baseline <span class="pl seo">SEO</span></h4><p>All 16 months, by query and page. Google deletes older data.</p></div><div class="m"><span class="own">SS</span><span class="out">Baseline export</span><div class="tools"><span class="tl">Search Console</span></div></div></div>
+    <div class="t" data-p="s"><span class="id">1.2</span><div><h4>Count leads as key events</h4><p>In GA4 or PostHog. Form success message, confirmed booking, or a call over 60 seconds. Same method as Paid playbook Phase 3.</p></div><div class="m"><span class="own">SS</span><span class="out">Test lead recorded</span><div class="tools"><span class="tl">GA4 / PostHog</span><span class="tl">Tag Manager</span></div></div></div>
+    <div class="t" data-p="loc"><span class="id">1.2L</span><div><h4>Track calls without breaking listings <span class="pl loc">Local</span></h4><p>Swap the number on the site by script. On the Business Profile, tracking number as main, real number as additional.</p></div><div class="m"><span class="own">SS</span><span class="out">Call tracking live</span></div></div>
+    <div class="t" data-p="aeo"><span class="id">1.3</span><div><h4>Separate AI traffic <span class="pl aeo">AEO</span></h4><p>GA4 channel group or PostHog insight for <span class="mono">chatgpt.com · perplexity.ai · gemini.google.com · copilot.microsoft.com · claude.ai</span>, with key events attached.</p></div><div class="m"><span class="own">SS</span><span class="out">AI channel saved</span><div class="tools"><span class="tl">GA4 / PostHog</span></div></div></div>
+    <details class="more" data-p="aeo">
+      <summary>Setting up AI traffic tracking, step by step <span class="hint">GA4 · PostHog · the pattern to paste</span></summary>
+      <div class="in">
+        <h5>The pattern</h5>
+        <pre class="code">.*(chatgpt|openai|perplexity|gemini\.google|copilot\.microsoft|claude\.ai).*</pre>
+        <p>Matches visits from ChatGPT, Perplexity, Gemini, Copilot and Claude. ChatGPT also tags many of its links with <span class="mono">utm_source=chatgpt.com</span>, which the same pattern catches. Add new assistants to the list as they appear.</p>
+        <div class="two">
+          <div>
+            <h5>GA4</h5>
+            <ol>
+              <li>Admin → Data display → Channel groups → copy the default group.</li>
+              <li>Add a channel named <b>AI assistants</b>: Source matches regex, paste the pattern.</li>
+              <li>Drag it above <b>Referral</b>, or Referral claims these visits first. Save.</li>
+              <li>In Reports → Acquisition → Traffic acquisition, switch the table to the new channel group.</li>
+              <li>Check the key events column, so we report AI leads, not just visits.</li>
+            </ol>
+          </div>
+          <div>
+            <h5>PostHog</h5>
+            <ol>
+              <li>New insight → Trends → event <span class="mono">$pageview</span>.</li>
+              <li>Filter: <span class="mono">$referring_domain</span> matches regex, paste the pattern.</li>
+              <li>Break down by <span class="mono">$referring_domain</span> to see each assistant.</li>
+              <li>Add a funnel from that pageview to the lead key event.</li>
+              <li>Save both to the client's dashboard.</li>
+            </ol>
+          </div>
+        </div>
+        <p>These numbers undercount. Some apps hide where a visit came from, and many people read the AI answer, then search the brand later. That's why 1.4 tracks brand demand alongside this.</p>
+      </div>
+    </details>
+    <div class="t" data-p="aeo"><span class="id">1.4</span><div><h4>Track brand demand <span class="pl aeo">AEO</span></h4><p>People often read an AI answer, then search the brand later. Branded searches and direct visits rising with AI mentions is the proof.</p></div><div class="m"><span class="own">SS</span><span class="out">Brand baseline</span><div class="tools"><span class="tl">Search Console</span><span class="tl">GA4 / PostHog</span></div></div></div>
+    <div class="t" data-p="seo loc"><span class="id">1.5</span><div><h4>Start rank tracking <span class="pl seo">SEO</span> <span class="pl loc">Local</span></h4><p>30 to 100 keywords, mobile and desktop. Local adds a map grid across the service area.</p></div><div class="m"><span class="own">SS</span><span class="out">First snapshot</span><div class="tools"><span class="tl">Semrush</span><span class="tl jml">Self-Driving SEO</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">1.6</span><div><h4>Run the AI baseline <span class="pl aeo">AEO</span></h4><p>The prompt grid above. Record who else appears and which sites get cited.</p></div><div class="m"><span class="own">SS</span><span class="out">Prompt sheet</span><div class="tools"><span class="tl">DataForSEO API</span></div></div></div>
+    <div class="t" data-p="s"><span class="id">1.7</span><div><h4>Write the baseline snapshot</h4><p>One page with the five numbers and the top competitors.</p></div><div class="m"><span class="own">SS · AL</span><span class="out">Snapshot</span></div></div>
+  </div>
+
+  <div class="gate"><span class="label">Gate 1</span><h4>Can we measure results?</h4><ul><li>Search Console baseline exported</li><li>A test lead shows up as a key event</li><li>Rank tracking, AI baseline and brand baseline saved</li></ul><p>If not, fix it first. Without a before-and-after we can't prove our value at renewal.</p></div>
+</section>
+
+<!-- PHASE 2 -->
+<section id="p2">
+  <div class="ph"><div class="num">2</div><h2>Audit</h2><div class="meta"><b>Weeks 1–3</b> · A ranked list of what holds the client back</div></div>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 760 200" role="img" aria-label="Fix order staircase: 1 found, 2 working, 3 well built, 4 worth it, 5 vouched for. Each step depends on the one below." style="min-width:560px">
+      <rect class="n-p" x="20" y="138" width="140" height="52" rx="4"/><text class="b on-p" x="32" y="158">1 · Found</text><text class="s on-p" x="32" y="176">crawled and indexed</text>
+      <rect class="n-o" x="168" y="110" width="140" height="80" rx="4"/><text class="b" x="180" y="130">2 · Working</text><text class="s" x="180" y="148">fast, mobile, secure</text>
+      <rect class="n-o" x="316" y="82" width="140" height="108" rx="4"/><text class="b" x="328" y="102">3 · Well built</text><text class="s" x="328" y="120">titles, headings, links</text>
+      <rect class="n-o" x="464" y="54" width="140" height="136" rx="4"/><text class="b" x="476" y="74">4 · Worth it</text><text class="s" x="476" y="92">content and trust</text>
+      <rect class="n-l" x="612" y="26" width="140" height="164" rx="4"/><text class="b on-l" x="624" y="46">5 · Vouched for</text><text class="s on-l" x="624" y="64">links, reviews, mentions</text>
+      <text class="mono-t" x="20" y="16">fix from the bottom up</text>
+    </svg>
+    </div>
+    <figcaption>How we rank findings. Better content does nothing for a page Google can't index, so lower steps always come first.</figcaption>
+  </figure>
+
+  <div class="sub" data-p="seo aeo"><span class="pl seo">SEO</span><h3>2T · Technical</h3></div>
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">2T.1</span><div><h4>Crawl the site</h4><p>Screaming Frog with JavaScript rendering, connected to Search Console and GA4.</p></div><div class="m"><span class="own">SS</span><span class="out">Crawl export</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2T.2</span><div><h4>Check indexing</h4><ul><li>robots.txt, sitemap, stray noindex tags</li><li>Wrong canonicals, redirect chains, soft 404s</li><li>Duplicate versions: http/https, www, trailing slash</li></ul></div><div class="m"><span class="own">SS</span><span class="out">Indexing findings</span><div class="tools"><span class="tl">Screaming Frog</span><span class="tl">Search Console</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2T.3</span><div><h4>Check structure</h4><p>Key pages within 3 clicks, no orphan pages, clean URLs.</p></div><div class="m"><span class="own">SS</span><span class="out">Structure findings</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2T.4</span><div><h4>Check speed</h4><p>Real-visitor data first (Search Console, PageSpeed field data). Limits are in Rules.</p></div><div class="m"><span class="own">SS</span><span class="out">Speed findings</span><div class="tools"><span class="tl">DebugBear</span><span class="tl">PageSpeed Insights</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2T.5</span><div><h4>Check mobile and HTTPS</h4><p>Same content as desktop, easy taps, HTTPS everywhere.</p></div><div class="m"><span class="own">SS</span><span class="out">Findings</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="seo aeo"><span class="id">2T.6</span><div><h4>Check schema <span class="pl seo">SEO</span> <span class="pl aeo">AEO</span></h4><p>Use Rich Results Test. A plain page fetch misses schema added by JavaScript.</p></div><div class="m"><span class="own">SS</span><span class="out">Schema inventory</span><div class="tools"><span class="tl">Rich Results Test</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2T.7</span><div><h4>Note languages and platform limits</h4><p>Several languages: check hreflang. Note what the CMS can't change, so the roadmap only promises what we can ship.</p></div><div class="m"><span class="own">SS</span><span class="out">Platform notes</span></div></div>
+  </div>
+
+  <div class="sub"><span class="pl seo">SEO</span><h3>2O · On-page and content</h3></div>
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">2O.1</span><div><h4>Build the page inventory</h4><p>Every page: traffic, leads, target query. Mark keep, improve, merge or remove.</p></div><div class="m"><span class="own">SS</span><span class="out">Inventory</span><div class="tools"><span class="tl">Screaming Frog</span><span class="tl">GA4 / PostHog</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2O.2</span><div><h4>Check titles and descriptions</h4><p>Unique, right length, main query first. Note titles Google rewrites.</p></div><div class="m"><span class="own">SS</span><span class="out">Title list</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2O.3</span><div><h4>Check headings and content</h4><p>One H1, matches intent. Flag thin pages and city-swap pages.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Content findings</span><div class="tools"><span class="tl">Screaming Frog</span><span class="tl">Semrush</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2O.4</span><div><h4>Find pages competing with each other</h4><p>Queries where two of the client's pages take turns. Pick one owner page.</p></div><div class="m"><span class="own">SS</span><span class="out">Cannibalization list</span><div class="tools"><span class="tl">Semrush</span><span class="tl">Search Console</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">2O.5</span><div><h4>Check links and images</h4><p>Money pages well linked, no broken links, images compressed with alt text.</p></div><div class="m"><span class="own">SS</span><span class="out">Findings</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="s"><span class="id">2O.6</span><div><h4>Check trust signals <span class="pl seo">SEO</span> <span class="pl aeo">AEO</span></h4><p>Named authors, About page, address, reviews, case studies. Legal, medical or financial: every advice page needs a named, qualified reviewer.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Trust findings</span></div></div>
+    <div class="t" data-p="seo"><span class="id">2O.7</span><div><h4>Find content gaps</h4><p>3 to 5 competitors that actually rank. Queries and page types they have that we don't.</p></div><div class="m"><span class="own">SS</span><span class="out">Gap list</span><div class="tools"><span class="tl">Semrush</span></div></div></div>
+  </div>
+
+  <div class="sub" data-p="loc"><span class="pl loc">Local</span><h3>2L · Local</h3></div>
+  <div class="tasks" data-p="loc">
+    <div class="t" data-p="loc"><span class="id">2L.1</span><div><h4>Score each listing</h4><p>Primary category first (the biggest local lever), then every field, photos, duplicates. Full method: GBP Optimization Playbook, Phase 3.</p></div><div class="m"><span class="own">SS</span><span class="out">Listing scorecard</span><div class="tools"><span class="tl jml">Self-Driving SEO</span></div></div></div>
+    <div class="t" data-p="loc"><span class="id">2L.2</span><div><h4>Check name, address, phone everywhere</h4><p>Identical across the site, listings and directories.</p></div><div class="m"><span class="own">SS</span><span class="out">Mismatch list</span><div class="tools"><span class="tl jml">Self-Driving SEO</span><span class="tl">Whitespark</span></div></div></div>
+    <div class="t" data-p="loc"><span class="id">2L.3</span><div><h4>Compare reviews</h4><p>Count, rating, recency and replies against the top 3 map competitors.</p></div><div class="m"><span class="own">SS</span><span class="out">Review comparison</span><div class="tools"><span class="tl jml">Self-Driving SEO</span></div></div></div>
+    <div class="t" data-p="loc"><span class="id">2L.4</span><div><h4>Run the map grid</h4><p>Top 5 terms from points across the area. Shows where the client is invisible.</p></div><div class="m"><span class="own">SS</span><span class="out">Grid screenshots</span><div class="tools"><span class="tl jml">Self-Driving SEO</span></div></div></div>
+    <div class="t" data-p="loc"><span class="id">2L.5</span><div><h4>Check location pages</h4><p>Real local content, not swapped city names. LocalBusiness schema matches the listing.</p></div><div class="m"><span class="own">SS</span><span class="out">Findings</span></div></div>
+  </div>
+
+  <div class="sub" data-p="aeo"><span class="pl aeo">AEO</span><h3>2A · AI visibility</h3></div>
+  <figure data-p="aeo">
+    <div class="cols3">
+      <div class="card"><h4>Search crawlers</h4><p class="eff">Block them and the client drops out of AI answers. <b>Keep open.</b></p><div class="bots">OAI-SearchBot<br>PerplexityBot<br>Claude-SearchBot<br>Googlebot · Bingbot</div></div>
+      <div class="card m"><h4>Fetchers for a user</h4><p class="eff">Open a page when someone asks about it. <b>Keep open.</b></p><div class="bots">ChatGPT-User<br>Claude-User<br>Perplexity-User</div></div>
+      <div class="card l"><h4>Training crawlers</h4><p class="eff">Collect data to train models. <b>Client's choice.</b> Blocking doesn't stop citations.</p><div class="bots">GPTBot<br>ClaudeBot<br>Google-Extended</div></div>
+    </div>
+    <figcaption>Three kinds of AI crawler, three different decisions. Check robots.txt for each kind.</figcaption>
+  </figure>
+  <div class="tasks" data-p="aeo">
+    <div class="t" data-p="aeo"><span class="id">2A.1</span><div><h4>Study why competitors get cited</h4><p>Open the pages AI cited instead of ours. Compare answer placement, numbers, dates and reviews.</p></div><div class="m"><span class="own">SS</span><span class="out">Citation notes</span><div class="tools"><span class="tl">DataForSEO API</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">2A.2</span><div><h4>Catch wrong facts</h4><p>Prices, services, hours or areas AI gets wrong, and the page or site causing it.</p></div><div class="m"><span class="own">SS</span><span class="out">Wrong-facts list</span></div></div>
+    <div class="t" data-p="aeo"><span class="id">2A.3</span><div><h4>Check crawler access</h4><p>robots.txt against the three groups above. If a bot still looks blocked, ask the client to check their CDN or firewall.</p></div><div class="m"><span class="own">SS</span><span class="out">Access table</span></div></div>
+    <div class="t" data-p="aeo"><span class="id">2A.4</span><div><h4>Score the top 10 pages</h4><p>Pass or fail against the answer-first anatomy in Phase 5.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Scorecard</span></div></div>
+    <div class="t" data-p="aeo"><span class="id">2A.5</span><div><h4>View pages as an AI agent</h4><p>JavaScript off. Services, prices and reviews must still be there as text.</p></div><div class="m"><span class="own">SS</span><span class="out">Findings</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">2A.6</span><div><h4>List the sources AI cites</h4><p>Review sites, directories, roundups, forums, YouTube. Is the client there, described the same way?</p></div><div class="m"><span class="own">SS</span><span class="out">Source list (Phase 7 targets)</span><div class="tools"><span class="tl">DataForSEO API</span></div></div></div>
+  </div>
+
+  <div class="tasks">
+    <div class="t" data-p="s"><span class="id">2.9</span><div><h4>Write and present the audit</h4><p>Each finding: issue, impact, evidence, fix, effort, owner. Top 5 first, in plain words. Note any web, paid or automation issues we spot as observations, not a pitch.</p></div><div class="m"><span class="own">SS · AL</span><span class="out">Audit report</span></div></div>
+  </div>
+</section>
+
+<!-- PHASE 3 -->
+<section id="p3">
+  <div class="ph"><div class="num">3</div><h2>Strategy and roadmap</h2><div class="meta"><b>Weeks 3–4</b> · An approved 90-day plan, every item with an owner and a date</div></div>
+
+  <div class="figs">
+    <figure>
+      <svg viewBox="0 0 520 330" role="img" aria-label="Priority matrix: impact against effort. Quick wins are high impact, low effort and go first.">
+        <rect class="n-tint" x="60" y="20" width="220" height="140"/>
+        <line class="grid-l" x1="280" y1="20" x2="280" y2="300"/><line class="grid-l" x1="60" y1="160" x2="500" y2="160"/>
+        <rect x="60" y="20" width="440" height="280" fill="none" stroke="var(--line)"/>
+        <text class="b" x="70" y="40">Quick wins · do first</text>
+        <text class="b" x="490" y="40" text-anchor="end">Big bets · plan them</text>
+        <text class="b" x="70" y="290">Fill-ins · when free</text>
+        <text class="b" x="490" y="290" text-anchor="end">Skip</text>
+        <circle class="dot" cx="96" cy="66" r="6"/><text class="s" x="106" y="70">remove stray noindex</text>
+        <circle class="dot" cx="120" cy="96" r="6"/><text class="s" x="130" y="100">listing category</text>
+        <circle class="dot" cx="150" cy="128" r="6"/><text class="s" x="160" y="132">titles on 8–20 pages</text>
+        <circle class="dot" cx="420" cy="74" r="6"/><text class="s" x="410" y="78" text-anchor="end">new service cluster</text>
+        <circle class="dot" cx="450" cy="118" r="6"/><text class="s" x="440" y="122" text-anchor="end">speed rebuild</text>
+        <circle class="dot" cx="130" cy="232" r="6"/><text class="s" x="140" y="236">alt text cleanup</text>
+        <circle class="dot" cx="440" cy="240" r="6"/><text class="s" x="430" y="244" text-anchor="end">rewrite every old post</text>
+        <text class="mono-t" x="280" y="322" text-anchor="middle">EFFORT →</text>
+        <text class="mono-t" x="22" y="160" text-anchor="middle" transform="rotate(-90 22 160)">IMPACT →</text>
+      </svg>
+      <figcaption>Score every finding on impact × confidence ÷ effort. Quick wins fill month one.</figcaption>
+    </figure>
+    <figure>
+      <div class="cols3" style="grid-template-columns:1fr">
+        <div class="card"><h4>Ready to buy</h4><p class="eff mono">water heater install san diego · tankless cost · near me</p></div>
+        <div class="card m"><h4>Comparing</h4><p class="eff mono">best plumber san diego · tankless vs tank · reviews</p></div>
+        <div class="card l"><h4>Learning</h4><p class="eff mono">why is my water heater leaking · how long do they last</p></div>
+      </div>
+      <figcaption>Every keyword goes in one of three intent groups. Ready-to-buy pages come first; learning pages feed them.</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 760 252" role="img" aria-label="90-day roadmap. Month 1: blockers and quick wins, foundations start. Month 2: money-page rewrites and first new pages. Month 3: new content and authority. Reporting runs throughout." style="min-width:600px">
+      <text class="mono-t" x="290" y="16" text-anchor="middle">MONTH 1</text><text class="mono-t" x="470" y="16" text-anchor="middle">MONTH 2</text><text class="mono-t" x="650" y="16" text-anchor="middle">MONTH 3</text>
+      <line class="grid-l" x1="200" y1="24" x2="200" y2="244"/><line class="grid-l" x1="380" y1="24" x2="380" y2="244"/><line class="grid-l" x1="560" y1="24" x2="560" y2="244"/><line class="grid-l" x1="740" y1="24" x2="740" y2="244"/>
+      <text x="190" y="50" text-anchor="end">Blockers &amp; quick wins</text><rect class="n-p" x="200" y="34" width="180" height="22" rx="3"/>
+      <text x="190" y="84" text-anchor="end">Foundations &amp; schema</text><rect class="n-p" x="260" y="68" width="300" height="22" rx="3"/>
+      <text x="190" y="118" text-anchor="end">Listings (local)</text><rect class="n-l" x="200" y="102" width="240" height="22" rx="3"/>
+      <text x="190" y="152" text-anchor="end">Money-page rewrites</text><rect class="n-p" x="380" y="136" width="240" height="22" rx="3"/>
+      <text x="190" y="186" text-anchor="end">New content</text><rect class="n-p" x="440" y="170" width="300" height="22" rx="3"/>
+      <text x="190" y="220" text-anchor="end">Authority</text><rect class="n-p" x="560" y="204" width="180" height="22" rx="3"/>
+      <text x="190" y="244" text-anchor="end">Monitor &amp; report</text><rect class="n-o n-dash" x="200" y="232" width="540" height="14" rx="3"/>
+    </svg>
+    </div>
+    <figcaption>The default 90-day shape. Adjust per client, but keep the order.</figcaption>
+  </figure>
+
+
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">3.1</span><div><h4>Research keywords by intent <span class="pl seo">SEO</span></h4><p>From the client's words, Search Console and the gap list. Young sites aim at specific, local terms first.</p></div><div class="m"><span class="own">SS</span><span class="out">Keyword sheet</span><div class="tools"><span class="tl">Semrush</span></div></div></div>
+    <div class="t" data-p="s"><span class="id">3.2</span><div><h4>Group topics into clusters <span class="pl seo">SEO</span> <span class="pl aeo">AEO</span></h4><p>One main page per service, with supporting pages that answer the related questions. Google's AI looks up those related questions too.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Cluster map</span></div></div>
+    <div class="t" data-p="s"><span class="id">3.3</span><div><h4>Build the keyword map</h4><p>One page per query, one page per fact (prices, areas, process).</p></div><div class="m"><span class="own">SS</span><span class="out">Keyword map</span></div></div>
+    <div class="t" data-p="aeo"><span class="id">3.4</span><div><h4>Build the prompt map <span class="pl aeo">AEO</span></h4><p>Each priority prompt: the page that should answer it, and the outside sites we want mentioning us.</p></div><div class="m"><span class="own">SS</span><span class="out">Prompt map</span></div></div>
+    <div class="t" data-p="s"><span class="id">3.5</span><div><h4>Prioritize</h4><p>Matrix above, then the fix order from Phase 2.</p></div><div class="m"><span class="own">SS · AL</span><span class="out">Ranked backlog</span></div></div>
+    <div class="t" data-p="s"><span class="id">3.6</span><div><h4>Write the 90-day roadmap</h4><p>Every item gets a date and an owner: our SEO team, or the client's developers from our brief.</p></div><div class="m"><span class="own">AL · SS</span><span class="out">Roadmap</span></div></div>
+    <div class="t" data-p="s"><span class="id">3.7</span><div><h4>Set expectations</h4><p>Restate the timeline from <a href="#expect">What to expect</a>, in writing.</p></div><div class="m"><span class="own">AL</span><span class="out">Targets</span></div></div>
+    <div class="t" data-p="s"><span class="id">3.8</span><div><h4>Present live and get approval</h4><p>On a call, not by email. Confirm which fixes the client's developers will make, and by when.</p></div><div class="m"><span class="own">AL · CL</span><span class="out">Approved roadmap</span></div></div>
+  </div>
+
+  <div class="gate"><span class="label">Gate 2</span><h4>Is the roadmap approved, and does every fix have an owner?</h4><ul><li>Written approval</li><li>Each month-1 fix assigned to our SEO team, or briefed to the client's developers with a date</li><li>CMS access tested, content approver named</li></ul><p>SEO stalls when fixes sit in a developer's queue. Agree dates up front; raise anything overdue monthly.</p></div>
+</section>
+
+<!-- PHASE 4 -->
+<section id="p4">
+  <div class="ph"><div class="num">4</div><h2>Fix the foundations</h2><div class="meta"><b>Month 1 onward</b> · Nothing technical stops pages from being found, read or cited</div></div>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 760 200" role="img" aria-label="Who makes each fix. If our SEO team can do it in the CMS, we ship it. If not and the client has developers, we brief them. If they have none, we note the limit and offer JML web services." style="min-width:600px">
+      <defs><marker id="arw2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="n-o" x="20" y="72" width="200" height="56" rx="5"/><text class="b" x="120" y="96" text-anchor="middle">Can our SEO team</text><text class="b" x="120" y="114" text-anchor="middle">do it in the CMS?</text>
+      <path class="ln" d="M220,90 H250 V36 H286" marker-end="url(#arw2)"/><text class="mono-t" x="254" y="30">yes</text>
+      <rect class="n-l" x="290" y="14" width="200" height="44" rx="5"/><text class="b on-l" x="390" y="41" text-anchor="middle">SS ships it</text>
+      <path class="ln" d="M220,110 H250 V150 H286" marker-end="url(#arw2)"/><text class="mono-t" x="256" y="170">no</text>
+      <rect class="n-o" x="290" y="124" width="200" height="56" rx="5"/><text class="b" x="390" y="148" text-anchor="middle">Client has</text><text class="b" x="390" y="166" text-anchor="middle">developers?</text>
+      <path class="ln" d="M490,142 H520 V104 H556" marker-end="url(#arw2)"/><text class="mono-t" x="526" y="96">yes</text>
+      <rect class="n-p" x="560" y="80" width="190" height="48" rx="5"/><text class="b on-p" x="655" y="100" text-anchor="middle">Detailed brief</text><text class="s on-p" x="655" y="117" text-anchor="middle">DV ships by agreed date</text>
+      <path class="ln" d="M490,162 H520 V172 H556" marker-end="url(#arw2)"/><text class="mono-t" x="526" y="190">no</text>
+      <rect class="n-o n-dash" x="560" y="150" width="190" height="44" rx="5"/><text class="s" x="655" y="169" text-anchor="middle">Note the limit · offer</text><text class="s" x="655" y="184" text-anchor="middle">JML web services quote</text>
+    </svg>
+    </div>
+    <figcaption>Every fix follows this path. A brief says what to change, where, why, the exact code or setting, and how to check it's done.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">4.1</span><div><h4>Fix indexing blockers first <span class="pl seo">SEO</span></h4><p>robots.txt, noindex, canonicals, sitemap, redirect chains. Then request indexing for key pages.</p></div><div class="m"><span class="own">SS · DV</span><span class="out">Blockers closed</span><div class="tools"><span class="tl">Search Console</span><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">4.2</span><div><h4>Fix speed <span class="pl seo">SEO</span></h4><p>Compress images to WebP, defer scripts, drop unused plugins, turn on caching.</p></div><div class="m"><span class="own">SS · DV</span><span class="out">Speed fixes live</span><div class="tools"><span class="tl">DebugBear</span></div></div></div>
+    <div class="t" data-p="s"><span class="id">4.3</span><div><h4>Add and fix schema <span class="pl seo">SEO</span> <span class="pl aeo">AEO</span></h4><p>Organization or LocalBusiness, Service, Article with author, Breadcrumb, FAQ where real. Only mark up what's visible. Validate each.</p></div><div class="m"><span class="own">SS</span><span class="out">Schema valid</span><div class="tools"><span class="tl">Rich Results Test</span><span class="tl">Schema Validator</span></div></div></div>
+    <details class="more" data-p="seo aeo">
+      <summary>Schema guide: which schema goes on which page <span class="hint">types, examples, how we add it</span></summary>
+      <div class="in">
+        <p>Schema is a block of code (JSON-LD) that tells search engines and AI tools, in a fixed format, what a page is about: this is a plumbing business, this page is a service, this article was written by this person on this date. Each page type gets its own schema.</p>
+        <h5>Page type → schema</h5>
+        <div class="tbl"><table>
+          <thead><tr><th>Page</th><th>Schema type</th><th>Fields that matter</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Homepage</td><td><span class="mono">Organization</span> or a <span class="mono">LocalBusiness</span> subtype, plus <span class="mono">WebSite</span></td><td>name, logo, url, telephone, address, areaServed, sameAs (profile links)</td><td>Describes the business once. Every other page points back to it by its <span class="mono">@id</span>.</td></tr>
+            <tr><td class="k">Service page</td><td><span class="mono">Service</span></td><td>name, serviceType, provider (→ business @id), areaServed, offers if prices are public</td><td>One service per page. The business type goes on the homepage, not here.</td></tr>
+            <tr><td class="k">Location page</td><td><span class="mono">LocalBusiness</span> subtype, one per location</td><td>address, geo, openingHoursSpecification, telephone</td><td>Must match the Business Profile exactly.</td></tr>
+            <tr><td class="k">Blog post, guide</td><td><span class="mono">BlogPosting</span> or <span class="mono">Article</span></td><td>headline, author (a <span class="mono">Person</span> with a bio URL), datePublished, dateModified, image</td><td>The author must be a real, named person.</td></tr>
+            <tr><td class="k">Author / team page</td><td><span class="mono">ProfilePage</span> with <span class="mono">Person</span></td><td>name, jobTitle, credentials, sameAs (LinkedIn)</td><td>Backs up the trust signals from 2O.6.</td></tr>
+            <tr><td class="k">FAQ section</td><td><span class="mono">FAQPage</span></td><td>questions and answers exactly as shown on the page</td><td>Google shows FAQ results only for government and health sites, but the markup still helps machines read the page.</td></tr>
+            <tr><td class="k">Products, pricing</td><td><span class="mono">Product</span> + <span class="mono">Offer</span>, or <span class="mono">Service</span> + <span class="mono">Offer</span></td><td>price, priceCurrency, availability</td><td>Product only for physical or digital products.</td></tr>
+            <tr><td class="k">Video</td><td><span class="mono">VideoObject</span></td><td>name, description, thumbnailUrl, uploadDate, duration</td><td>On the page where the video is embedded.</td></tr>
+            <tr><td class="k">Every page</td><td><span class="mono">BreadcrumbList</span></td><td>the page's path from the homepage</td><td>Usually added sitewide by the SEO plugin.</td></tr>
+          </tbody></table></div>
+        <h5>Pick the most specific business type</h5>
+        <p>schema.org has a type for most trades. Use the most specific one that fits, and fall back to <span class="mono">ProfessionalService</span> only when nothing closer exists (consultants, agencies).</p>
+        <div class="flowin"><span>Plumber</span><span>HVACBusiness</span><span>Electrician</span><span>MovingCompany</span><span>Dentist</span><span>LegalService</span><span>AccountingService</span><span>ProfessionalService</span></div>
+        <h5>Examples</h5>
+        <div class="two">
+          <pre class="code"><span class="c">// Homepage: the business</span>
+{
+  "@context": "https://schema.org",
+  "@type": "Plumber",
+  "@id": "https://example.com/#business",
+  "name": "Example Plumbing",
+  "url": "https://example.com/",
+  "logo": "https://example.com/logo.png",
+  "telephone": "+1-619-555-0100",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "100 Main St",
+    "addressLocality": "San Diego",
+    "addressRegion": "CA",
+    "postalCode": "92101"
+  },
+  "areaServed": "San Diego County",
+  "sameAs": [
+    "https://www.yelp.com/biz/example-plumbing",
+    "https://www.linkedin.com/company/example"
+  ]
+}</pre>
+          <pre class="code"><span class="c">// Service page: points back to the business</span>
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Tankless water heater installation",
+  "serviceType": "Water heater installation",
+  "provider": { "@id": "https://example.com/#business" },
+  "areaServed": "San Diego County",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "3200"
+  }
+}
+
+<span class="c">// Blog post</span>
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "How long do tankless water heaters last?",
+  "author": {
+    "@type": "Person",
+    "name": "Maria Lopez",
+    "url": "https://example.com/team/maria-lopez"
+  },
+  "datePublished": "2026-10-01",
+  "dateModified": "2026-10-20",
+  "publisher": { "@id": "https://example.com/#business" }
+}</pre>
+        </div>
+        <h5>How we add it</h5>
+        <div class="br"><div class="q"><span class="label">Branch</span>What runs the site?</div><div class="o"><div><b>WordPress</b>Rank Math or Yoast for sitewide schema; custom JSON-LD blocks for service and location pages.</div><div><b>Webflow, Shopify</b>JSON-LD in the page template or a custom code embed per page.</div><div><b>Custom build</b>Brief the client's developers with the exact JSON-LD per template.</div></div></div>
+        <h5>Rules</h5>
+        <ul>
+          <li>Put JSON-LD in the page HTML, not only through Tag Manager. Google can read script-added schema, but many AI crawlers don't run scripts.</li>
+          <li>Only mark up what a visitor can see on the page. Hidden or invented details break Google's rules.</li>
+          <li>Review stars: Google ignores ratings a business publishes about itself on its own Organization or LocalBusiness schema.</li>
+          <li>Validate every template in the Rich Results Test and the Schema Markup Validator, then watch the Enhancements reports in Search Console.</li>
+        </ul>
+      </div>
+    </details>
+    <div class="t" data-p="aeo"><span class="id">4.4</span><div><h4>Set the AI crawler rules <span class="pl aeo">AEO</span></h4>
+      <pre class="code">User-agent: *
+Allow: /
+<span class="c"># Only if the client opts out of training:</span>
+User-agent: GPTBot
+Disallow: /
+
+Sitemap: https://example.com/sitemap.xml</pre>
+      <p>One open rule for everyone; named rules only for deliberate exceptions. Submit the sitemap in Bing and turn on IndexNow.</p></div><div class="m"><span class="own">SS</span><span class="out">robots.txt logged</span><div class="tools"><span class="tl">Bing Webmaster</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">4.5</span><div><h4>Make key pages readable without JavaScript <span class="pl aeo">AEO</span></h4><p>Services, prices, reviews and ratings as real text. Date facts that change ("4.9 on Google, 312 reviews, Oct 2026").</p></div><div class="m"><span class="own">SS · DV</span><span class="out">Fixes live</span></div></div>
+    <div class="t" data-p="aeo"><span class="id">4.6</span><div><h4>Add llms.txt (optional) <span class="pl aeo">AEO</span></h4><p>A short file describing the business and key pages. Google doesn't use it and evidence that others do is thin, so add it only if it takes under an hour.</p></div><div class="m"><span class="own">SS</span><span class="out">File live</span></div></div>
+    <div class="t" data-p="loc"><span class="id">4.7</span><div><h4>Create or optimize every listing <span class="pl loc">Local</span></h4><ul><li>New listings: finish verification, fill every field on day one</li><li>Existing: fix the primary category, complete every field</li><li>Match NAP everywhere, merge duplicates, clean up data aggregators</li></ul><p>Step-by-step detail lives in the GBP Optimization Playbook.</p></div><div class="m"><span class="own">SS</span><span class="out">Listings live</span><div class="tools"><span class="tl jml">Self-Driving SEO</span><span class="tl">Whitespark</span></div></div></div>
+    <div class="t" data-p="s"><span class="id">4.8</span><div><h4>Log and verify</h4><p>Every change dated in the change log. Recrawl, then "Validate fix" in Search Console.</p></div><div class="m"><span class="own">SS</span><span class="out">Change log</span><div class="tools"><span class="tl">Screaming Frog</span><span class="tl">Search Console</span></div></div></div>
+  </div>
+</section>
+
+<!-- PHASE 5 -->
+<section id="p5">
+  <div class="ph"><div class="num">5</div><h2>Optimize existing pages</h2><div class="meta"><b>Month 1 onward</b> · The fastest gains, from pages Google already half-trusts</div></div>
+
+  <figure data-p="seo">
+    <div class="scroll">
+    <svg viewBox="0 0 760 112" role="img" aria-label="Positions 1 to 30. Page one is 1 to 10. Striking distance is 8 to 20." style="min-width:600px">
+      <path class="ln" d="M20,24 V18 H258 V24"/><text class="mono-t" x="139" y="12" text-anchor="middle">page one</text>
+      <g>
+        <rect class="n-o" x="20" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="44" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="68" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="92" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="116" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="140" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="164" y="30" width="22" height="30" rx="2"/>
+        <rect class="n-l" x="188" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="212" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="236" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="260" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="284" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="308" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="332" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="356" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="380" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="404" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="428" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="452" y="30" width="22" height="30" rx="2"/><rect class="n-l" x="476" y="30" width="22" height="30" rx="2"/>
+        <rect class="n-o" x="500" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="524" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="548" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="572" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="596" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="620" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="644" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="668" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="692" y="30" width="22" height="30" rx="2"/><rect class="n-o" x="716" y="30" width="22" height="30" rx="2"/>
+      </g>
+      <text class="s" x="31" y="49" text-anchor="middle">1</text><text class="s on-l" x="199" y="49" text-anchor="middle">8</text><text class="s on-l" x="487" y="49" text-anchor="middle">20</text><text class="s" x="727" y="49" text-anchor="middle">30</text>
+      <path class="ln" d="M188,68 V74 H498 V68"/><text class="b" x="343" y="94" text-anchor="middle">striking distance: 8–20</text>
+    </svg>
+    </div>
+    <figcaption>Pages averaging positions 8 to 20 with real impressions are close to page one. Moving them is faster than ranking a new page.</figcaption>
+  </figure>
+
+  <figure data-p="aeo">
+    <div class="anat">
+      <div class="mk h">How much does a tankless water heater install cost in San Diego?</div><div class="note">Heading phrased the way people ask</div>
+      <div class="mk ans">Most San Diego installs cost $3,200 to $5,500, including the unit, permit and haul-away. Gas-to-gas swaps sit at the low end; switching from electric adds venting and gas line work… <i>(40–60 words)</i></div><div class="note">Direct answer first. Makes sense if lifted out alone.</div>
+      <div class="mk">Table: tank vs tankless · price · lifespan · install time</div><div class="note">Tables for comparisons, numbered steps for processes</div>
+      <div class="mk">"Based on 214 installs we completed in 2026." Source and date</div><div class="note">Proof: the client's own numbers, with sources</div>
+      <div class="mk">Reviewed by Maria Lopez, licensed plumber · Updated Oct 2026</div><div class="note">Named expert and a visible date</div>
+    </div>
+    <figcaption>The answer-first anatomy, shown with an example section. Every money page section follows it. Write a normal, readable page; Google warns against chopping pages into pieces for AI.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">5.1</span><div><h4>Push striking-distance pages <span class="pl seo">SEO</span></h4><p>Match what ranks, tighten the title, add missing subtopics, link from 3+ strong pages.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Pages updated</span><div class="tools"><span class="tl">Search Console</span><span class="tl">Semrush</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">5.2</span><div><h4>Fix low click rates <span class="pl seo">SEO</span></h4><p>Top-5 pages with weak click rates: rewrite the title and description. Check after 4 weeks.</p></div><div class="m"><span class="own">SS</span><span class="out">Titles rewritten</span><div class="tools"><span class="tl">Search Console</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">5.3</span><div><h4>Rewrite money pages answer-first <span class="pl aeo">AEO</span></h4><p>The anatomy above. FAQ from real customer questions.</p></div><div class="m"><span class="own">CW · SS</span><span class="out">Pages rewritten</span></div></div>
+    <div class="t" data-p="s"><span class="id">5.4</span><div><h4>Add proof, authors and dates</h4><p>Numbers with sources, expert quotes, named reviewer, "Last updated" only on real changes.</p></div><div class="m"><span class="own">CW · CL</span><span class="out">Proof added</span></div></div>
+    <div class="t" data-p="seo"><span class="id">5.5</span><div><h4>Merge and prune <span class="pl seo">SEO</span></h4><p>Merge competing or thin pages into the owner page, 301 the rest. Check backlinks first.</p></div><div class="m"><span class="own">SS</span><span class="out">Redirect log</span><div class="tools"><span class="tl">Screaming Frog</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">5.6</span><div><h4>Correct wrong AI facts <span class="pl aeo">AEO</span></h4><p>State the right fact plainly on its owner page and fix outside profiles. Recheck next month.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Facts fixed</span></div></div>
+    <div class="t" data-p="loc"><span class="id">5.7</span><div><h4>Upgrade location pages <span class="pl loc">Local</span></h4><p>Jobs done there, local reviews, team, photos, directions.</p></div><div class="m"><span class="own">CW · CL</span><span class="out">Pages upgraded</span></div></div>
+  </div>
+</section>
+
+<!-- PHASE 6 -->
+<section id="p6">
+  <div class="ph"><div class="num">6</div><h2>Create new content</h2><div class="meta"><b>Month 2 onward</b> · Pages that rank, get cited and bring leads</div></div>
+
+  <figure>
+    <div class="steps">
+      <div><span>Calendar</span></div><div><span>Brief</span></div><div><span>Expert call</span></div><div><span>Draft</span></div><div><span class="opt">Specialist review</span></div><div><span>Client OK</span></div><div><span class="g">G3 · Publish QA</span></div><div><span>Indexed</span></div>
+    </div>
+    <figcaption>Every new page moves through these steps. The dashed step applies to legal, medical, dental and financial advice.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="s"><span class="id">6.1</span><div><h4>Set the content calendar</h4><p>Money pages first (services, locations, comparisons, pricing), then guides. Each with a target query and prompt.</p></div><div class="m"><span class="own">SS · AL</span><span class="out">Calendar</span></div></div>
+    <details class="more" data-p="s">
+      <summary>Content calendar: where it comes from and what it holds <span class="hint">inputs, fields, example</span></summary>
+      <div class="in">
+        <h5>Where the topics come from</h5>
+        <div class="flowin"><span>Keyword map (3.3)</span><span>Prompt map (3.4)</span><span>Gap list (2O.7)</span><span>Striking-distance pages (5.1)</span><span>Customer questions (kickoff, reviews, sales calls)</span><span>Seasonality (Search Console)</span><span class="to">→</span><span class="g">Content calendar</span></div>
+        <p>Nothing goes on the calendar without coming from one of these. That keeps every page tied to a search people make or a question buyers ask.</p>
+        <h5>What each row holds</h5>
+        <div class="tbl"><table>
+          <thead><tr><th>Field</th><th>What goes in it</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Publish date</td><td>Target date. Seasonal pages go live 6 to 8 weeks before the peak.</td></tr>
+            <tr><td class="k">Page type</td><td>Service, location, comparison, pricing, guide, FAQ. Marked new or rewrite.</td></tr>
+            <tr><td class="k">Target query + intent</td><td>One main query, and whether it's ready-to-buy, comparing or learning.</td></tr>
+            <tr><td class="k">Target prompts</td><td>The AI prompts from the prompt map this page should answer.</td></tr>
+            <tr><td class="k">Cluster</td><td>Which main service page it supports, and the internal links in and out.</td></tr>
+            <tr><td class="k">People</td><td>Writer, client expert to interview, specialist reviewer if needed.</td></tr>
+            <tr><td class="k">Schema + CTA</td><td>Schema type (see 4.3) and the call to action.</td></tr>
+            <tr><td class="k">Status</td><td>Planned → Briefed → Drafting → Review → Approved → Published → Indexed.</td></tr>
+          </tbody></table></div>
+        <h5>Example rows</h5>
+        <div class="tbl"><table>
+          <thead><tr><th>Date</th><th>Page</th><th>Query</th><th>Prompt</th><th>Cluster</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">Nov 4</td><td>Rewrite: service</td><td>tankless water heater install san diego</td><td>best tankless installer in San Diego</td><td>Water heaters</td><td>Review</td></tr>
+            <tr><td class="mono">Nov 18</td><td>New: pricing</td><td>tankless water heater cost</td><td>how much is a tankless install</td><td>Water heaters</td><td>Briefed</td></tr>
+            <tr><td class="mono">Dec 2</td><td>New: comparison</td><td>tankless vs tank water heater</td><td>should I get tankless or tank</td><td>Water heaters</td><td>Planned</td></tr>
+          </tbody></table></div>
+        <h5>How it runs</h5>
+        <ul>
+          <li>Built for 90 days with the roadmap (3.6).</li>
+          <li>The next month is locked at each monthly call; later months can still change.</li>
+          <li>Months 1 and 2 lean on money pages and rewrites; guides come once those are live.</li>
+          <li>Reviewed every quarter against what's ranking, what's cited and what brings leads.</li>
+        </ul>
+      </div>
+    </details>
+    <div class="t" data-p="s"><span class="id">6.2</span><div><h4>Write the brief</h4><ul><li>Query, intent and target prompts</li><li>What ranks now and what it misses</li><li>Questions to answer, links in and out, schema, call to action</li></ul></div><div class="m"><span class="own">SS</span><span class="out">Brief</span></div></div>
+    <details class="more" data-p="s">
+      <summary>Brief template, with a filled example <span class="hint">what the writer gets</span></summary>
+      <div class="in">
+        <p>One brief per page, finished before anyone writes. A writer who has never met the client should be able to produce the page from it.</p>
+        <div class="tbl"><table>
+          <thead><tr><th style="width:22%">Field</th><th>Example: tankless pricing page</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Page and URL</td><td>New pricing page · <span class="mono">/tankless-water-heater-cost/</span></td></tr>
+            <tr><td class="k">Main query + intent</td><td>tankless water heater cost san diego · ready to buy</td></tr>
+            <tr><td class="k">Target prompts</td><td>how much is a tankless install in San Diego · is tankless worth it</td></tr>
+            <tr><td class="k">What ranks now</td><td>National cost guides with ranges, no local prices, no install photos. Our angle: real San Diego prices from the client's own jobs.</td></tr>
+            <tr><td class="k">Outline</td><td>H1 Tankless water heater cost in San Diego (2026) · H2 How much does it cost? · H2 What changes the price? · H2 Tank vs tankless: cost over 10 years · H2 Do you need a permit? · FAQ</td></tr>
+            <tr><td class="k">Proof to include</td><td>Price range from the client's last 12 months of jobs, permit fee from the city site, one quote from the lead installer</td></tr>
+            <tr><td class="k">Expert questions</td><td>What's the most common surprise cost? When is tankless not worth it? How long do installs take?</td></tr>
+            <tr><td class="k">Internal links</td><td>In: water heater service page, homepage, 2 related posts. Out: booking page, comparison page.</td></tr>
+            <tr><td class="k">Schema + CTA</td><td>Service with Offer, FAQPage · "Get a fixed-price quote"</td></tr>
+            <tr><td class="k">Length guide</td><td>Match the top 3 results (about 1,200 to 1,600 words). Length is never the goal.</td></tr>
+          </tbody></table></div>
+      </div>
+    </details>
+    <div class="t" data-p="s"><span class="id">6.3</span><div><h4>Get expert input</h4><p>A 20-minute call with the client's expert. First-hand detail is what generic content can't copy.</p></div><div class="m"><span class="own">CW · CL</span><span class="out">Interview notes</span></div></div>
+    <div class="t" data-p="s"><span class="id">6.4</span><div><h4>Draft</h4><p>Answer-first anatomy. AI can help draft; a person edits every line and checks every fact. No mass-produced pages.</p></div><div class="m"><span class="own">CW</span><span class="out">Draft</span></div></div>
+    <div class="t" data-p="s"><span class="id">6.5</span><div><h4>Specialist review, then client approval</h4><p>Advice topics: a licensed reviewer is named, no promised outcomes. Then one client revision round.</p></div><div class="m"><span class="own">CW · CL</span><span class="out">Sign-offs</span></div></div>
+    <div class="t" data-p="s"><span class="id">6.6</span><div><h4>Run the publish checklist</h4><p>Title, H1, URL, schema valid, 3+ internal links in, images, author, date, mobile check.</p></div><div class="m"><span class="own">SS</span><span class="out">Ticked checklist</span></div></div>
+  </div>
+
+  <div class="gate"><span class="label">Gate 3</span><h4>Checklist passed, facts checked, client approved?</h4><p>All three, or it doesn't go live. A wrong price repeated by an AI tool costs more than a week's delay.</p></div>
+
+  <div class="tasks">
+    <div class="t" data-p="s"><span class="id">6.7</span><div><h4>Publish and get indexed</h4><p>Request indexing; IndexNow pings Bing. Confirm indexed within 7 days.</p></div><div class="m"><span class="own">SS</span><span class="out">Indexed</span><div class="tools"><span class="tl">Search Console</span><span class="tl">Bing Webmaster</span></div></div></div>
+    <details class="more" data-p="seo">
+      <summary>Getting pages indexed: how it works and what to do when it doesn't <span class="hint">steps, statuses, fixes</span></summary>
+      <div class="in">
+        <div class="flowin"><span>Discovered</span><span class="to">→</span><span>Crawled</span><span class="to">→</span><span>Indexed</span><span class="to">→</span><span class="g">Ranking</span></div>
+        <p>Google first has to find the URL, then visit it, then decide it's worth keeping. Only indexed pages can rank or be used in Google's AI answers. Most new pages on a healthy site are indexed within days to a few weeks.</p>
+        <h5>Speed it up</h5>
+        <ol>
+          <li>The page is in the XML sitemap, which updates automatically.</li>
+          <li>Link to it from 3 or more pages that are already indexed (the homepage, its main service page, related posts).</li>
+          <li>Request indexing once in Search Console's URL Inspection tool. There's a daily limit, so save it for important pages.</li>
+          <li>Ping Bing with IndexNow (most SEO plugins do this automatically).</li>
+          <li>Backlinks we've earned that Google hasn't found after 2 weeks: submit them through Indexification, so the link counts.</li>
+        </ol>
+        <h5>When a page isn't indexed: read the status</h5>
+        <div class="tbl"><table>
+          <thead><tr><th>Status in the Pages report</th><th>What it means</th><th>What we do</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Discovered, currently not indexed</td><td>Google knows the URL but hasn't visited yet</td><td>Add internal links, check the site isn't slow or overloaded, wait 2 weeks</td></tr>
+            <tr><td class="k">Crawled, currently not indexed</td><td>Google visited and decided it isn't worth keeping yet</td><td>Usually a quality problem: make the page more useful and less like other pages</td></tr>
+            <tr><td class="k">Duplicate, Google chose a different canonical</td><td>Google thinks another page says the same thing</td><td>Merge the pages, or make this one clearly different</td></tr>
+            <tr><td class="k">Excluded by noindex</td><td>The page tells Google not to index it</td><td>Remove the noindex if it should rank</td></tr>
+            <tr><td class="k">Blocked by robots.txt</td><td>Google isn't allowed to visit</td><td>Fix robots.txt</td></tr>
+            <tr><td class="k">Page with redirect / Not found (404)</td><td>The URL moved or doesn't exist</td><td>Fix internal links to point at the final URL</td></tr>
+          </tbody></table></div>
+        <h5>Don't</h5>
+        <ul>
+          <li>Don't request indexing for the same URL again and again; it doesn't speed anything up.</li>
+          <li>Don't use Google's Indexing API for normal pages. Google allows it only for job postings and livestream videos.</li>
+          <li>Don't run the client's own pages through indexing services. Search Console handles those; Indexification is only for backlinks (step 5).</li>
+        </ul>
+        <p>Not indexed after 4 weeks with good links? Treat it as a quality or duplication problem, not a technical one.</p>
+      </div>
+    </details>
+    <div class="t" data-p="aeo"><span class="id">6.8</span><div><h4>Reuse off the site <span class="pl aeo">AEO</span></h4>
+      <div class="br"><div class="q"><span class="label">Branch</span>Where does the audience look?</div><div class="o"><div><b>YouTube</b>Full description, chapters, accurate captions.</div><div><b>LinkedIn</b>Expert post; key phrase in line one.</div><div><b>Forums</b>Real answers from the client's people only.</div></div></div>
+    </div><div class="m"><span class="own">CW · CL</span><span class="out">Reuse logged</span></div></div>
+  </div>
+</section>
+
+<!-- PHASE 7 -->
+<section id="p7">
+  <div class="ph"><div class="num">7</div><h2>Authority and presence</h2><div class="meta"><b>Month 2 onward</b> · Other trusted sites vouch for the client</div></div>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 760 196" role="img" aria-label="AI visibility ladder: retrieved, cited, mentioned, recommended. The top step depends on what other sites say." style="min-width:560px">
+      <rect class="n-o" x="20" y="132" width="172" height="56" rx="4"/><text class="b" x="32" y="154">Retrieved</text><text class="s" x="32" y="172">crawlable, indexed</text>
+      <rect class="n-o" x="200" y="98" width="172" height="90" rx="4"/><text class="b" x="212" y="120">Cited</text><text class="s" x="212" y="138">clear answers + proof</text>
+      <rect class="n-p" x="380" y="64" width="172" height="124" rx="4"/><text class="b on-p" x="392" y="86">Mentioned</text><text class="s on-p" x="392" y="104">brand named in sources</text>
+      <rect class="n-l" x="560" y="30" width="180" height="158" rx="4"/><text class="b on-l" x="572" y="52">Recommended</text><text class="s on-l" x="572" y="70">reviews, roundups and</text><text class="s on-l" x="572" y="86">forums agree</text>
+      <text class="mono-t" x="20" y="20">our own pages win the lower steps · other sites win the top one</text>
+    </svg>
+    </div>
+    <figcaption>Being cited and being recommended are different. "The best options are A, B and C" leans on what reviews, roundups and forums say about the client.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="seo"><span class="id">7.1</span><div><h4>Find the link gap <span class="pl seo">SEO</span></h4><p>Sites linking to 2+ competitors but not to us.</p></div><div class="m"><span class="own">SS</span><span class="out">Target list</span><div class="tools"><span class="tl">Semrush</span></div></div></div>
+    <div class="t" data-p="seo"><span class="id">7.2</span><div><h4>Earn links <span class="pl seo">SEO</span></h4><p>Data stories, associations, partners, expert articles, unlinked mentions, broken-link swaps.</p></div><div class="m"><span class="own">SS · AL</span><span class="out">Outreach log</span><div class="tools"><span class="tl">Indexification</span></div></div></div>
+    <details class="more" data-p="seo">
+      <summary>Ways we earn links <span class="hint">methods, effort, best fit</span></summary>
+      <div class="in">
+        <p>A link is another site vouching for the client. One link from a relevant local or trade site is worth more than dozens from random blogs. Start at the top of this list: the easy, local wins.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Method</th><th>How it works</th><th>Effort</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Associations and chambers</td><td>Membership directories and member spotlights link to members</td><td class="lvl-l">Low</td><td>Local businesses</td></tr>
+            <tr><td class="k">Suppliers and partners</td><td>Manufacturers' dealer or installer finders, partner pages, vendor case studies</td><td class="lvl-l">Low</td><td>Trades, B2B</td></tr>
+            <tr><td class="k">Unlinked mentions</td><td>Find sites that name the client without linking, and ask for the link</td><td class="lvl-l">Low</td><td>Any established brand</td></tr>
+            <tr><td class="k">Sponsorships and events</td><td>Real local sponsorships (teams, charities, events) list sponsors with links</td><td class="lvl-m">Medium</td><td>Local businesses</td></tr>
+            <tr><td class="k">Journalist requests</td><td>Answer reporters' requests for expert quotes (Qwoted, Featured and similar)</td><td class="lvl-m">Medium</td><td>Experts: lawyers, dentists, finance</td></tr>
+            <tr><td class="k">Expert articles and podcasts</td><td>The client's expert writes for trade sites or guests on shows, unpaid</td><td class="lvl-m">Medium</td><td>Authority in a niche</td></tr>
+            <tr><td class="k">Broken link replacement</td><td>Find dead links on relevant pages and offer our page as the replacement</td><td class="lvl-m">Medium</td><td>Sites with strong guides</td></tr>
+            <tr><td class="k">Local press</td><td>Pitch real news: openings, milestones, community work, local data</td><td class="lvl-m">Medium</td><td>Local businesses</td></tr>
+            <tr><td class="k">Data stories</td><td>Publish the client's own numbers ("average AC repair cost in San Diego, 2026") and pitch them</td><td class="lvl-h">High</td><td>Bigger authority jumps</td></tr>
+            <tr><td class="k">Linkable tools</td><td>Calculators, checklists, cost guides other sites reference</td><td class="lvl-h">High</td><td>Long-term link magnets</td></tr>
+          </tbody></table></div>
+        <p>Links marked "nofollow" or "sponsored" pass less ranking value, but still bring visitors and count as mentions for AI tools.</p>
+      </div>
+    </details>
+    <details class="more risk" data-p="seo">
+      <summary><span class="risk-chip">High risk</span> Last-resort tactics (black hat) <span class="hint">read before considering any of these</span></summary>
+      <div class="in">
+        <div class="warn"><b>These break Google's spam policies.</b> If Google catches them, the client can lose rankings across the whole site, through a manual action or quietly through an algorithm update. Recovery takes months and isn't guaranteed. They are a last resort, not a growth plan.</div>
+        <h5>Only consider them when all of these are true</h5>
+        <ul>
+          <li>Every option in "Ways we earn links" has been worked for at least 6 months without enough movement.</li>
+          <li>The client has been told the risks in plain words and has signed a written acknowledgment.</li>
+          <li>The account lead and SEO lead have both approved it.</li>
+          <li>The client isn't in legal, medical or financial services, where losing visibility does the most harm.</li>
+          <li>Every step is logged so it can be undone: redirects removed, links disavowed.</li>
+        </ul>
+        <div class="tbl"><table>
+          <thead><tr><th>Tactic</th><th>How it works</th><th>Risk</th><th>Why it's risky</th></tr></thead>
+          <tbody>
+            <tr><td class="k">Buying a real, related business</td><td>Acquire a closing competitor or related business and merge its site, content and customers into the client's</td><td class="lvl-m">Medium</td><td>Legitimate when the business is truly acquired and the content is related. Unrelated redirects get ignored.</td></tr>
+            <tr><td class="k">Expired domain redirects</td><td>Find a dropped domain in the client's field with Spamzilla (it shows link history and spam signals), buy it, and 301-redirect it to the client's site to raise authority scores</td><td class="lvl-h">High</td><td>Named as "expired domain abuse" in Google's spam policies since 2024. Unrelated domains are usually ignored or penalized.</td></tr>
+            <tr><td class="k">Paid guest posts and link insertions</td><td>Pay sites to publish an article or add a link to an existing one</td><td class="lvl-h">High</td><td>Link spam under Google's policies. Marking the link "sponsored" makes it allowed, but then it passes no ranking value.</td></tr>
+            <tr><td class="k">Private blog networks (PBNs)</td><td>A group of sites we control, built only to link to clients</td><td class="lvl-h">Very high</td><td>Google looks for these patterns specifically. When one site is caught, every linked client is exposed.</td></tr>
+            <tr><td class="k">Parasite pages</td><td>Publish client content on a high-authority site that has nothing to do with the topic</td><td class="lvl-h">Very high</td><td>"Site reputation abuse" under Google's policies since 2024.</td></tr>
+            <tr><td class="k">Link exchanges at scale</td><td>"I'll link to you if you link to me" across many sites</td><td class="lvl-h">High</td><td>Excessive link exchanges are named as link spam.</td></tr>
+          </tbody></table></div>
+        <p>Domain Authority (Moz) and Authority Score (Semrush) are outside tools' estimates, not Google's. A higher score doesn't guarantee rankings, so judge a redirect by real ranking and traffic changes.</p>
+        <p>If a tactic gets flagged: remove the redirects or links, disavow what can't be removed, fix any manual action listed in Search Console, then file a reconsideration request.</p>
+      </div>
+    </details>
+    <div class="t" data-p="aeo"><span class="id">7.3</span><div><h4>Get onto the sources AI cites <span class="pl aeo">AEO</span></h4><p>Work the 2A.6 list: directories, review sites, roundups.</p></div><div class="m"><span class="own">SS · AL</span><span class="out">Placements log</span></div></div>
+    <div class="t" data-p="aeo loc"><span class="id">7.4</span><div><h4>Make every profile say the same thing <span class="pl aeo">AEO</span> <span class="pl loc">Local</span></h4><p>Same description, category, services and areas everywhere. AI looks for agreement.</p></div><div class="m"><span class="own">SS</span><span class="out">Profiles aligned</span></div></div>
+    <div class="t" data-p="loc aeo"><span class="id">7.5</span><div><h4>Run a steady review system <span class="pl loc">Local</span> <span class="pl aeo">AEO</span></h4><p>Ask every customer, reply to every review within 48 hours. Never ask only happy customers or offer rewards (Google's rules). AU can automate the ask by text.</p></div><div class="m"><span class="own">AU · CL</span><span class="out">Review flow live</span></div></div>
+    <div class="t" data-p="loc"><span class="id">7.6</span><div><h4>Build local citations <span class="pl loc">Local</span></h4><p>Data aggregators, then top trade and city directories, identical NAP.</p></div><div class="m"><span class="own">SS</span><span class="out">Citation tracker</span><div class="tools"><span class="tl">Whitespark</span></div></div></div>
+    <div class="t" data-p="aeo"><span class="id">7.7</span><div><h4>Join communities honestly <span class="pl aeo">AEO</span></h4><p>The client's real people answer where buyers ask, under their own names.</p></div><div class="m"><span class="own">CL · SS</span><span class="out">Activity log</span></div></div>
+  </div>
+</section>
+
+<!-- PHASE 8 -->
+<section id="p8">
+  <div class="ph"><div class="num">8</div><h2>Monitor and report</h2><div class="meta"><b>Ongoing</b> · Catch problems early, show results in business terms</div></div>
+
+  <div class="cols3">
+    <div class="card"><span class="label">Weekly</span><ul><li data-p="seo">Screaming Frog crawl, Search Console errors</li><li data-p="seo">DebugBear speed alerts</li><li data-p="seo">Big ranking moves</li><li data-p="loc">New reviews answered</li><li data-p="aeo">robots.txt still open, 5 prompts spot-checked</li><li data-p="s">Work shipped vs plan</li></ul></div>
+    <div class="card"><span class="label">Monthly</span><ul><li data-p="seo">Clicks, impressions vs last month and last year</li><li data-p="seo loc">Rankings and map grid</li><li data-p="s">Organic leads (key events)</li><li data-p="aeo">Full prompt set via DataForSEO</li><li data-p="aeo">AI referrals and brand demand</li></ul></div>
+    <div class="card l"><span class="label">Quarterly</span><ul><li data-p="seo">Recrawl and technical check</li><li data-p="s">Refresh list: pages losing traffic</li><li data-p="aeo">Update the prompt set</li><li data-p="s">Competitor review, next 90-day roadmap</li></ul></div>
+  </div>
+
+  <div class="sub"><h3>When results are poor: find the leak</h3></div>
+  <figure>
+    <div class="leak">
+      <div class="row"><div class="bar" style="width:100%"><span>1</span>Is the page indexed?</div><div class="fix">No → <b>fix indexing</b> (Phase 4)</div></div>
+      <div class="row"><div class="bar" style="width:92%"><span>2</span>Ranks in the top 20?</div><div class="fix">No → <b>rework the page or build links</b></div></div>
+      <div class="row"><div class="bar" style="width:84%"><span>3</span>People click?</div><div class="fix">No → <b>rewrite title</b>, or aim to be cited in the AI Overview</div></div>
+      <div class="row"><div class="bar" style="width:76%"><span>4</span>Clicks turn into leads?</div><div class="fix">No → <b>fix the page</b>, or brief the client's developers</div></div>
+      <div class="row"><div class="bar" style="width:68%"><span>5</span>Leads are good?</div><div class="fix">No → <b>target buying-intent searches</b></div></div>
+      <div class="row"><div class="bar" style="width:60%"><span>6</span>AI cites the page?</div><div class="fix">No → <b>answer-first rewrite</b>, check crawlers</div></div>
+      <div class="row"><div class="bar" style="width:52%"><span>7</span>AI recommends the client?</div><div class="fix">No → <b>reviews, roundups, profiles</b> (Phase 7)</div></div>
+    </div>
+    <figcaption>Work down and stop at the first "no". Fixing a lower step while a higher one is broken wastes the month.</figcaption>
+  </figure>
+
+  <div class="tasks">
+    <div class="t" data-p="s"><span class="id">8.1</span><div><h4>Keep the change log</h4><p>What, where, when, why. It explains every movement.</p></div><div class="m"><span class="own">SS</span><span class="out">Change log</span></div></div>
+    <div class="t" data-p="s"><span class="id">8.2</span><div><h4>Monthly report by the 5th business day</h4><p>Leads first, then 3 to 5 numbers vs baseline, what we did, what's next, what we need.</p></div><div class="m"><span class="own">AL · SS</span><span class="out">Report</span></div></div>
+    <div class="t" data-p="s"><span class="id">8.3</span><div><h4>Monthly call (30 min)</h4><p>Walk the report, chase stuck approvals or developer tickets, agree next month's pages.</p></div><div class="m"><span class="own">AL · CL</span><span class="out">Call notes</span></div></div>
+    <div class="t" data-p="s"><span class="id">8.4</span><div><h4>Quarterly review</h4><p>Results vs targets, new roadmap, Phase 9 decision.</p></div><div class="m"><span class="own">AL</span><span class="out">QBR deck</span></div></div>
+  </div>
+</section>
+
+<!-- PHASE 9 -->
+<section id="p9">
+  <div class="ph"><div class="num">9</div><h2>Refresh, scale or exit</h2><div class="meta"><b>Quarterly</b> · The next move, made on purpose</div></div>
+  <div class="cols3">
+    <div class="card l"><h4>Scale</h4><p class="eff"><b>When:</b> early signs up two quarters, leads growing.</p><p class="eff">New clusters, new locations, more pages, more authority work.</p></div>
+    <div class="card"><h4>Maintain</h4><p class="eff"><b>When:</b> steady results, client at capacity or tight on cash.</p><p class="eff">Fewer new pages; keep monitoring, refreshes, reviews.</p></div>
+    <div class="card m"><h4>Offboard</h4><p class="eff"><b>When:</b> the engagement ends.</p><p class="eff">Final report, handover, remove our access last.</p></div>
+  </div>
+  <div class="tasks">
+    <div class="t" data-p="s"><span class="id">9.1</span><div><h4>Refresh old content</h4><p>Pages losing traffic or over 12 months old get new facts and a new date.</p></div><div class="m"><span class="own">SS · CW</span><span class="out">Refresh list</span></div></div>
+    <div class="t" data-p="s"><span class="id">9.2</span><div><h4>Raise other services from the data</h4><p>Unrankable buying searches → Google Ads test. Traffic that won't convert → web project. Manual review asks → automation.</p></div><div class="m"><span class="own">AL</span><span class="out">QBR opportunities</span></div></div>
+    <div class="t" data-p="s"><span class="id">9.3</span><div><h4>Hand over</h4><p>Keyword map, prompt history, change log, schema, all content. Never delete pages, listings or redirects.</p></div><div class="m"><span class="own">AL · SS</span><span class="out">Handover folder</span></div></div>
+    <div class="t" data-p="s"><span class="id">9.4</span><div><h4>Remove our access last</h4><p>Only after the client confirms their own admin access works everywhere.</p></div><div class="m"><span class="own">SS</span><span class="out">Access removed</span></div></div>
+  </div>
+</section>
+
+<!-- NEVER -->
+<section id="never">
+  <div class="ph"><div class="num">✕</div><h2>What we never do</h2><div class="meta">Applies to every team member and every white-label partner</div></div>
+  <div class="never">
+    <div><span><b>Guarantee rankings or AI citations</b><small>Nobody controls them.</small></span></div>
+    <div><span><b>Buy links or use link networks</b><small>Breaks Google's spam policies. The only exception is the last-resort process in 7.2, with the client's written sign-off.</small></span></div>
+    <div><span><b>Fake, filtered or rewarded reviews</b><small>Breaks Google's review rules. Fake reviews also break the FTC's 2024 rule.</small></span></div>
+    <div><span><b>Plant forum or social posts</b><small>No fake accounts, no staged threads.</small></span></div>
+    <div><span><b>Mass-produce thin pages</b><small>No city-swap pages, no unedited AI pages.</small></span></div>
+    <div><span><b>Write separate content "for AI"</b><small>One page serves people, search and AI.</small></span></div>
+    <div><span><b>Stuff keywords</b><small>Hurts rankings and doesn't help AI visibility.</small></span></div>
+    <div><span><b>Hide content behind JavaScript</b><small>Search engines and AI agents may miss it.</small></span></div>
+    <div><span><b>Block search crawlers by accident</b><small>Search and training crawlers are separate decisions.</small></span></div>
+    <div><span><b>Own the client's assets</b><small>No domains, listings or analytics under JML logins.</small></span></div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="ph"><div class="num">§</div><h2>Rules of thumb</h2><div class="meta">Starting points. Google's numbers are marked; the rest are ours.</div></div>
+  <div class="tbl">
+    <table class="rules">
+      <thead><tr><th>Rule</th><th>Number</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Title / meta description</td><td class="n">~50–60 / ~150–160 chars</td><td>Ours</td></tr>
+        <tr><td>Core Web Vitals "good"</td><td class="n">LCP &lt;2.5s · INP &lt;200ms · CLS &lt;0.1</td><td>Google</td></tr>
+        <tr><td>Click depth for key pages</td><td class="n">≤ 3</td><td>Ours</td></tr>
+        <tr><td>Striking distance</td><td class="n">positions 8–20</td><td>Ours</td></tr>
+        <tr><td>Answer block</td><td class="n">40–60 words</td><td>Ours</td></tr>
+        <tr><td>AI prompts / runs per engine</td><td class="n">20–30 / 5</td><td>Ours</td></tr>
+        <tr><td>Wait before judging a page edit</td><td class="n">4–8 weeks</td><td>Ours</td></tr>
+        <tr><td>New site to meaningful leads</td><td class="n">6–12 months</td><td>Ours</td></tr>
+        <tr><td>Review replies</td><td class="n">≤ 48 hours</td><td>Ours</td></tr>
+        <tr><td>Search Console history</td><td class="n">16 months</td><td>Google</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Jay Marketing Lab · SEO &amp; AEO Playbook · Internal · October 2026. Search and AI platforms change often; re-check crawler names and platform features every quarter.</footer>
+</main>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.filter button');
+  var tracks=['seo','aeo','loc'];
+  function apply(f){
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===f))});
+    document.querySelectorAll('[data-p]').forEach(function(el){
+      var ps=el.dataset.p.split(' ');
+      var isTrack=ps.some(function(p){return tracks.indexOf(p)>-1});
+      el.classList.toggle('off', f!=='all' && isTrack && ps.indexOf(f)===-1);
+    });
+    try{localStorage.setItem('jml-seo-filter',f)}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.f)})});
+  var saved='all';try{saved=localStorage.getItem('jml-seo-filter')||'all'}catch(e){}
+  if(['all','seo','aeo','loc'].indexOf(saved)===-1)saved='all';
+  apply(saved);
+})();
+</script>
+
+</body></html>

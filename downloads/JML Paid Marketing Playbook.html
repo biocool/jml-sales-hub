@@ -1,0 +1,1147 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>JML Paid Marketing Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: purple masthead, sticky phase rail + platform filter, single reading column of phases built from task rows, gates and branch blocks */
+:root{
+  --purple:#4C0099; --lime:#B1EB1E;
+  --bg:#FFFFFF; --surface:#F7F5FA; --fg:#1A1A1A; --muted:#5B536B; --line:#E3DCEC;
+  --heading:#4C0099; --chip:#EFEAF6; --onpurple:#FFFFFF;
+  --svg-node-text:#1A1A1A;
+  --display:"DM Serif Display",Georgia,serif;
+  --body:"DM Sans",Arial,sans-serif;
+  --mono:"JetBrains Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#130A20; --surface:#1D1230; --fg:#ECE7F3; --muted:#AFA4C2; --line:#33264B;
+  --heading:#F2ECFA; --chip:#2A1C42; --svg-node-text:#ECE7F3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#130A20; --surface:#1D1230; --fg:#ECE7F3; --muted:#AFA4C2; --line:#33264B;
+  --heading:#F2ECFA; --chip:#2A1C42; --svg-node-text:#ECE7F3; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--purple)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--heading);text-wrap:balance;margin:0}
+h4{font-size:1rem;margin:0 0 .25rem;font-weight:700}
+p{margin:0 0 .6rem}
+a{color:inherit}
+td a{color:var(--heading);text-underline-offset:2px}
+.mono{font-family:var(--mono);overflow-wrap:anywhere}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+
+/* Masthead */
+.mast{background:var(--purple);color:var(--onpurple)}
+.mast .wrap{padding-block:28px 34px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:end}
+.mast img{width:130px;display:block}
+.mast h1{color:#FFFFFF;font-size:clamp(2rem,5vw,3.2rem);line-height:1.05}
+.mast .label{color:var(--lime);margin-bottom:.6rem}
+.mast p{color:#E9E1F5;max-width:62ch;margin:.8rem 0 0}
+@media (max-width:620px){.mast .wrap{grid-template-columns:1fr;gap:18px}.mast img{width:110px}}
+
+/* Sticky rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.rail .wrap{display:flex;gap:14px;align-items:center;padding-block:10px;flex-wrap:wrap}
+.phases{display:flex;gap:6px;overflow-x:auto;flex:1 1 420px;min-width:0;scrollbar-width:thin;padding-bottom:2px}
+.phases a{font-family:var(--mono);font-size:.74rem;text-decoration:none;padding:5px 9px;border-radius:4px;background:var(--chip);white-space:nowrap;color:var(--fg)}
+.phases a:hover,.phases a:focus-visible{background:var(--purple);color:#fff;outline:none}
+.filter{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.filter button{font:500 .8rem var(--body);background:transparent;color:var(--fg);border:0;padding:6px 12px;cursor:pointer}
+.filter button+button{border-left:1px solid var(--line)}
+.filter button[aria-pressed="true"]{background:var(--purple);color:#fff}
+.filter button:focus-visible{outline:2px solid var(--lime);outline-offset:-2px}
+
+main{padding-block:12px 80px}
+section{padding-top:44px;scroll-margin-top:70px}
+main > section + section{margin-top:48px;padding-top:64px;border-top:1px solid var(--line)}
+.vizlabel{margin-top:30px}
+.sechead{display:grid;grid-template-columns:72px 1fr;gap:4px 18px;align-items:baseline;margin-bottom:18px}
+.sechead .num{font-family:var(--display);font-size:2.6rem;line-height:1;color:var(--purple)}
+:root[data-theme="dark"] .sechead .num{color:var(--lime)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sechead .num{color:var(--lime)}}
+.sechead h2{font-size:clamp(1.6rem,3.4vw,2.1rem)}
+.sechead .meta{grid-column:2;color:var(--muted);font-size:.92rem}
+.sechead .meta b{color:var(--fg);font-weight:500}
+@media (max-width:560px){.sechead{grid-template-columns:1fr}.sechead .meta{grid-column:1}}
+.lede{max-width:68ch}
+
+/* Intro grid */
+.intro{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;margin-top:8px}
+.intro > *{min-width:0}
+@media (max-width:760px){.intro{grid-template-columns:1fr}}
+.legend{display:grid;gap:8px;font-size:.9rem}
+.legend div{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:start}
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}
+.role{border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:.88rem}
+.role b{font-family:var(--mono);font-size:.8rem;color:var(--heading)}
+
+/* Chips */
+.pl{display:inline-block;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;vertical-align:2px;white-space:nowrap}
+.pl.g{background:var(--chip);color:var(--heading);border:1px solid var(--purple)}
+.pl.m{background:var(--purple);color:#fff;border:1px solid var(--purple)}
+.pl.s{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.pl.c{background:var(--lime);color:#1A1A1A;border:1px solid var(--lime)}
+
+/* Tasks */
+.tasks{border-top:1px solid var(--line)}
+.task{display:grid;grid-template-columns:62px minmax(0,1fr) 210px;gap:6px 18px;padding:16px 0;border-bottom:1px solid var(--line)}
+.tid{font-family:var(--mono);font-size:.8rem;color:var(--muted);padding-top:2px}
+.tbody p{color:var(--fg);max-width:66ch}
+.tbody ul{margin:.2rem 0 .4rem;padding-left:1.1rem;max-width:66ch}
+.tbody li{margin:.15rem 0}
+.tmeta{font-size:.82rem;color:var(--muted);display:grid;gap:6px;align-content:start}
+.tmeta .own{font-family:var(--mono);font-size:.74rem;color:var(--fg)}
+.tmeta .own::before{content:"Owner  ";color:var(--muted)}
+.tmeta .out::before{content:"Output: ";font-weight:700;color:var(--fg)}
+@media (max-width:700px){.task{grid-template-columns:48px minmax(0,1fr)}.tmeta{grid-column:2}}
+.sub{margin:30px 0 8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sub h3{font-size:1.35rem}
+
+/* Gates and branches */
+.gate{background:var(--purple);color:#fff;border-radius:6px;padding:16px 18px;margin:22px 0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px}
+.gate .label{color:var(--lime);grid-row:span 2;padding-top:3px}
+.gate h4{color:#fff;font-size:1.02rem}
+.gate ul{margin:0;padding-left:1.1rem;color:#E9E1F5;font-size:.92rem}
+.gate p{margin:.3rem 0 0;color:#E9E1F5;font-size:.92rem}
+@media (max-width:560px){.gate{grid-template-columns:1fr}.gate .label{grid-row:auto}}
+.branch{border:1px solid var(--line);border-radius:6px;margin:10px 0 6px;overflow:hidden}
+.branch .bq{background:var(--surface);padding:9px 14px;font-weight:700;font-size:.92rem;border-bottom:1px solid var(--line)}
+.branch .bq .label{color:var(--muted);margin-right:8px;font-weight:400}
+.bopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.bopts > div{padding:10px 14px;font-size:.9rem;min-width:0}
+.bopts > div + div{border-left:1px solid var(--line)}
+@media (max-width:520px){.bopts > div + div{border-left:0;border-top:1px solid var(--line)}}
+.bopts b{display:block;font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--heading);margin-bottom:2px}
+
+.note{background:var(--surface);border-left:4px solid var(--lime);padding:12px 16px;border-radius:0 6px 6px 0;margin:16px 0;max-width:78ch;font-size:.94rem}
+.note b{font-weight:700}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:12px 0 4px;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:640px}
+th{background:var(--purple);color:#fff;text-align:left;font-weight:500;padding:9px 12px;font-size:.8rem}
+td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:var(--surface)}
+td.k{font-weight:700;white-space:nowrap}
+td .mono{font-size:.8rem}
+
+/* Scope */
+.scope{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.scope > div{border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+.scope h4{font-family:var(--display);font-weight:400;font-size:1.2rem;color:var(--heading);margin-bottom:6px}
+.scope ul{margin:0;padding-left:1.1rem;font-size:.9rem}
+.scope .out{background:var(--surface)}
+@media (max-width:820px){.scope{grid-template-columns:1fr}}
+
+/* Flow diagram */
+.flow{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface);margin-top:14px}
+.flow svg{display:block;min-width:900px;width:100%;height:auto}
+.n-shared rect{fill:var(--purple)}
+.n-shared text{fill:#FFFFFF}
+.n-lane rect{fill:var(--bg);stroke:var(--purple);stroke-width:1.5}
+.n-lane text{fill:var(--svg-node-text)}
+.n-lane.c rect{fill:var(--lime);stroke:var(--lime)}
+.n-lane.c text{fill:#1A1A1A}
+.n-lane.lp rect{stroke-dasharray:5 4}
+.n-gate path{fill:var(--bg);stroke:var(--purple);stroke-width:1.5}
+.n-gate text{fill:var(--svg-node-text)}
+.f-line{fill:none;stroke:var(--muted);stroke-width:1.5}
+.f-note{fill:var(--muted);font-family:var(--mono);font-size:10.5px}
+svg text{font-family:var(--body);font-size:13px}
+svg .t-b{font-weight:700}
+svg .t-s{font-size:11px}
+#arrow path{fill:var(--muted)}
+
+/* Diagnosis ladder */
+.ladder{counter-reset:step;display:grid;gap:0;margin-top:12px;border-top:1px solid var(--line)}
+.rung{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:6px 24px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rung .q{font-weight:700}
+.rung .q span{font-family:var(--mono);font-weight:400;color:var(--muted);margin-right:8px}
+.rung .a{font-size:.92rem}
+.rung .a b{color:var(--heading)}
+@media (max-width:700px){.rung{grid-template-columns:1fr}}
+
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:12px}
+.qs > div{border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:.92rem;min-width:0}
+.qs b{display:block;margin-bottom:3px}
+.qs .assume{color:var(--muted);font-size:.85rem;margin-top:4px}
+
+footer{border-top:1px solid var(--line);margin-top:56px;padding-block:20px;color:var(--muted);font-size:.85rem}
+[data-p].off{display:none}
+@media (prefers-reduced-motion:no-preference){.phases a,.filter button{transition:background .15s,color .15s}}
+
+/* ---- v6 visual components ---- */
+.viz{margin:18px 0 10px}
+.vizlabel{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:16px 0 4px;padding:0;list-style:none}
+.keys li{border-left:3px solid var(--lime);background:var(--surface);padding:9px 12px;font-size:.88rem;border-radius:0 6px 6px 0;min-width:0}
+.keys li b{color:var(--heading)}
+
+/* step chain */
+.chain{display:flex;align-items:stretch;flex-wrap:wrap;row-gap:14px}
+.chain > .st{position:relative;flex:1 1 0;min-width:110px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-right:24px;font-size:.84rem;line-height:1.35}
+.chain > .st::after{content:"";position:absolute;right:-18px;top:50%;width:10px;height:10px;border-top:2px solid var(--muted);border-right:2px solid var(--muted);transform:translateY(-50%) rotate(45deg)}
+.chain > .st:last-child{margin-right:0}
+.chain > .st:last-child::after{display:none}
+.st b{display:block;font-size:.9rem;color:var(--heading);margin-bottom:2px}
+.st .n{font-family:var(--mono);font-size:.68rem;color:var(--muted);display:block;margin-bottom:2px}
+.st.dk{background:var(--purple);border-color:var(--purple);color:#E9E1F5}
+.st.dk b,.st.dk .n{color:#fff}
+.st.lm{background:var(--lime);border-color:var(--lime);color:#1A1A1A}
+.st.lm b,.st.lm .n{color:#1A1A1A}
+.st.q{background:var(--bg);border:2px dashed var(--purple)}
+.st.fork{display:grid;gap:6px;padding:0;background:none;border:0}
+.st.fork .o{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 10px}
+.st.fork .o i{font-style:normal;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;color:var(--heading);display:block}
+@media (max-width:680px){
+  .chain{flex-direction:column}
+  .chain > .st{margin-right:0;margin-bottom:22px;flex:none}
+  .chain > .st::after{right:auto;left:50%;top:auto;bottom:-17px;transform:translateX(-50%) rotate(135deg)}
+  .chain > .st:last-child{margin-bottom:0}
+}
+
+/* decision tree */
+.tree{display:grid}
+.tree .q{position:relative;justify-self:center;background:var(--bg);border:2px solid var(--purple);border-radius:6px;padding:8px 16px;font-weight:700;text-align:center;max-width:560px;font-size:.92rem}
+.tree .q::after{content:"";position:absolute;left:50%;top:100%;height:12px;border-left:2px solid var(--muted)}
+.tree .bs{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:12px;margin-top:24px;position:relative}
+.tree .bs::before{content:"";position:absolute;top:-12px;left:calc(50% / var(--n,2));right:calc(50% / var(--n,2));border-top:2px solid var(--muted)}
+.tree .b{position:relative;border:1px solid var(--line);border-radius:6px;padding:9px 12px;background:var(--surface);font-size:.85rem;line-height:1.4;min-width:0}
+.tree .b::before{content:"";position:absolute;top:-13px;left:50%;height:12px;border-left:2px solid var(--muted)}
+.tree .b .lab{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:var(--heading);margin-bottom:2px}
+.tree .b.go{background:var(--purple);border-color:var(--purple);color:#E9E1F5}
+.tree .b.go .lab{color:var(--lime)}
+.tree .b.no{background:var(--bg);border-style:dashed;color:var(--muted)}
+.tree + .tree{margin-top:26px}
+@media (max-width:620px){.tree .bs{grid-template-columns:1fr}.tree .bs::before{display:none}.tree .b::before{display:none}.tree .q::after{display:none}.tree .bs{margin-top:12px}}
+
+/* math tiles */
+.math{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.math .t{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:10px 14px;min-width:120px}
+.math .t .v{font-family:var(--display);font-size:1.7rem;line-height:1.1;color:var(--heading);display:block}
+.math .t .l{font-size:.78rem;color:var(--muted)}
+.math .op{font-family:var(--display);font-size:1.6rem;color:var(--muted)}
+.math .t.res{background:var(--purple);border-color:var(--purple)}
+.math .t.res .v{color:var(--lime)}
+.math .t.res .l{color:#E9E1F5}
+
+/* columns of checklists */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.col{border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:0}
+.col h5{margin:0;padding:8px 12px;font:700 .82rem var(--body);background:var(--surface);border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.col ul{list-style:none;margin:0;padding:8px 12px;font-size:.84rem;display:grid;gap:5px}
+.col li{padding-left:20px;position:relative;line-height:1.35}
+.col li::before{content:"";position:absolute;left:2px;top:.35em;width:9px;height:5px;border-left:2px solid var(--heading);border-bottom:2px solid var(--heading);transform:rotate(-45deg)}
+.col.x li::before{border:0;width:10px;height:2px;background:var(--muted);transform:none;top:.6em}
+
+/* callout band */
+.rule{display:flex;gap:14px;align-items:center;background:var(--purple);color:#E9E1F5;border-radius:6px;padding:12px 16px;margin:14px 0;font-size:.9rem}
+.rule .label{color:var(--lime);white-space:nowrap}
+.rule b{color:#fff}
+@media (max-width:560px){.rule{flex-direction:column;align-items:flex-start;gap:4px}}
+
+/* google vs meta scenes */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.vs > div{border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.vs h5{margin:0 0 10px;font:700 .95rem var(--body);display:flex;gap:8px;align-items:center}
+.scene{background:var(--surface);border-radius:6px;padding:12px;margin-bottom:10px;font-size:.8rem}
+.searchbar{background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:6px 12px;font-family:var(--mono);font-size:.76rem;margin-bottom:8px}
+.adcard{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 10px}
+.adcard .sp{font-size:.66rem;font-weight:700;color:var(--muted)}
+.adcard .hl{color:var(--heading);font-weight:700}
+.feed{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.feed span{height:44px;background:var(--line);border-radius:4px}
+.feed span.ad{background:var(--lime);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.65rem;color:#1A1A1A}
+.vs p{margin:0;font-size:.86rem}
+@media (max-width:640px){.vs{grid-template-columns:1fr}}
+
+/* org tree */
+.otree,.otree ul{list-style:none;margin:0;padding:0}
+.otree ul{padding-left:22px;margin-top:6px}
+.otree li{position:relative;padding:3px 0 3px 0}
+.otree ul li::before{content:"";position:absolute;left:-14px;top:0;bottom:50%;width:12px;border-left:2px solid var(--line);border-bottom:2px solid var(--line)}
+.otree ul li:not(:last-child)::after{content:"";position:absolute;left:-14px;top:50%;bottom:-3px;border-left:2px solid var(--line)}
+.otree .nd{display:inline-block;border:1px solid var(--line);background:var(--surface);border-radius:5px;padding:4px 10px;font-size:.82rem}
+.otree .nd.top{background:var(--purple);color:#fff;border-color:var(--purple)}
+.otree .nd small{color:var(--muted);margin-left:6px}
+.otree .nd.top small{color:#E9E1F5}
+
+/* stairs (bidding) */
+.stairs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:end}
+.stairs > div{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--purple);border-radius:4px;padding:8px 10px;font-size:.8rem;line-height:1.35}
+.stairs > div:nth-child(1){min-height:70px}.stairs > div:nth-child(2){min-height:100px}.stairs > div:nth-child(3){min-height:130px}.stairs > div:nth-child(4){min-height:160px;border-top-color:var(--lime)}
+.stairs b{display:block;color:var(--heading);font-size:.86rem}
+.stairs .when{display:block;font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-bottom:3px}
+@media (max-width:620px){.stairs{grid-template-columns:1fr 1fr}.stairs > div{min-height:0!important}}
+
+/* dials (settings) */
+.dials{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.dial{border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:.84rem;min-width:0}
+.dial b{display:block;font-size:.88rem}
+.sw-on,.sw-off,.sw-cond{display:inline-block;font-family:var(--mono);font-size:.66rem;padding:2px 7px;border-radius:10px;margin:4px 0;font-weight:500}
+.sw-on{background:var(--lime);color:#1A1A1A}
+.sw-off{background:var(--fg);color:var(--bg)}
+.sw-cond{border:1px solid var(--purple);color:var(--heading)}
+
+/* size swatches */
+.sizes{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
+.sz{display:grid;gap:6px;justify-items:start;font-size:.78rem;max-width:180px}
+.sz .box{height:110px;max-width:100%;border:2px solid var(--purple);background:var(--surface);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.72rem;color:var(--heading)}
+.sz.wide .box{height:auto;width:170px}
+.sz b{font-size:.82rem}
+.sz span{color:var(--muted);line-height:1.35}
+
+/* pipelines */
+.pipes{display:grid;gap:12px}
+.pipe{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:center}
+.pipe .who{font-weight:700;font-size:.88rem}
+.pipe .who small{display:block;font-weight:400;color:var(--muted);font-size:.76rem}
+.pipe .chain > .st{min-width:80px;padding:7px 9px;font-size:.78rem;margin-right:20px}
+.pipe .chain > .st::after{right:-15px;width:8px;height:8px}
+@media (max-width:760px){.pipe{grid-template-columns:1fr}}
+
+/* timeline */
+.tl{display:grid;grid-template-columns:90px repeat(8,minmax(0,1fr));gap:4px;font-size:.74rem;min-width:620px}
+.tl .h{font-family:var(--mono);color:var(--muted);text-align:center}
+.tl .rl{font-weight:700;font-size:.78rem;align-self:center}
+.tl .c{height:30px;border-radius:3px;background:var(--surface);display:flex;align-items:center;justify-content:center;text-align:center}
+.tl .c.learn{background:var(--chip);color:var(--heading)}
+.tl .c.opt{background:var(--purple);color:#fff}
+.tl .c.rep{background:var(--lime);color:#1A1A1A;font-weight:700}
+.tl .c.alert{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.tlwrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;padding:12px}
+
+/* funnel */
+.funnel{display:grid;gap:6px}
+.fr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;align-items:center}
+.fr .bar{background:var(--purple);color:#fff;border-radius:4px;padding:8px 12px;font-size:.84rem;font-weight:700;justify-self:center;text-align:center}
+.fr .fix{font-size:.84rem;border-left:3px solid var(--lime);padding-left:10px}
+.fr .fix span{font-family:var(--mono);font-size:.68rem;color:var(--muted);display:block;text-transform:uppercase}
+@media (max-width:620px){.fr{grid-template-columns:1fr}.fr .bar{width:100%!important}}
+
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.tile{border:1px solid var(--line);border-radius:6px;padding:12px 14px;min-width:0}
+.tile .v{font-family:var(--display);font-size:1.55rem;line-height:1.1;color:var(--heading);display:block;margin:2px 0 4px}
+.tile .l{font-weight:700;font-size:.84rem;display:block}
+.tile .w{font-size:.8rem;color:var(--muted)}
+.tile.hi{background:var(--purple);border-color:var(--purple)}
+.tile.hi .v{color:var(--lime)}.tile.hi .l{color:#fff}.tile.hi .w{color:#E9E1F5}
+
+/* details */
+details.all{margin-top:18px;border:1px solid var(--line);border-radius:6px}
+details.all > summary{cursor:pointer;padding:10px 14px;font-weight:700;font-size:.9rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.all > summary::-webkit-details-marker{display:none}
+details.all > summary::after{content:"+";font-family:var(--mono);font-size:1.1rem;color:var(--heading)}
+details.all[open] > summary::after{content:"–"}
+details.all > summary span{font-weight:400;color:var(--muted);font-size:.82rem}
+details.all > summary:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+details.all > .inner{padding:0 14px 14px}
+.loopsvg{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.loopsvg svg{display:block;min-width:820px;width:100%;height:auto}
+.lp-node rect{fill:var(--bg);stroke:var(--purple);stroke-width:1.5}
+.lp-node text{fill:var(--svg-node-text)}
+.lp-dark rect{fill:var(--purple)}
+.lp-dark text{fill:#FFFFFF}
+.lp-pill rect{fill:var(--lime)}
+.lp-pill text{fill:#1A1A1A;font-size:11px;font-weight:700}
+.lp-ret{fill:none;stroke:var(--purple);stroke-width:2;stroke-dasharray:6 4}
+#arrow2 path{fill:var(--purple)}
+:root[data-theme="dark"] .lp-ret{stroke:var(--lime)}
+:root[data-theme="dark"] #arrow2 path{fill:var(--lime)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lp-ret{stroke:var(--lime)}:root:not([data-theme="light"]) #arrow2 path{fill:var(--lime)}}
+.wk{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;max-width:420px}
+.wk div{border:1px solid var(--line);border-radius:4px;padding:8px 4px;text-align:center;font-family:var(--mono);font-size:.74rem}
+.wk div.y{background:var(--lime);border-color:var(--lime);color:#1A1A1A;font-weight:700}
+.wk div.nx{color:var(--muted);text-decoration:line-through}
+.twoup{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.twoup > *{min-width:0}
+@media (max-width:760px){.twoup{grid-template-columns:1fr}}
+@media (max-width:680px){
+  .pipe .chain{flex-direction:row;row-gap:10px}
+  .pipe .chain > .st{flex:0 0 auto;margin-right:20px;margin-bottom:0}
+  .pipe .chain > .st:last-child{margin-right:0}
+  .pipe .chain > .st::after{right:-15px;left:auto;top:50%;bottom:auto;transform:translateY(-50%) rotate(45deg)}
+}
+
+.expbtn{font:500 .8rem var(--body);background:transparent;color:var(--heading);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}.expbtn:focus-visible{outline:2px solid var(--lime)}
+.routes{margin-top:14px;border:1px solid var(--lime);border-radius:6px}
+details.routes > summary{cursor:pointer;list-style:none;background:var(--lime);color:#1A1A1A;padding:10px 14px;font-weight:700;font-size:.9rem;display:flex;justify-content:space-between;align-items:center;gap:10px;border-radius:5px}
+details.routes[open] > summary{border-radius:5px 5px 0 0}
+details.routes > summary::-webkit-details-marker{display:none}
+details.routes > summary::after{content:"+";font-family:var(--mono);font-size:1.1rem}
+details.routes[open] > summary::after{content:"–"}
+details.routes > summary span{font-weight:400;font-size:.82rem}
+details.routes > summary:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.routegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px}
+@media (max-width:820px){.routegrid{grid-template-columns:1fr}}
+.rcard{border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:0}
+.rcard header{background:var(--purple);color:#fff;padding:10px 14px}
+.rcard header b{display:block;font-family:var(--display);font-weight:400;font-size:1.25rem;line-height:1.1}
+.rcard header span{font-size:.8rem;color:#E9E1F5}
+.rcard header .lt{display:inline-block;font-family:var(--mono);font-size:.66rem;background:var(--lime);color:#1A1A1A;border-radius:3px;padding:1px 6px;margin-bottom:6px}
+.rcard ol{list-style:none;counter-reset:r;margin:0;padding:12px 14px;display:grid;gap:8px;font-size:.85rem}
+.rcard li{counter-increment:r;display:grid;grid-template-columns:22px 1fr;gap:8px;line-height:1.4}
+.rcard li::before{content:counter(r);font-family:var(--mono);font-size:.72rem;width:22px;height:22px;border-radius:50%;background:var(--chip);color:var(--heading);display:flex;align-items:center;justify-content:center}
+.rcard li.key::before{background:var(--purple);color:#fff}
+.rcard li b{color:var(--heading)}
+.rcard .use{border-top:1px solid var(--line);padding:9px 14px;font-size:.8rem;color:var(--muted);background:var(--surface)}
+.routeend{padding:0 14px 14px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:10px}
+.chk{border:1px solid var(--line);border-top:4px solid var(--purple);border-radius:4px;padding:10px 12px;display:grid;gap:6px;align-content:start;min-width:0;font-size:.82rem}
+.chk .no{font-family:var(--display);font-size:1.6rem;line-height:1;color:var(--heading)}
+.chk .qq{font-weight:700;font-size:.92rem;line-height:1.3}
+.chk .look{color:var(--fg)}
+.chk .look .pl{margin-right:4px}
+.chk .act{border-left:3px solid var(--lime);padding-left:8px;color:var(--muted)}
+.chk .act b{color:var(--fg)}
+.report{border:1px solid var(--line);border-radius:8px;overflow:hidden;max-width:760px}
+.report .rh{background:var(--purple);color:#fff;padding:10px 16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.85rem}
+.report .rh b{font-family:var(--display);font-weight:400;font-size:1.15rem}
+.report .rh span{color:var(--lime);font-family:var(--mono);font-size:.72rem;align-self:center}
+.report .rn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.report .rn > div{padding:12px 14px;border-right:1px solid var(--line);min-width:0}
+.report .rn > div:last-child{border-right:0}
+.report .rn .l{font-weight:700;font-size:.86rem;display:block}
+.report .rn .v{font-family:var(--display);font-size:1.5rem;color:var(--heading);display:block;line-height:1.2}
+.report .rn .c{font-size:.74rem;color:var(--muted)}
+.report .rn .opt{background:var(--surface)}
+.report .rf{border-top:1px solid var(--line);padding:10px 16px;font-size:.84rem;color:var(--muted)}
+@media (max-width:620px){.report .rn{grid-template-columns:1fr 1fr}.report .rn > div:nth-child(2){border-right:0}.report .rn > div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.stepstart{font-size:.88rem;color:var(--muted);margin:18px 0 0}
+.stepper{list-style:none;margin:18px 0 6px;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 16px;counter-reset:s}
+.stepper li{position:relative;padding-top:46px;min-width:0}
+.stepper li::before{counter-increment:s;content:counter(s);position:absolute;top:0;left:0;width:32px;height:32px;border-radius:50%;background:var(--bg);border:2px solid var(--purple);color:var(--heading);font:500 .82rem var(--mono);display:flex;align-items:center;justify-content:center;z-index:1;box-sizing:border-box}
+.stepper li::after{content:"";position:absolute;top:15px;left:40px;right:-8px;border-top:2px solid var(--line)}
+.stepper li:last-child::after{display:none}
+.stepper li.hl::before{background:var(--purple);color:#fff}
+.stepper h5{margin:0 0 4px;font:700 .96rem var(--body);color:var(--heading)}
+.stepper p{margin:0;font-size:.84rem;color:var(--muted);line-height:1.45}
+.stepper .tags{display:grid;gap:6px;margin-top:10px}
+.stepper .tag{font-size:.78rem;line-height:1.35;border:1px solid var(--line);border-radius:4px;padding:6px 8px;background:var(--surface)}
+.stepper .tag i{font-style:normal;font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;color:var(--heading);text-transform:uppercase;display:block;margin-bottom:1px}
+@media (max-width:860px){.stepper{grid-template-columns:1fr;gap:20px}.stepper li{padding-top:0;padding-left:48px}.stepper li::after{top:38px;left:15px;right:auto;bottom:-16px;border-top:0;border-left:2px solid var(--line)}}
+.tstrip{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 6px}
+.tstrip .label{color:var(--muted);margin-right:4px}
+.tchip{font-size:.76rem;text-decoration:none;color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:3px 10px;background:var(--bg);white-space:nowrap}
+.tchip.core{border-color:var(--purple);color:var(--heading)}
+.tchip.opt{border-style:dashed;color:var(--muted)}
+.tchip:hover,.tchip:focus-visible{background:var(--purple);color:#fff;border-color:var(--purple);outline:none}
+.tierkey{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.tier{font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.tier.core{background:var(--purple);color:#fff}
+.tier.build{background:var(--fg);color:var(--bg)}
+.tier.std{border:1px solid var(--purple);color:var(--heading)}
+.tier.opt{border:1px dashed var(--muted);color:var(--muted)}
+.tgroup{margin-top:30px}
+.tgh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.tgh h3{font-size:1.25rem}
+.tgh span{font-size:.84rem;color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.tool{border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:6px;align-content:start;min-width:0;scroll-margin-top:90px}
+.tool:target{outline:2px solid var(--lime);outline-offset:2px}
+.tool .th{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.tool .th b{font-size:.95rem;line-height:1.25}
+.tool .plats{display:flex;gap:4px}
+.tool p{margin:0;font-size:.84rem;line-height:1.45}
+.tool .tnote{color:var(--muted);font-size:.8rem;border-left:3px solid var(--lime);padding-left:8px}
+.tool .ph{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzYgMjUwLjY3Ij4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsKICAgICAgICBmaWxsOiAjYjFlYjFlOwogICAgICB9CgogICAgICAuY2xzLTEsIC5jbHMtMiB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogI2ZmZjsKICAgICAgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPGc+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik05My4xLDY4Ljk5bDE1LjI0LjkyLTcuMzQsMTUuMzVjLS45MywxLjk2LS4xLDQuMzIsMS44NSw1LjI1LDEuOTYuOTQsNC4zMi4xLDUuMjUtMS44NWw3LjUtMTUuNjksMTIuNzUsMTIuODgtLjAyLTMwLjEyaDBzMC0uNjIsMC0uNjJ2LTEuNDRzMC00LjI0LDAtNC4yNHYtNC4xMXMwLTYuODYsMC02Ljg2bC0zLjkxLDMuMTctMS4xLjg5LS4zLjI0LTEuMTIuOTEtMi4wNywxLjY4LTEuMTIuOTEtMi4xOCwxLjc2LTEuMTIuOTEtLjc3LjYzLTIzLjc4LDE5LjMzczEuNDMuMDYsMi4yNC4xMVoiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEwOS4yMiwxNjkuODNjLTIuODEtLjAzLTUuMTIsMi4zMi01LjA2LDUuMDQtLjA1LDIuNjUsMi4xNiw1LjAzLDQuOTksNS4wNCwyLjgyLjAxLDUuMS0yLjI1LDUuMS01LjA0cy0yLjI2LTUuMDItNS4wMi01LjA0Wk0xMDkuMTksMTcyLjM0Yy0xLjQyLjAzLTIuNTEsMS4xMS0yLjU0LDIuNSwwLC41LS4zNi44Ny0uODQuODYtLjQ3LDAtLjgyLS4zOC0uODItLjg3di0uMDhjLjAxLTEuOSwxLjUxLTMuNjgsMy4zOS00LC4yNy0uMDUuNTQtLjA3LjgxLS4wOC40NiwwLC44My4zOS44My44NC0uMDEuNDYtLjM3LjgxLS44My44MloiLz4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTEyOC4zNSwxNjEuNzV2LTY0LjM5bC02LjQ2LTYuNDZjLTEuMjMsNS44Mi02LjQsMTAuMTgtMTIuNTgsMTAuMTgtNC42NywwLTguNzUtMi40OS0xMS4wMS02LjIydjY2LjZjMCw0LjAxLS45MSw3Ljk5LTIuODcsMTEuNS0yLjc4LDQuOTYtOC4xOSwxMC4yNi0xOC41OSwxMC4yNi0xMS42MywwLTE2Ljc0LTcuMTktMTguOTYtMTMuMDMtMS4xOS0zLjEtMS43LTYuNDEtMS43LTkuNzN2LTkuNDNoLTI4LjkxYzAsMTQuMjEtLjYxLDYxLjE3LDUwLjkxLDYxLjE3czUwLjE4LTUwLjQ1LDUwLjE4LTUwLjQ1Wk0xMTguMzksMTgzLjQ5Yy0uMTUuNTYtLjgxLjgtMS4yOC40Ni0uMDgtLjA1LS4xNC0uMTItLjIxLS4xOC0xLjE0LTEuMTMtMi4yNy0yLjI3LTMuNDEtMy40MS0uMDYtLjA2LS4xLS4xMi0uMTUtLjItMS43NywxLjMxLTMuNywxLjc1LTUuNzksMS4yMy0xLjYzLS40LTIuOTItMS4zMy0zLjg4LTIuNy0xLjg4LTIuNjktMS40OS02LjM5LjkzLTguNjgsMi40Mi0yLjI5LDYuMTMtMi40Niw4Ljc4LS4zNiwxLjQzLDEuMTMsMi4yNSwyLjYzLDIuNDgsNC40NC4yMiwxLjgxLS4yNywzLjQ1LTEuMzksNC45NC4wNy4wNS4xNC4wOC4yLjE0LDEuMTUsMS4xNCwyLjI5LDIuMjksMy40MywzLjQzLjI2LjI1LjM5LjU0LjMuOVoiLz4KICAgIDxnPgogICAgICA8Zz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik01My40NiwxMzAuMjljLTEuMDgtLjczLTIuMjMtMS4zNi0zLjQzLTEuODYtMi40OS0xLjA1LTUuMTQtMS41OS03Ljg2LTEuNTlzLTUuMzcuNTMtNy44NiwxLjU5Yy0xLjIuNTEtMi4zNSwxLjEzLTMuNDMsMS44Ni0uMjkuMTktLjU3LjM5LS44NC42LS42OC41MS0uNzgsMS40OS0uMjEsMi4xMmgwYy41LjU3LDEuMzUuNjUsMS45Ni4xOSwxLjEzLS44NSwyLjM1LTEuNTUsMy42Ni0yLjExLDIuMTMtLjksNC40LTEuMzYsNi43My0xLjM2czQuNi40Niw2LjczLDEuMzZjMS4zMS41NSwyLjUzLDEuMjYsMy42NSwyLjEuNi40NSwxLjQ2LjM3LDEuOTYtLjE5aDBjLjU2LS42My40Ny0xLjYxLS4yMS0yLjEyLS4yNy0uMjEtLjU1LS40LS44My0uNTlaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDcuNzksMTMzLjcyYy0xLjc4LS43NS0zLjY4LTEuMTQtNS42My0xLjE0cy0zLjg0LjM4LTUuNjMsMS4xNGMtLjkzLjM5LTEuODEuODgtMi42NCwxLjQ2LS43MS41LS44MywxLjUtLjI1LDIuMTVoMGMuNDkuNTUsMS4zMS42NSwxLjkxLjIzLjY2LS40NiwxLjM2LS44NSwyLjEtMS4xNiwxLjQyLS42LDIuOTQtLjkxLDQuNS0uOTFzMy4wNy4zMSw0LjUuOTFjLjc0LjMxLDEuNDQuNywyLjEsMS4xNi42LjQyLDEuNDIuMzIsMS45MS0uMjNoMGMuNTgtLjY1LjQ2LTEuNjYtLjI1LTIuMTUtLjgyLS41Ny0xLjctMS4wNi0yLjYzLTEuNDVaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDUuNTUsMTM5LjAyYy0xLjA3LS40NS0yLjIxLS42OC0zLjM5LS42OHMtMi4zMS4yMy0zLjM5LjY4Yy0uMzEuMTMtLjYuMjgtLjg5LjQ0LS44LjQ1LS45OCwxLjU0LS4zNiwyLjIyaDBjLjQ1LjUxLDEuMi42NCwxLjc5LjMuODYtLjQ5LDEuODQtLjc1LDIuODUtLjc1czEuOTkuMjYsMi44NC43NGMuNTkuMzMsMS4zNC4yLDEuNzktLjNoMGMuNjEtLjY5LjQ0LTEuNzctLjM3LTIuMjItLjI4LS4xNi0uNTgtLjMtLjg4LS40M1oiLz4KICAgICAgPC9nPgogICAgICA8Y2lyY2xlIGNsYXNzPSJjbHMtMiIgY3g9IjQyLjE2IiBjeT0iMTQ1LjMiIHI9IjEuNzUiLz4KICAgIDwvZz4KICA8L2c+CiAgPGc+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTQzLjc4LDE2MC4wMnYtMTkuNzRoNi42M2wzLjk4LDEzLjQ3LDMuOTQtMTMuNDdoNi42NHYxOS43NGgtNC4xMXYtMTUuNTRsLTQuMzUsMTUuNTRoLTQuMjZsLTQuMzQtMTUuNTR2MTUuNTRoLTQuMTFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE3Mi40OCwxNTAuMDhsLTMuODItLjYyYy40My0xLjM4LDEuMTctMi40MSwyLjIxLTMuMDdzMi42LTEsNC42Ny0xYzEuODgsMCwzLjI3LjIsNC4xOS42LjkyLjQsMS41Ni45MSwxLjk0LDEuNTIuMzcuNjEuNTYsMS43NC41NiwzLjM5bC0uMDUsNC40MmMwLDEuMjYuMDcsMi4xOC4yLDIuNzguMTQuNi4zOSwxLjI0Ljc2LDEuOTJoLTQuMTZjLS4xMS0uMjUtLjI0LS42Mi0uNC0xLjEyLS4wNy0uMjItLjEyLS4zNy0uMTUtLjQ0LS43Mi42My0xLjQ5LDEuMS0yLjMsMS40MS0uODIuMzEtMS42OS40Ny0yLjYyLjQ3LTEuNjQsMC0yLjkyLS40LTMuODctMS4yLS45NC0uOC0xLjQxLTEuODEtMS40MS0zLjAzLDAtLjgxLjIxLTEuNTMuNjQtMi4xNi40My0uNjMsMS4wMy0xLjEyLDEuOC0xLjQ1Ljc3LS4zNCwxLjg5LS42MywzLjM0LS44OCwxLjk2LS4zMywzLjMzLS42NCw0LjA4LS45M3YtLjM4YzAtLjczLS4yLTEuMjUtLjYtMS41NnMtMS4xNS0uNDYtMi4yNi0uNDZjLS43NSwwLTEuMzMuMTMtMS43NS40LS40Mi4yNi0uNzYuNzMtMS4wMiwxLjM5Wk0xNzguMSwxNTMuMTVjLS41NC4xNi0xLjM5LjM1LTIuNTYuNThzLTEuOTMuNDQtMi4yOS42NmMtLjU1LjM1LS44Mi43OS0uODIsMS4zM3MuMjIuOTkuNjYsMS4zN2MuNDQuMzksMSwuNTgsMS42OC41OC43NiwwLDEuNDgtLjIyLDIuMTctLjY3LjUxLS4zNC44NC0uNzYsMS0xLjI1LjExLS4zMi4xNi0uOTQuMTYtMS44NHYtLjc1WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOTAuNCwxNjAuMDJoLTQuMnYtMTQuM2gzLjl2Mi4wM2MuNjctLjk2LDEuMjctMS41OSwxLjgtMS45LjUzLS4zLDEuMTQtLjQ2LDEuODItLjQ2Ljk2LDAsMS44OC4yNCwyLjc3LjcxbC0xLjMsMy4zYy0uNzEtLjQxLTEuMzctLjYyLTEuOTgtLjYycy0xLjA5LjE1LTEuNS40NGMtLjQxLjI5LS43My44Mi0uOTYsMS41OC0uMjQuNzYtLjM1LDIuMzYtLjM1LDQuNzl2NC40MloiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTk4LjE1LDE2MC4wMnYtMTkuNzRoNC4ydjEwLjQ4bDQuOTItNS4wNGg1LjE4bC01LjQzLDUuMjIsNS44Miw5LjA4aC00LjUzbC0zLjk5LTYuNDItMS45NiwxLjg1djQuNThoLTQuMloiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjI0LjU0LDE1NS40Nmw0LjE5LjYzYy0uNTQsMS4zOC0xLjM5LDIuNDQtMi41NSwzLjE2LTEuMTYuNzItMi42MiwxLjA4LTQuMzYsMS4wOC0yLjc2LDAtNC44MS0uODEtNi4xMy0yLjQ0LTEuMDUtMS4zLTEuNTctMi45NC0xLjU3LTQuOTMsMC0yLjM3LjY5LTQuMjMsMi4wNy01LjU3LDEuMzgtMS4zNCwzLjEyLTIuMDEsNS4yMi0yLjAxLDIuMzYsMCw0LjIzLjcsNS42LDIuMTEsMS4zNywxLjQxLDIuMDIsMy41NiwxLjk2LDYuNDZoLTEwLjUzYy4wMywxLjEyLjM3LDIsMS4wMiwyLjYyLjY1LjYyLDEuNDYuOTQsMi40Mi45NC42NiwwLDEuMjEtLjE2LDEuNjYtLjQ4LjQ1LS4zMi43OS0uODQsMS4wMi0xLjU2Wk0yMjQuNzgsMTUxLjY0Yy0uMDMtMS4xLS4zNC0xLjkzLS45NC0yLjUtLjYtLjU3LTEuMzMtLjg1LTIuMTgtLjg1LS45MiwwLTEuNjguMy0yLjI3LjktLjYuNi0uODksMS40Mi0uODgsMi40NWg2LjI4WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yMzkuNjcsMTQ1LjcydjMuMDJoLTIuODd2NS43NmMwLDEuMTcuMDMsMS44NS4wOCwyLjA0cy4xOC4zNS4zNy40OGMuMTkuMTMuNDMuMTkuNzEuMTkuMzksMCwuOTUtLjEyLDEuNjktLjM2bC4zNiwyLjk0Yy0uOTguMzgtMi4wOC41Ny0zLjMyLjU3LS43NiwwLTEuNDQtLjExLTIuMDUtLjM0cy0xLjA1LS41My0xLjM0LS44OWMtLjI4LS4zNi0uNDgtLjg1LS41OS0xLjQ3LS4wOS0uNDQtLjEzLTEuMzMtLjEzLTIuNjd2LTYuMjNoLTEuOTN2LTMuMDJoMS45M3YtMi44NGw0LjIyLTIuMjF2NS4wNWgyLjg3WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yNDIuNTgsMTQzLjc4di0zLjVoNC4ydjMuNWgtNC4yWk0yNDIuNTgsMTYwLjAydi0xNC4zaDQuMnYxNC4zaC00LjJaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2NS41NSwxNjAuMDJoLTQuMnYtNy4zYzAtMS41NC0uMDktMi41NC0uMjctMy0uMTgtLjQ1LS40Ny0uODEtLjg4LTEuMDYtLjQtLjI1LS44OS0uMzgtMS40Ni0uMzgtLjczLDAtMS4zOC4xOC0xLjk2LjU0LS41OC4zNi0uOTguODMtMS4xOSwxLjQzLS4yMS41OS0uMzIsMS42OS0uMzIsMy4yOXY2LjQ4aC00LjJ2LTE0LjNoMy45djIuMWMxLjM5LTEuNjIsMy4xMy0yLjQyLDUuMjQtMi40Mi45MywwLDEuNzguMTUsMi41NC40NS43Ny4zLDEuMzUuNjgsMS43NCwxLjE1LjM5LjQ3LjY3LDEsLjgyLDEuNTkuMTUuNTkuMjMsMS40NC4yMywyLjU0djguODlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2OS40MiwxNjAuOTZsNC44LjUzYy4wOC41LjI2Ljg1LjU1LDEuMDQuNC4yNywxLjAzLjQsMS44OC40LDEuMSwwLDEuOTItLjE1LDIuNDctLjQ0LjM3LS4yLjY1LS41Mi44NC0uOTYuMTMtLjMxLjE5LS44OS4xOS0xLjc0di0yLjA5Yy0xLjI2LDEuNTQtMi44NCwyLjMyLTQuNzYsMi4zMi0yLjEzLDAtMy44My0uODEtNS4wNy0yLjQ0LS45OC0xLjI4LTEuNDctMi44OC0xLjQ3LTQuNzksMC0yLjQuNjQtNC4yMywxLjkyLTUuNDksMS4yOC0xLjI3LDIuODctMS45LDQuNzgtMS45czMuNTkuNzgsNC44NiwyLjMzdi0yLjAxaDMuOTR2MTIuODNjMCwxLjY5LS4xNSwyLjk1LS40NiwzLjc4LS4zMS44My0uNzQsMS40OS0xLjMsMS45Ny0uNTYuNDgtMS4zLjg1LTIuMjQsMS4xMi0uOTMuMjctMi4xMS40LTMuNTQuNC0yLjY5LDAtNC42LS40MS01LjczLTEuMjUtMS4xMy0uODMtMS42OS0xLjg4LTEuNjktMy4xNiwwLS4xMywwLS4yOC4wMS0uNDZaTTI3My4xOCwxNTIuNTdjMCwxLjUyLjMzLDIuNjMuOTgsMy4zM3MxLjQ2LDEuMDYsMi40MiwxLjA2YzEuMDMsMCwxLjktLjM2LDIuNi0xLjA4LjcxLS43MiwxLjA2LTEuNzksMS4wNi0zLjIxcy0uMzQtMi41OC0xLjAyLTMuMy0xLjU0LTEuMDgtMi41Ny0xLjA4LTEuODQuMzUtMi40OSwxLjA2Yy0uNjUuNzEtLjk4LDEuNzgtLjk4LDMuMjNaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI5Ny4xOSwxNjAuMDJ2LTE5LjU4aDQuNDN2MTYuMjVoMTEuMDF2My4zM2gtMTUuNDRaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxOC45LDE1MC4wOGwtMy44Mi0uNjJjLjQzLTEuMzgsMS4xNy0yLjQxLDIuMjEtMy4wN3MyLjYtMSw0LjY3LTFjMS44OCwwLDMuMjcuMiw0LjE5LjYuOTIuNCwxLjU2LjkxLDEuOTQsMS41Mi4zNy42MS41NiwxLjc0LjU2LDMuMzlsLS4wNSw0LjQyYzAsMS4yNi4wNywyLjE4LjIsMi43OC4xNC42LjM5LDEuMjQuNzYsMS45MmgtNC4xNmMtLjExLS4yNS0uMjQtLjYyLS40LTEuMTItLjA3LS4yMi0uMTItLjM3LS4xNS0uNDQtLjcyLjYzLTEuNDksMS4xLTIuMywxLjQxLS44Mi4zMS0xLjY5LjQ3LTIuNjIuNDctMS42NCwwLTIuOTItLjQtMy44Ny0xLjItLjk0LS44LTEuNDEtMS44MS0xLjQxLTMuMDMsMC0uODEuMjEtMS41My42NC0yLjE2LjQzLS42MywxLjAzLTEuMTIsMS44LTEuNDUuNzctLjM0LDEuODktLjYzLDMuMzQtLjg4LDEuOTYtLjMzLDMuMzMtLjY0LDQuMDgtLjkzdi0uMzhjMC0uNzMtLjItMS4yNS0uNi0xLjU2cy0xLjE1LS40Ni0yLjI2LS40NmMtLjc1LDAtMS4zMy4xMy0xLjc1LjQtLjQyLjI2LS43Ni43My0xLjAyLDEuMzlaTTMyNC41MywxNTMuMTVjLS41NC4xNi0xLjM5LjM1LTIuNTYuNThzLTEuOTMuNDQtMi4yOS42NmMtLjU1LjM1LS44Mi43OS0uODIsMS4zM3MuMjIuOTkuNjYsMS4zN2MuNDQuMzksMSwuNTgsMS42OC41OC43NiwwLDEuNDgtLjIyLDIuMTctLjY3LjUxLS4zNC44NC0uNzYsMS0xLjI1LjExLS4zMi4xNi0uOTQuMTYtMS44NHYtLjc1WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMzIuNjIsMTYwLjAydi0xOS43NGg0LjJ2Ny4xMWMxLjMtMS4zMywyLjgzLTEuOTksNC42MS0xLjk5LDEuOTQsMCwzLjU0LjYzLDQuOCwxLjg5LDEuMjcsMS4yNiwxLjksMy4wNywxLjksNS40M3MtLjY1LDQuMzItMS45NCw1LjY0Yy0xLjI5LDEuMzItMi44NiwxLjk4LTQuNywxLjk4LS45MSwwLTEuOC0uMi0yLjY5LS42MS0uODgtLjQxLTEuNjQtMS4wMS0yLjI4LTEuODF2Mi4xaC0zLjlaTTMzNi43OSwxNTIuNTZjMCwxLjQ4LjI2LDIuNTguNzgsMy4yOS43MywxLjAxLDEuNywxLjUxLDIuOSwxLjUxLjkzLDAsMS43Mi0uMzYsMi4zNy0xLjA3LjY1LS43MS45OC0xLjg0Ljk4LTMuMzcsMC0xLjYzLS4zMy0yLjgxLS45OS0zLjUzLS42Ni0uNzItMS41LTEuMDgtMi41My0xLjA4cy0xLjg1LjM1LTIuNTEsMS4wNmMtLjY3LjcxLTEsMS43OC0xLDMuMjFaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTYzLjg2LDc2LjQxaDEzLjAzdjIyLjg2YzAsNC44LS40Myw4LjQ1LTEuMjgsMTAuOTUtLjg1LDIuNS0yLjU2LDQuNjMtNS4xNCw2LjM3LTIuNTcsMS43NC01Ljg3LDIuNjEtOS44OSwyLjYxLTQuMjUsMC03LjU0LS41Ny05Ljg3LTEuNzItMi4zMy0xLjE1LTQuMTQtMi44My01LjQxLTUuMDQtMS4yNy0yLjIxLTIuMDItNC45NC0yLjI1LTguMTlsMTIuNDItMS42OWMuMDIsMS44Ni4xOCwzLjIzLjQ5LDQuMTMuMzEuOS44MiwxLjYzLDEuNTUsMi4xOC41LjM2LDEuMjEuNTUsMi4xMi41NSwxLjQ1LDAsMi41Mi0uNTQsMy4yLTEuNjIuNjgtMS4wOCwxLjAyLTIuOSwxLjAyLTUuNDZ2LTI1LjkyWiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOTQuNDIsOTcuODhsLTExLjE2LTEuMThjLjQyLTEuOTUsMS4wMy0zLjQ5LDEuODItNC42MS43OS0xLjEyLDEuOTQtMi4wOSwzLjQzLTIuOTEsMS4wNy0uNTksMi41NC0xLjA1LDQuNDItMS4zOCwxLjg3LS4zMywzLjktLjQ5LDYuMDgtLjQ5LDMuNSwwLDYuMzEuMiw4LjQ0LjU5czMuODksMS4yMSw1LjMxLDIuNDVjLjk5Ljg2LDEuNzgsMi4wOCwyLjM1LDMuNjYuNTcsMS41OC44NiwzLjA4Ljg2LDQuNTJ2MTMuNDZjMCwxLjQ0LjA5LDIuNTYuMjcsMy4zNy4xOC44MS41OCwxLjg1LDEuMTksMy4xMWgtMTAuOTZjLS40NC0uNzgtLjczLTEuMzgtLjg2LTEuNzktLjEzLS40MS0uMjctMS4wNi0uNC0xLjk0LTEuNTMsMS40Ny0zLjA1LDIuNTMtNC41NiwzLjE2LTIuMDcuODQtNC40NywxLjI2LTcuMiwxLjI2LTMuNjMsMC02LjM5LS44NC04LjI4LTIuNTNzLTIuODMtMy43Ni0yLjgzLTYuMjNjMC0yLjMxLjY4LTQuMjIsMi4wNC01LjcxLDEuMzYtMS40OSwzLjg2LTIuNiw3LjUyLTMuMzMsNC4zOC0uODgsNy4yMi0xLjUsOC41Mi0xLjg1LDEuMy0uMzUsMi42OC0uODIsNC4xMy0xLjM5LDAtMS40NC0uMy0yLjQ0LS44OS0zLjAxLS41OS0uNTctMS42NC0uODYtMy4xMy0uODYtMS45MSwwLTMuMzUuMzEtNC4zLjkyLS43NS40OC0xLjM1LDEuMzgtMS44MSwyLjdaTTIwNC41NSwxMDQuMDJjLTEuNjEuNTctMy4yOCwxLjA4LTUuMDIsMS41Mi0yLjM3LjYzLTMuODcsMS4yNS00LjUxLDEuODctLjY1LjYzLS45OCwxLjM1LS45OCwyLjE1LDAsLjkyLjMyLDEuNjcuOTYsMi4yNS42NC41OCwxLjU4Ljg4LDIuODMuODhzMi41MS0uMzIsMy42My0uOTVjMS4xMi0uNjMsMS45MS0xLjQsMi4zOC0yLjMxLjQ3LS45MS43LTIuMDkuNy0zLjU0di0xLjg3WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yMTkuNjIsODguMDFoMTIuMzJsNi4yOSwyMC4yOSw1Ljg0LTIwLjI5aDExLjUxbC0xMi4wOSwzMi41NmMtMS4zOCwzLjcxLTIuNzgsNi4yMi00LjIyLDcuNTItMi4wMywxLjg0LTUuMTIsMi43Ni05LjI2LDIuNzYtMS42OCwwLTQuMjgtLjIzLTcuOC0uNjlsLS45Mi04LjE1YzEuNjguNTQsMy41NS44LDUuNjIuOCwxLjM4LDAsMi40OS0uMzIsMy4zNC0uOTUuODUtLjYzLDEuNTctMS43NiwyLjE2LTMuMzlsLTEyLjc5LTMwLjQ3WiIvPgogICAgPC9nPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTM0OC43NCwxNzQuN2gtMjA1LjY5di01LjY0aDIwNS42OXY1LjY0Wk0xNDQuMjUsMTczLjQ5aDIwMy4yOHYtMy4yM2gtMjAzLjI4djMuMjNaIi8+CiAgICAgIDxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTQzLjQ3IiB5PSIxNjkuNSIgd2lkdGg9IjE2OS4xOCIgaGVpZ2h0PSI0Ljc2Ii8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4=" alt="Jay Marketing Lab">
+    <div>
+      <div class="label">Internal playbook · Marketing &amp; Growth · v9 · October 2026</div>
+      <h1>Paid Marketing Playbook</h1>
+      <p>The steps we follow for every paid ads client, from the first audit (while they are still a lead) to scale or offboarding. Each phase opens with a diagram and its key rules. Use the switch below to show only Google or only Meta.</p>
+    </div>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Playbook sections">
+  <div class="wrap">
+    <div class="phases">
+      <a href="#map">Map</a><a href="#p0">0 Audit</a><a href="#p1">1 Intake</a><a href="#p2">2 Strategy</a><a href="#p3">3 Tracking</a><a href="#p4">4 Build</a><a href="#pc">5 Creative</a><a href="#p5">6 Launch</a><a href="#p6">7 Learning</a><a href="#p7">8 Optimize</a><a href="#p8">9 Report</a><a href="#p9">10 Scale / Exit</a><a href="#toolkit">Toolkit</a><a href="#rules">Rules of thumb</a><a href="#changes">2026 changes</a>
+    </div>
+    <button id="expand" class="expbtn" aria-pressed="false">Open all tasks</button>
+    <div class="filter" role="group" aria-label="Show platform">
+      <button id="f-all" data-f="all" aria-pressed="true">All</button>
+      <button id="f-g" data-f="g" aria-pressed="false">Google</button>
+      <button id="f-m" data-f="m" aria-pressed="false">Meta</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- MAP -->
+<section id="map">
+  <div class="intro">
+    <div>
+      <h2 style="font-size:1.7rem;margin-bottom:10px">How to read this</h2>
+      <p class="lede">Each phase starts with a diagram and the few rules that matter most. Open <b>All tasks</b> under a phase when you're doing the work and need every step.</p>
+      <p class="lede">Phase 0 happens <b>before the contract</b>. Two <b>gates</b> stop the work until tracking is proven and the client has approved the ads.</p>
+    </div>
+    <div>
+      <div class="label" style="color:var(--muted);margin-bottom:8px">Labels</div>
+      <div class="legend">
+<div><span><span class="pl s">Shared</span></span><span>Same steps for both platforms.</span></div>
+<div><span><span class="pl g">Google</span></span><span>Google Ads only: Search, Local Services, Performance Max, YouTube.</span></div>
+<div><span><span class="pl m">Meta</span></span><span>Meta Ads only: Facebook and Instagram.</span></div>
+<div><span><span class="pl c">Creative</span></span><span>Ad creative made by our team: static designs, CGI and motion, and video edits.</span></div>
+</div>
+      <div class="roles">
+<div class="role"><b>AL</b> Account lead. Owns the client relationship, plan, approvals, reports.</div>
+<div class="role"><b>MB</b> Media buyer. Builds and runs the campaigns and tracking.</div>
+<div class="role"><b>CR</b> Creative. Static design, CGI, motion graphics, and video editing.</div>
+<div class="role"><b>WD</b> Web team. Wireframes, and builds campaign pages for JML web clients.</div>
+<div class="role"><b>CL</b> Client. Access, footage, approvals, CRM connection.</div>
+</div>
+    </div>
+  </div>
+  <div aria-label="Workflow map: Audit while the client is still a lead, then after the contract is signed: Intake, Strategy, Tracking, Gate 1 test conversion recorded, then four parallel tracks: Google build, Meta build, Creative, and Landing page. They merge at Gate 2 client approval, then Launch, Learning period, and an Optimize and Report loop that leads to Scale, Pause or Offboard." class="flow" role="img">
+<svg viewbox="0 0 1080 460" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arrow" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z"></path></marker></defs>
+<!-- Row 1 -->
+<text class="f-note" x="20" y="28">before the contract (lead)</text>
+<g class="n-lane lp"><rect height="56" rx="5" width="130" x="20" y="40"></rect><text class="t-b" text-anchor="middle" x="85" y="64">0 Audit</text><text class="t-s" text-anchor="middle" x="85" y="82">numbers, accounts</text></g>
+<path class="f-line" d="M150,68 H196" marker-end="url(#arrow)"></path>
+<text class="f-note" text-anchor="middle" x="173" y="58">signs</text>
+<text class="f-note" x="200" y="28">after the contract (client)</text>
+<g class="n-shared"><rect height="56" rx="5" width="130" x="200" y="40"></rect><text class="t-b" text-anchor="middle" x="265" y="64">1 Intake</text><text class="t-s" text-anchor="middle" x="265" y="82">scope, access</text></g>
+<g class="n-shared"><rect height="56" rx="5" width="130" x="370" y="40"></rect><text class="t-b" text-anchor="middle" x="435" y="64">2 Strategy</text><text class="t-s" text-anchor="middle" x="435" y="82">plan, angles, pages</text></g>
+<g class="n-shared"><rect height="56" rx="5" width="130" x="540" y="40"></rect><text class="t-b" text-anchor="middle" x="605" y="64">3 Tracking</text><text class="t-s" text-anchor="middle" x="605" y="82">tags, CAPI, CRM</text></g>
+<g class="n-gate"><path d="M750,36 L790,68 L750,100 L710,68 Z"></path><text class="t-b" text-anchor="middle" x="750" y="72">G1</text></g>
+<text class="f-note" text-anchor="middle" x="750" y="118">tracking proven?</text>
+<path class="f-line" d="M330,68 H366" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M500,68 H536" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M670,68 H706" marker-end="url(#arrow)"></path>
+<text class="f-note" x="830" y="64">no at a gate:</text>
+<text class="f-note" x="830" y="79">fix first, then return</text>
+<!-- Split -->
+<path class="f-line" d="M750,100 V138 H20 V316"></path>
+<path class="f-line" d="M20,178 H36" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M20,224 H36" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M20,270 H36" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M20,316 H36" marker-end="url(#arrow)"></path>
+<text class="f-note" x="40" y="153">four tracks run at the same time</text>
+<g class="n-lane"><rect height="36" rx="5" width="500" x="40" y="160"></rect><text x="56" y="183"><tspan class="t-b">4G Google build</tspan><tspan class="t-s" dx="10">campaign types · keywords · ads &amp; assets · bidding</tspan></text></g>
+<g class="n-lane"><rect height="36" rx="5" width="500" x="40" y="206"></rect><text x="56" y="229"><tspan class="t-b">4M Meta build</tspan><tspan class="t-s" dx="10">objective · audiences · ads · attribution · CRM feedback</tspan></text></g>
+<g class="n-lane c"><rect height="36" rx="5" width="500" x="40" y="252"></rect><text x="56" y="275"><tspan class="t-b">5 Creative</tspan><tspan class="t-s" dx="10">static designs · CGI &amp; motion · client footage edits · 4 a month</tspan></text></g>
+<g class="n-lane lp"><rect height="36" rx="5" width="500" x="40" y="298"></rect><text x="56" y="321"><tspan class="t-b">4L Landing page</tspan><tspan class="t-s" dx="10">copy + wireframe per campaign · built by JML or client's team</tspan></text></g>
+<!-- Merge -->
+<path class="f-line" d="M540,178 H566 M540,224 H566 M540,270 H566 M540,316 H566 M566,178 V316"></path>
+<path class="f-line" d="M566,247 H582" marker-end="url(#arrow)"></path>
+<g class="n-gate"><path d="M620,215 L660,247 L620,279 L580,247 Z"></path><text class="t-b" text-anchor="middle" x="620" y="251">G2</text></g>
+<text class="f-note" text-anchor="middle" x="620" y="297">client approved?</text>
+<g class="n-shared"><rect height="56" rx="5" width="130" x="690" y="219"></rect><text class="t-b" text-anchor="middle" x="755" y="243">6 Launch</text><text class="t-s" text-anchor="middle" x="755" y="261">QA, go live</text></g>
+<g class="n-shared"><rect height="56" rx="5" width="150" x="860" y="219"></rect><text class="t-b" text-anchor="middle" x="935" y="243">7 Learning</text><text class="t-s" text-anchor="middle" x="935" y="261">usually 1 to 4 weeks</text></g>
+<path class="f-line" d="M660,247 H686" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M820,247 H856" marker-end="url(#arrow)"></path>
+<!-- Loop -->
+<path class="f-line" d="M935,275 V363" marker-end="url(#arrow)"></path>
+<g class="n-shared"><rect height="56" rx="5" width="150" x="860" y="367"></rect><text class="t-b" text-anchor="middle" x="935" y="391">8 Optimize</text><text class="t-s" text-anchor="middle" x="935" y="409">weekly session</text></g>
+<g class="n-shared"><rect height="56" rx="5" width="130" x="690" y="367"></rect><text class="t-b" text-anchor="middle" x="755" y="391">9 Report</text><text class="t-s" text-anchor="middle" x="755" y="409">monthly</text></g>
+<path class="f-line" d="M860,382 H824" marker-end="url(#arrow)"></path>
+<path class="f-line" d="M820,410 H856" marker-end="url(#arrow)"></path>
+<text class="f-note" text-anchor="middle" x="840" y="445">repeats every month</text>
+<g class="n-lane"><rect height="56" rx="5" width="200" x="440" y="367"></rect><text class="t-b" text-anchor="middle" x="540" y="391">10 Scale · Pause · Exit</text><text class="t-s" text-anchor="middle" x="540" y="409">decided at a monthly report</text></g>
+<path class="f-line" d="M690,395 H644" marker-end="url(#arrow)"></path>
+</svg>
+</div>
+  <div class="sub"><h3>What Paid Marketing includes</h3></div>
+  <div class="scope">
+<div>
+<h4>Media buying</h4>
+<ul>
+<li>Free pre-sale audit with a budget recommendation</li>
+<li>Strategy, budget split and targets</li>
+<li>Tracking setup on Google, Meta and GA4, including sending CRM results back to the platforms</li>
+<li>Campaign build and launch</li>
+<li>Weekly in-house monitoring and optimization</li>
+<li>Ad copy for every ad we run</li>
+<li><b>Free:</b> one campaign landing page per campaign, as copy and a suggested wireframe</li>
+<li>A monthly report</li>
+</ul>
+</div>
+<div>
+<h4>Ad creative</h4>
+<ul>
+<li><b>Static image ads</b> we design ourselves (a large share of what we make)</li>
+<li><b>CGI and motion graphics</b> made from scratch</li>
+<li><b>Video edits</b> of the client's own footage</li>
+<li>Captions, end cards, and every size each placement needs</li>
+<li><b>4 creatives per campaign per month</b></li>
+</ul>
+</div>
+<div class="out">
+<h4>Not included</h4>
+<ul>
+<li>Filming or live-action shoots</li>
+<li>Photography (statics use the client's photos, our CGI renders, or licensed stock)</li>
+<li>UGC creators, influencers, actors</li>
+<li>Custom music composition</li>
+<li>Building the landing page, unless the client uses JML web services</li>
+<li>Project files (3D scenes, design and edit files). Clients get the finished ads, uploaded to their ad accounts.</li>
+</ul>
+<p style="font-size:.85rem;color:var(--muted);margin:.6rem 0 0">If a concept needs any of these, the client supplies it or we quote it as a separate project.</p>
+</div>
+</div>
+</section>
+
+<!-- P0 -->
+<section id="p0">
+  <div class="sechead"><div class="num">0</div><h2>Audit</h2><div class="meta"><b>When:</b> before the contract, while they're a lead · <b>Free</b> · <b>Goal:</b> agree platforms and budget before they sign</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip core" href="#t-kp" data-p="g">Google Keyword Planner</a><a class="tchip core" href="#t-semrush">Semrush</a><a class="tchip core" href="#t-kwf" data-p="g">KWFinder</a><a class="tchip core" href="#t-spyfu" data-p="g">SpyFu</a><a class="tchip core" href="#t-adclarity">AdClarity (in Semrush)</a><a class="tchip core" href="#t-adlib" data-p="m">Meta Ad Library</a><a class="tchip core" href="#t-gatc" data-p="g">Google Ads Transparency Center</a><a class="tchip std" href="#t-psi">PageSpeed Insights</a></div>
+  <p class="stepstart">Starts when a lead, or an existing client, asks about paid ads.</p>
+  <ol class="stepper">
+    <li><h5>Audit</h5><p>Look at what they have today.</p><div class="tags"><span class="tag"><i>Running ads</i>Audit their Google and Meta accounts</span><span class="tag"><i>No ads yet</i>Audit the opportunity: competitors, demand, website</span></div></li>
+    <li><h5>Size demand</h5><p>Monthly searches, cost per click, and audience size in their area.</p></li>
+    <li><h5>Do the math</h5><p>Work out the most they can pay per lead and still break even.</p></li>
+    <li><h5>Recommend</h5><p>Platforms, monthly budget (at least $1,000 each), and a cost-per-lead range.</p></li>
+    <li class="hl"><h5>Present</h5><p>Send the free audit and walk them through it on a call.</p></li>
+    <li><h5>Decide</h5><p>The lead chooses.</p><div class="tags"><span class="tag"><i>Signs</i>Go to Phase 1</span><span class="tag"><i>Not now</i>Agree a follow-up date</span></div></li>
+  </ol>
+  <div class="vizlabel">The math that sets the budget</div>
+  <div class="math">
+    <div class="t"><span class="v">$2,000</span><span class="l">average customer value</span></div><span class="op">×</span>
+    <div class="t"><span class="v">40%</span><span class="l">profit margin</span></div><span class="op">×</span>
+    <div class="t"><span class="v">1 in 4</span><span class="l">leads become customers</span></div><span class="op">=</span>
+    <div class="t res"><span class="v">$200</span><span class="l">most they can pay per lead and break even</span></div>
+  </div>
+  <ul class="keys">
+    <li><b>Minimum:</b> $1,000 a month per platform. If they can't, recommend one platform.</li>
+    <li><b>One win:</b> pick a single main conversion (form, 60-second call, booking, or sale).</li>
+    <li><b>Flag early:</b> slow lead follow-up and restricted categories (finance, housing, jobs).</li>
+  </ul>
+  <details class="all"><summary>All tasks <span>12 tasks with owners and outputs</span></summary><div class="inner"><p class="lede">The audit is how a lead becomes a paid marketing client. Everything we need to price and plan the work is learned here, so by Intake the budget, platforms and goals are already settled.</p><div class="tasks">
+<div class="task" data-p="s"><span class="tid">0.1</span><div class="tbody"><h4>Branch: are they running paid ads now? <span class="pl s">Shared</span></h4>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Do they have existing Google or Meta ads?</div><div class="bopts"><div><b>Yes</b>Ask for read-only access, or a screen-share, and run the account audit (0.2). Look at least 12 months back.</div><div><b>No</b>Skip 0.2. The audit becomes an opportunity audit: competitors, demand, and their website.</div></div></div>
+</div><div class="tmeta"><span class="own">AL</span><span class="out">Audit type noted</span></div></div>
+<div class="task" data-p="g"><span class="tid">0.2G</span><div class="tbody"><h4>Audit the existing Google account <span class="pl g">Google</span> <span class="mono" style="font-size:.75rem;color:var(--muted)">existing ads only</span></h4><ul><li>Is conversion tracking counting real leads, or button clicks and page views?</li><li>Search terms report: what money went to searches that could never become customers?</li><li>Structure, bidding strategy, ad quality, and missing assets</li><li>Auto-applied recommendations: are they on? (They let Google change the account without asking.)</li><li>Is AI Max on (Google switched many Search campaigns over in September 2026), and where is it sending people?</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Findings with top 5 fixes</span></div></div>
+<div class="task" data-p="m"><span class="tid">0.2M</span><div class="tbody"><h4>Audit the existing Meta account <span class="pl m">Meta</span> <span class="mono" style="font-size:.75rem;color:var(--muted)">existing ads only</span></h4><ul><li>Are the pixel and the Conversions API both sending the right events, without double counting?</li><li>Too many small ad sets splitting a small budget?</li><li>How old are the ads, and how many times has the same person seen them (frequency)?</li><li>Are audiences overlapping and competing with each other?</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Findings with top 5 fixes</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.3</span><div class="tbody"><h4>Scan competitors' ads <span class="pl s">Shared</span></h4><p>Look up each competitor in the <b>Google Ads Transparency Center</b> and the <b>Meta Ad Library</b>. Note their offers, hooks and formats. Ads that have run for months are probably working. Search the lead's main keywords on Google to see who shows up.</p></div><div class="tmeta"><span class="own">MB · CR</span><span class="out">Swipe file with notes</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.4</span><div class="tbody"><h4>Size the opportunity <span class="pl s">Shared</span></h4><p><span class="pl g">Google</span> Use Keyword Planner to estimate monthly searches and typical cost per click for their main services in their area. <span class="pl m">Meta</span> Check the rough audience size for their area and customer type in Ads Manager. These numbers keep the budget recommendation grounded in real demand.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Demand and cost estimate</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.5</span><div class="tbody"><h4>Work out the numbers that decide the budget <span class="pl s">Shared</span></h4><p>Ask for three numbers: what an average customer is worth, the profit margin, and what share of leads become customers. Multiply them to get the most they can pay for one lead and still break even.</p><p><span class="mono" style="font-size:.85rem">Example: $2,000 job × 40% margin × 1 in 4 leads closes = $200 per lead to break even.</span> Our target cost per lead sits comfortably below that number.</p></div><div class="tmeta"><span class="own">AL · MB</span><span class="out">Unit economics sheet</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.6</span><div class="tbody"><h4>Pick one primary conversion <span class="pl s">Shared</span></h4><p>Choose the single action that counts as a win: a form sent, a phone call longer than 60 seconds, a booked appointment, or a purchase. Other actions (page views, button clicks) can be tracked, but the platforms are never told to aim for them, or they will find cheap clicks instead of customers.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Primary conversion written in the audit</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.7</span><div class="tbody"><h4>Review their website <span class="pl s">Shared</span></h4><p>Every campaign gets its own landing page copy and wireframe from us (see 4L), so this check is about what we're working with: can we add tracking, is the site fast on a phone, and which existing pages could carry traffic if a campaign page is late. Note what a dedicated campaign page would fix. That makes the free landing page a concrete part of the pitch.</p></div><div class="tmeta"><span class="own">MB · WD</span><span class="out">Website notes</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.8</span><div class="tbody"><h4>Check how leads are handled <span class="pl s">Shared</span></h4><p>Leads go cold quickly: one called back within minutes is far more likely to buy than one called the next day. If they're slow to respond, the ads will look like they're failing when the real problem is follow-up. Note it and raise it kindly. Our AI and automation team can set up instant text replies and CRM alerts.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Lead handling note</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.9</span><div class="tbody"><h4>Check for restricted categories <span class="pl s">Shared</span></h4>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Is the business in a restricted category?</div><div class="bopts"><div><b>Meta</b>Housing, employment, financial products and services, and social or political issues must use a <b>Special Ad Category</b>. It removes most age, gender and zip-code targeting. Check payment processing clients against this list.</div><div><b>Google</b>Financial services, healthcare, legal and some local services have extra policies or need advertiser verification. Check before quoting, since it can limit what we can do.</div></div></div>
+</div><div class="tmeta"><span class="own">MB</span><span class="out">Category noted in the audit</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.10</span><div class="tbody"><h4>Recommend platforms, budget and targets <span class="pl s">Shared</span></h4><p>Use the demand estimate, break-even cost per lead and our minimum of $1,000 a month per platform to recommend which platforms, a monthly ad budget, and a realistic cost-per-lead range for months 1 to 3. If their budget can't meet the minimums, say so and suggest starting with one platform.</p></div><div class="tmeta"><span class="own">AL · MB</span><span class="out">Recommendation</span></div></div>
+<div class="task" data-p="s"><span class="tid">0.11</span><div class="tbody"><h4>Present the audit <span class="pl s">Shared</span></h4><p>The audit is free. Write a short, plain-language document following the JML client document rules: what we found, what it's costing them or what they're missing, what we recommend, and what's included. Mention that every campaign comes with landing page copy and a suggested wireframe at no extra cost. Walk them through it on a call.</p>
+<div class="branch"><div class="bq"><span class="label">Branch</span>What does the lead decide?</div><div class="bopts"><div><b>Yes</b>Send the proposal and contract with the agreed budget, platforms and creative allotment. Once signed, go to Phase 1.</div><div><b>Not now</b>Agree a date to follow up. Keep the audit on file; refresh the numbers before the next conversation.</div></div></div>
+</div><div class="tmeta"><span class="own">AL</span><span class="out">Audit document and call</span></div></div>
+</div><div class="note"><b>Done when:</b> the contract is signed and states the platforms, monthly ad budget, management fee, creative allotment and start date.</div></div></details>
+</section>
+
+<!-- P1 -->
+<section id="p1">
+  <div class="sechead"><div class="num">1</div><h2>Intake and access</h2><div class="meta"><b>When:</b> week 0, right after signing · <b>Goal:</b> working access and a kickoff, with nothing to chase later</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip build" href="#t-gads" data-p="g">Google Ads + manager account</a><a class="tchip build" href="#t-meta" data-p="m">Meta Business Suite + Ads Manager</a><a class="tchip std" href="#t-crew">JML Crew CRM</a></div>
+  <div class="rule"><span class="label">Ownership rule</span><span>The client <b>owns every ad account</b> and pays the platforms with their own card. JML is added as manager or partner. Never run client ads in a JML account.</span></div>
+  <div class="viz cols">
+    <div class="col"><h5><span class="pl g">Google</span> Access</h5><ul><li>Google Ads linked to our manager account</li><li>GA4: Editor</li><li>Tag Manager: Publish</li><li>Business Profile: Manager</li><li>Merchant Center (stores only)</li></ul></div>
+    <div class="col"><h5><span class="pl m">Meta</span> Access</h5><ul><li>JML added as Partner</li><li>Ad account, Page, Instagram, dataset</li><li>Payment on file</li><li>Domain verified</li><li>Two client-side admins</li></ul></div>
+    <div class="col"><h5><span class="pl s">Shared</span> Site and leads</h5><ul><li>Website login or developer contact</li><li>Enough CRM access to connect it to the platforms</li><li>No CRM? Leads go into JML Crew</li><li>Original video files and brand assets</li></ul></div>
+  </div>
+  <div class="vizlabel">Kickoff call covers</div>
+  <div class="chain">
+    <div class="st"><b>Customers</b>Who buys and why</div>
+    <div class="st"><b>Offers</b>and seasons</div>
+    <div class="st"><b>Brand rules</b>words to avoid</div>
+    <div class="st"><b>Leads</b>CRM, stages, follow-up speed</div>
+    <div class="st"><b>Approvals</b>who and how fast</div>
+    <div class="st lm"><b>Website</b>JML or their team? Decides who builds landing pages</div>
+  </div>
+  <details class="all"><summary>All tasks <span>9 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks">
+<div class="task" data-p="s"><span class="tid">1.1</span><div class="tbody"><h4>Carry the audit over <span class="pl s">Shared</span></h4><p>Copy the audit, the unit economics, the agreed budget and the signed scope into the client folder. Check the contract matches what was agreed in 0.11. If anything is missing (creative allotment, start date), sort it out now, not after kickoff.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Scope summary in the client folder</span></div></div>
+<div class="task" data-p="s"><span class="tid">1.2</span><div class="tbody"><h4>Set the ownership rule with the client <span class="pl s">Shared</span></h4><p>The client owns every ad account and pays the platforms directly with their own card. JML is added as a manager or partner. We never run a client's ads inside a JML-owned account, because the client would lose all their history and data if they ever left.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Line in the welcome email</span></div></div>
+<div class="task" data-p="g"><span class="tid">1.3G</span><div class="tbody"><h4>Request Google access <span class="pl g">Google</span></h4><ul><li>Google Ads: link the client's account to the JML manager account (MCC) with Standard access (upgrade from the read-only access used in the audit)</li><li>Google Analytics 4: Editor</li><li>Google Tag Manager: Publish</li><li>Google Business Profile: Manager (local businesses)</li><li>Merchant Center: Admin (online stores only)</li></ul></div><div class="tmeta"><span class="own">MB · CL</span><span class="out">Access checklist, every line ticked</span></div></div>
+<div class="task" data-p="m"><span class="tid">1.3M</span><div class="tbody"><h4>Request Meta access <span class="pl m">Meta</span></h4><ul><li>Client's Business Manager (Meta Business Suite) adds JML as a Partner</li><li>Partner access to: the ad account, Facebook Page, Instagram account, and dataset (the pixel)</li><li>Payment method saved on the ad account</li><li>Website domain verified in Business Manager (we can help)</li><li>At least two admins on the client side, so they never get locked out</li></ul></div><div class="tmeta"><span class="own">MB · CL</span><span class="out">Access checklist, every line ticked</span></div></div>
+<div class="task" data-p="s"><span class="tid">1.4</span><div class="tbody"><h4>Request site and CRM connection access <span class="pl s">Shared</span></h4><p>Website admin login or a developer contact, so we can add tags and forms. For the CRM (or whatever tool their leads go into), we only need enough access to connect it to Google and Meta, or someone on their side who can approve the connection. We don't read or review their leads ourselves. The point is that the ad platforms learn which leads became customers and bid for more people like them.</p></div><div class="tmeta"><span class="own">AL · CL</span><span class="out">Logins saved in the password vault</span></div></div>
+<div class="task" data-p="s"><span class="tid">1.5</span><div class="tbody"><h4>Branch: new account or existing account? <span class="pl s">Shared</span></h4>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Does the client already advertise on this platform?</div><div class="bopts"><div><b>No, new account</b>Create it on a call with the client so it sits under their ownership and they add billing themselves.</div><div><b>Yes, existing account</b>The top 5 fixes from the audit (0.2) become the first changes in the build. Don't delete old campaigns; pause them.</div></div></div>
+</div><div class="tmeta"><span class="own">MB</span><span class="out">Account status noted</span></div></div>
+<div class="task" data-p="s"><span class="tid">1.6</span><div class="tbody"><h4>Run the kickoff call (45 to 60 minutes) <span class="pl s">Shared</span></h4><p>The numbers were covered in the audit, so the kickoff is about working together:</p><ul><li>Their best customers: who they are, where they are, why they buy</li><li>Current offers, busy and slow seasons</li><li>Brand rules and words to avoid</li><li>Which CRM or tool their leads go into, and what stages a lead moves through (for example: new, qualified, customer)</li><li>Who receives leads, and how fast they call back</li><li>Who approves ads, and how quickly</li><li><b>Who runs their website:</b> JML's web team or their own? This decides who builds the campaign landing pages (see 4L).</li></ul></div><div class="tmeta"><span class="own">AL · MB · CL</span><span class="out">Kickoff notes in the client folder</span></div></div>
+<div class="task" data-p="c"><span class="tid">1.7</span><div class="tbody"><h4>Collect creative raw material <span class="pl c">Creative</span></h4><p>Logo files, brand colors and fonts, existing videos, product images, reviews and testimonials, offer details. Videos must be the <b>original files</b> from the camera or phone. Clips saved from WhatsApp, Instagram or a website are compressed and usually too low quality to edit.</p></div><div class="tmeta"><span class="own">CR · CL</span><span class="out">Shared folder: Brand / Footage / Proof / Offers</span></div></div>
+<div class="task" data-p="s"><span class="tid">1.8</span><div class="tbody"><h4>Set the client up in JML Crew <span class="pl s">Shared</span></h4><p>Every client is added to the JML Crew platform at intake: client folder, tasks, communication, change log and report template. JML Crew includes a CRM, so a client without their own CRM uses ours, and their leads go there.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Workspace ready</span></div></div>
+</div><div class="note"><b>Done when:</b> we have logged in to every account and confirmed the access works, the kickoff notes are saved, we know who builds the landing pages, and the raw creative is in the shared folder.</div></div></details>
+</section>
+
+<!-- P2 -->
+<section id="p2">
+  <div class="sechead"><div class="num">2</div><h2>Strategy</h2><div class="meta"><b>When:</b> weeks 1 to 2 · <b>Goal:</b> a one-page plan the client approves</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip core" href="#t-kp" data-p="g">Google Keyword Planner</a><a class="tchip core" href="#t-semrush">Semrush</a><a class="tchip core" href="#t-kwf" data-p="g">KWFinder</a><a class="tchip build" href="#t-meta" data-p="m">Meta Business Suite + Ads Manager</a></div>
+  <div class="viz vs">
+    <div><h5><span class="pl g">Google</span> Catches demand</h5>
+      <div class="scene"><div class="searchbar">emergency plumber near me</div><div class="adcard"><span class="sp">Sponsored</span><div class="hl">24/7 Plumber · On site in 60 min</div></div></div>
+      <p>Reaches people <b>already searching</b>. Best for urgent and local services.</p></div>
+    <div><h5><span class="pl m">Meta</span> Creates demand</h5>
+      <div class="scene"><div class="feed"><span></span><span class="ad">your ad</span><span></span><span></span><span></span><span></span></div></div>
+      <p>Reaches people <b>not searching yet</b>. Best for visual products, new offers and retargeting.</p></div>
+  </div>
+  <div class="vizlabel">Which channel first</div>
+  <div class="tree"><div class="q">What kind of business is it?</div><div class="bs" style="--n:4">
+    <div class="b"><span class="lab">Local or urgent service</span>Google Search first, plus Local Services if eligible</div>
+    <div class="b"><span class="lab">Visual or new product</span>Meta first, Google for brand terms</div>
+    <div class="b"><span class="lab">Online store</span>Performance Max with the product feed, plus Meta</div>
+    <div class="b"><span class="lab">Budget for both</span>Weight toward the one closest to the sale</div>
+  </div></div>
+  <div class="vizlabel">The one-page plan</div>
+  <div class="chain">
+    <div class="st"><b>Channels</b>from the audit</div>
+    <div class="st"><b>Budget split</b>÷ 30.4 = daily</div>
+    <div class="st"><b>3–5 angles</b>offer, speed, proof, pain, result</div>
+    <div class="st"><b>4 creatives</b>this month</div>
+    <div class="st"><b>Landing pages</b>one per campaign</div>
+    <div class="st q"><b>Targets</b>optional</div>
+    <div class="st dk"><b>Client OK</b>in writing</div>
+  </div>
+  <details class="all"><summary>All tasks <span>8 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks" style="margin-top:14px">
+<div class="task" data-p="s"><span class="tid">2.1</span><div class="tbody"><h4>Confirm the channels <span class="pl s">Shared</span></h4><p>Start from the audit recommendation (0.10). The guide below is the reasoning behind it.</p>
+<div class="branch"><div class="bq"><span class="label">Branch</span>What kind of business is it?</div><div class="bopts"><div><b>Local or urgent service</b>Google Search first, plus Local Services Ads if eligible. Meta later for retargeting.</div><div><b>Visual or new product</b>Meta first. Google Search for brand and high-intent terms.</div><div><b>Online store</b>Google Shopping or Performance Max with the product feed, plus Meta.</div><div><b>Budget covers both</b>Weight the budget toward the platform closest to the purchase. Test the other with a fixed test budget.</div></div></div>
+</div><div class="tmeta"><span class="own">AL · MB</span><span class="out">Channel choice with one-line reason</span></div></div>
+<div class="task" data-p="s"><span class="tid">2.2</span><div class="tbody"><h4>Split the agreed budget <span class="pl s">Shared</span></h4><p>The total was agreed in the audit. Split it by platform and campaign. Daily budget = monthly budget ÷ 30.4. Check each platform clears the minimums in Rules of thumb. Keep 10 to 20% aside for testing new ideas.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Budget table</span></div></div>
+<div class="task" data-p="s"><span class="tid">2.3</span><div class="tbody"><h4>Map the funnel <span class="pl s">Shared</span></h4><p><b>Prospecting</b> reaches new people. <b>Retargeting</b> reaches people who already visited the site or watched a video. Retargeting needs a big enough audience first, so it usually starts in month 2.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Funnel diagram in the plan</span></div></div>
+<div class="task" data-p="s"><span class="tid">2.4</span><div class="tbody"><h4>Choose 3 to 5 message angles <span class="pl s">Shared</span></h4><p>From the kickoff notes and competitor scan. Common angles: the offer or price, speed and convenience, trust and proof, the pain of the problem, the end result. Each angle becomes a set of headlines for Google and a creative concept for Meta and YouTube.</p></div><div class="tmeta"><span class="own">AL · MB · CR</span><span class="out">Angle list</span></div></div>
+<div class="task" data-p="c"><span class="tid">2.5</span><div class="tbody"><h4>Write the creative plan <span class="pl c">Creative</span></h4><p>The 4 creatives for this month, and which route each one uses (S: designed static, A: CGI and motion, or B: client footage edit), the sizes and lengths each platform needs, and delivery dates. Feeds the Creative track.</p></div><div class="tmeta"><span class="own">CR · AL</span><span class="out">Creative plan</span></div></div>
+<div class="task" data-p="s"><span class="tid">2.6</span><div class="tbody"><h4>List the campaign landing pages <span class="pl s">Shared</span></h4><p>One landing page per campaign, free. List each campaign, the offer and angle its page will carry, and who builds it (JML web team or the client's team). Feeds the landing page track (4L).</p></div><div class="tmeta"><span class="own">AL · MB</span><span class="out">Landing page list</span></div></div>
+<div class="task" data-p="s"><span class="tid">2.7</span><div class="tbody"><h4>Lock targets for 30, 60 and 90 days <span class="pl s">Optional</span></h4><p>Useful, not required. If the client wants firm numbers, turn the audit's cost-per-lead range into targets. If not, use the top of the audit's cost-per-lead range wherever this playbook says "target". The main metric (cost per lead, cost per customer, or return on ad spend for stores), a volume target, and a lead-quality measure. Say plainly that month one is mostly learning, so results usually improve in months two and three.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Targets in the plan</span></div></div>
+<div class="task" data-p="s"><span class="tid">2.8</span><div class="tbody"><h4>Get written approval <span class="pl s">Shared</span></h4><p>Send the one-page media plan, creative plan and landing page list. An email reply saying yes is enough.</p></div><div class="tmeta"><span class="own">AL · CL</span><span class="out">Approved plan saved</span></div></div>
+</div></div></details>
+</section>
+
+<!-- P3 -->
+<section id="p3">
+  <div class="sechead"><div class="num">3</div><h2>Tracking</h2><div class="meta"><b>When:</b> week 2 · <b>Goal:</b> every lead counted once, and the platforms told which leads became customers</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip std" href="#t-gtm">Google Tag Manager</a><a class="tchip std" href="#t-ga4">Google Analytics 4</a><a class="tchip std" href="#t-tagassist" data-p="g">Google Tag Assistant</a><a class="tchip std" href="#t-pixelhelper" data-p="m">Meta Pixel Helper</a><a class="tchip std" href="#t-events" data-p="m">Meta Events Manager</a><a class="tchip std" href="#t-capi" data-p="m">Meta Conversions API</a><a class="tchip std" href="#t-datamgr" data-p="g">Google Ads Data Manager</a><a class="tchip std" href="#t-crew">JML Crew CRM</a><a class="tchip std" href="#t-zapier">Zapier or Make</a><a class="tchip opt" href="#t-callrail" data-p="g">CallRail</a></div>
+  <div class="vizlabel">The feedback loop we build for every client</div>
+  <div class="loopsvg" role="img" aria-label="Ad click goes to the landing page, which saves the click ID in hidden fields. The form or call creates a lead in the CRM, which moves from lead to qualified to customer. Those stages are sent back daily to Google through Data Manager and to Meta through the Conversions API for CRM, so the platforms learn which clicks become customers and bid for more people like them.">
+    <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <g class="lp-dark"><rect x="20" y="40" width="180" height="70" rx="6"/><text x="110" y="70" text-anchor="middle" class="t-b">Ad click</text><text x="110" y="90" text-anchor="middle" class="t-s">on Google or Meta</text></g>
+      <g class="lp-node"><rect x="250" y="40" width="200" height="70" rx="6"/><text x="350" y="70" text-anchor="middle" class="t-b">Landing page</text><text x="350" y="90" text-anchor="middle" class="t-s">hidden fields save the click ID</text></g>
+      <g class="lp-node"><rect x="500" y="40" width="170" height="70" rx="6"/><text x="585" y="70" text-anchor="middle" class="t-b">Form or call</text><text x="585" y="90" text-anchor="middle" class="t-s">counted once, on success</text></g>
+      <g class="lp-node"><rect x="720" y="20" width="260" height="140" rx="6"/><text x="850" y="50" text-anchor="middle" class="t-b">CRM</text><text x="850" y="68" text-anchor="middle" class="t-s">client's own, or JML Crew</text></g>
+      <g class="lp-pill"><rect x="736" y="96" width="66" height="26" rx="13"/><text x="769" y="113" text-anchor="middle">Lead</text></g>
+      <g class="lp-pill"><rect x="814" y="96" width="78" height="26" rx="13"/><text x="853" y="113" text-anchor="middle">Qualified</text></g>
+      <g class="lp-pill"><rect x="904" y="96" width="66" height="26" rx="13"/><text x="937" y="113" text-anchor="middle">Customer</text></g>
+      <path class="f-line" d="M200,75 H246" marker-end="url(#arrow)"/>
+      <path class="f-line" d="M450,75 H496" marker-end="url(#arrow)"/>
+      <path class="f-line" d="M670,75 H716" marker-end="url(#arrow)"/>
+      <path class="lp-ret" d="M850,160 V230 H664" marker-end="url(#arrow2)"/>
+      <g class="lp-node"><rect x="300" y="200" width="360" height="62" rx="6"/><text x="480" y="225" text-anchor="middle" class="t-b">Stages sent back daily</text><text x="480" y="245" text-anchor="middle" class="t-s">Google: Data Manager · Meta: Conversions API for CRM</text></g>
+      <path class="lp-ret" d="M300,231 H110 V114" marker-end="url(#arrow2)"/>
+      <text x="120" y="160" class="f-note">platforms learn which clicks</text>
+      <text x="120" y="174" class="f-note">become customers, and bid</text>
+      <text x="120" y="188" class="f-note">for more people like them</text>
+    </svg>
+  </div>
+  <div class="twoup" style="margin-top:16px">
+    <div><div class="vizlabel" style="margin-top:0"><span class="pl m">Meta</span> Pixel + server, counted once</div>
+      <div class="chain"><div class="st"><b>Pixel</b>from the browser</div><div class="st"><b>Conversions API</b>from the server</div><div class="st lm"><b>Same event ID</b>counted once</div></div></div>
+    <div><div class="vizlabel" style="margin-top:0"><span class="pl g">Google</span> Conversion tag</div>
+      <div class="chain"><div class="st"><b>Ads tag</b>via Tag Manager</div><div class="st"><b>Enhanced conversions</b>hashed email or phone</div><div class="st lm"><b>Calls ≥ 60 s</b>count as leads</div></div></div>
+  </div>
+  <div class="gate"><span class="label">Gate 1</span><h4>Did the test conversion show up everywhere, once?</h4><p>Build can start when a test lead appears in GA4, Google and Meta. Nothing goes live until it passes again on the final landing pages.</p></div>
+  <details class="all"><summary>All tasks <span>14 tasks with owners and outputs</span></summary><div class="inner"><p class="lede">Ad platforms learn from the conversions we send them. If tracking is wrong, they learn the wrong thing and spend the budget chasing it. That's why tracking is set up first. A few pieces depend on the build (call assets and the campaign landing pages), so they are finished in Phase 4, and the test is repeated on the final pages before launch (6.1).</p><div class="tasks">
+<div class="task" data-p="s"><span class="tid">3.1</span><div class="tbody"><h4>Install or check GA4 and Google Tag Manager <span class="pl s">Shared</span></h4><p>All tags go through Tag Manager so we can change them without touching the site code.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Tag Manager container live</span></div></div>
+<div class="task" data-p="s"><span class="tid">3.2</span><div class="tbody"><h4>Fire conversions only on confirmed success <span class="pl s">Shared</span></h4><p>The conversion fires when the thank-you page loads or the success message appears. Never on the button click: people click Submit on forms that fail, and those would be counted as leads.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Conversion events defined</span></div></div>
+<div class="task" data-p="s"><span class="tid">3.3</span><div class="tbody"><h4>Use one link-tagging convention <span class="pl s">Shared</span></h4><p><span class="mono" style="font-size:.82rem">utm_source=google|meta · utm_medium=cpc|paid_social · utm_campaign=[campaign] · utm_content=[ad]</span>. Google also tags clicks automatically (auto-tagging). Meta tags go in the ad's URL parameters field.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">UTM sheet</span></div></div>
+<div class="task" data-p="s"><span class="tid">3.4</span><div class="tbody"><h4>Pass the ad click into the CRM, and plan the feedback loop <span class="pl s">Shared</span></h4><p>Hidden form fields save the Google click ID, the Meta click ID and the UTMs with each lead. When that lead later becomes qualified or a customer, the CRM tells Google and Meta which click it came from (3.7G and 3.9M). The platforms then aim for people who become customers, not just people who fill in forms.</p>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Where do their leads go?</div><div class="bopts"><div><b>A CRM</b>Agree 2 to 3 stages to send back (for example: qualified lead, customer, with a value). Connect it in 3.7G and 3.9M.</div><div><b>No CRM of their own</b>Their leads go into the CRM inside JML Crew (set up at intake, 1.8). Agree the stages with the client and connect JML Crew to Google and Meta the same way.</div><div><b>Sale happens online</b>Skip. The purchase tag already tells the platforms.</div></div></div></div><div class="tmeta"><span class="own">MB · WD</span><span class="out">Hidden fields working</span></div></div>
+<div class="sub"><span class="pl g">Google</span><h3>Google tracking</h3></div>
+<div class="task" data-p="g"><span class="tid">3.5G</span><div class="tbody"><h4>Google Ads conversion tag with Enhanced Conversions</h4><p>Install the native Google Ads conversion tag through Tag Manager as the primary conversion. Turn on Enhanced Conversions for leads, which sends a scrambled (hashed) email or phone with each conversion so Google can match more of them. GA4 conversions can be imported as secondary, for reference only.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Tag live, status "Recording"</span></div></div>
+<div class="task" data-p="g"><span class="tid">3.6G</span><div class="tbody"><h4>Call tracking</h4><p>Set up the "calls from website" conversion now. Calls from the ads themselves are tracked through call assets with Google forwarding numbers, switched on when the call asset is built (4G.7). Count only calls of 60 seconds or more, so wrong numbers and hang-ups don't count as leads.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Call conversions set</span></div></div>
+<div class="task" data-p="g"><span class="tid">3.7G</span><div class="tbody"><h4>Send CRM results back to Google</h4><p>Connect the CRM with Google Ads Data Manager (Google's tool for linking CRMs such as HubSpot and Salesforce) or a connector like Zapier. Send the "qualified lead" and "customer" stages back as offline conversions, matched by the Google click ID and by email or phone (enhanced conversions for leads). Set uploads to run daily, or automatically whenever a lead changes stage.</p><p>Start with these as secondary goals. Once qualified leads reach about 30 a month, make them the primary goal so bidding aims for qualified leads instead of any form fill.</p></div><div class="tmeta"><span class="own">MB · CL</span><span class="out">CRM connected, stages arriving</span></div></div>
+<div class="task" data-p="g"><span class="tid">3.8G</span><div class="tbody"><h4>Set primary and secondary goals</h4><p>Only the primary conversion steers bidding. Everything else is marked secondary.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Goals set</span></div></div>
+<div class="sub"><span class="pl m">Meta</span><h3>Meta tracking</h3></div>
+<div class="task" data-p="m"><span class="tid">3.5M</span><div class="tbody"><h4>Pixel plus Conversions API</h4><p>The pixel reports events from the visitor's browser. The Conversions API (CAPI) sends the same events from the server, so they still arrive when browsers or ad blockers stop the pixel. Set up CAPI through the website platform's built-in integration (Shopify, WordPress plugin), Meta's CAPI Gateway, or server-side Tag Manager.</p></div><div class="tmeta"><span class="own">MB · WD</span><span class="out">Events arriving from both sources</span></div></div>
+<div class="task" data-p="m"><span class="tid">3.6M</span><div class="tbody"><h4>Stop double counting</h4><p>Send the same event ID from the pixel and from CAPI so Meta counts each lead once.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Deduplication confirmed in Events Manager</span></div></div>
+<div class="task" data-p="m"><span class="tid">3.7M</span><div class="tbody"><h4>Domain verification and match quality</h4><p>Verify the domain in Business Manager. In Events Manager, check Event Match Quality for the main event and aim for "Good" or better by sending hashed email and phone.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Domain verified</span></div></div>
+<div class="task" data-p="m"><span class="tid">3.8M</span><div class="tbody"><h4>Instant form lead delivery</h4><p>If we use Meta's in-app forms, connect them to the client's CRM, or to JML Crew if they don't have one (native integration or Zapier), so leads reach the client in minutes. Leads left sitting in a downloadable file go cold.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Leads delivered automatically</span></div></div>
+<div class="task" data-p="m"><span class="tid">3.9M</span><div class="tbody"><h4>Send CRM results back to Meta</h4><p>Connect the CRM through Meta's Conversions API for CRM (directly, or through a partner integration). Send the same lead stages as Google: qualified lead and customer. This is what unlocks Meta's <b>Conversion leads</b> goal (4M.2), which aims for people likely to become qualified rather than anyone who fills in a form. Check the stages arrive in Events Manager.</p></div><div class="tmeta"><span class="own">MB · CL</span><span class="out">Lead stages arriving in Events Manager</span></div></div>
+<div class="task" data-p="s"><span class="tid">3.10</span><div class="tbody"><h4>Send a test conversion <span class="pl s">Shared</span></h4><p>Submit a real test form and place a test call. Confirm it shows in GA4, in Google Ads, and in Meta Events Manager (use the Test Events tool). For Meta instant forms, use the Lead Ads Testing Tool. If the CRM is connected, move the test lead to "qualified" (in JML Crew we do this; in the client's own CRM, ask the client to) and check that stage reaches both platforms (allow up to a day).</p></div><div class="tmeta"><span class="own">MB · CL</span><span class="out">Screenshots in the client folder</span></div></div>
+</div></div></details>
+</section>
+
+<!-- P4 -->
+<section id="p4">
+  <div class="sechead"><div class="num">4</div><h2>Campaign build</h2><div class="meta"><b>When:</b> weeks 2 to 3, alongside Creative · <b>Goal:</b> campaigns built and paused, creative and landing pages ready</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip build" href="#t-gads" data-p="g">Google Ads + manager account</a><a class="tchip build" href="#t-gae" data-p="g">Google Ads Editor</a><a class="tchip build" href="#t-meta" data-p="m">Meta Business Suite + Ads Manager</a><a class="tchip core" href="#t-kp" data-p="g">Google Keyword Planner</a><a class="tchip std" href="#t-figma">Figma</a></div>
+
+  <div data-p="g">
+    <div class="sub"><span class="pl g">Google</span><h3>4G · Google Ads</h3></div>
+    <div class="vizlabel">Campaign types: the default is Search or Performance Max, depending on the business</div>
+    <div class="tiles">
+      <div class="tile hi"><span class="l">Search</span><span class="v">Default</span><span class="w">When people search for the service. Text ads on Google results.</span></div>
+      <div class="tile hi"><span class="l">Performance Max</span><span class="v">Default</span><span class="w">For stores with a product feed, or when customers are easier to reach across YouTube, Maps and Gmail than by keyword.</span></div>
+      <div class="tile"><span class="l">Local Services</span><span class="v">Pay per lead</span><span class="w">Now inside Performance Max. Search and Maps only. Eligible trades.</span></div>
+      <div class="tile"><span class="l">Demand Gen</span><span class="v">Video + banners</span><span class="w">YouTube, Discover, Gmail. Display now lives here.</span></div>
+    </div>
+    <div class="twoup" style="margin-top:6px">
+      <div><div class="vizlabel">Account structure</div>
+        <ul class="otree"><li><span class="nd top">Google Ads account<small>client-owned</small></span><ul>
+          <li><span class="nd">Brand campaign<small>client's name searches</small></span></li>
+          <li><span class="nd">Service A campaign</span><ul><li><span class="nd">Ad group<small>10–20 close keywords</small></span></li><li><span class="nd">Ad group</span></li></ul></li>
+          <li><span class="nd">Service B campaign</span></li>
+          <li><span class="nd">Shared negative list<small>jobs, free, DIY…</small></span></li>
+        </ul></li></ul></div>
+      <div><div class="vizlabel">Search or Performance Max?</div>
+        <div class="tree"><div class="q">How do their customers find them?</div><div class="bs" style="--n:2">
+          <div class="b go"><span class="lab">They search for it</span>Search. "Plumber near me", "divorce lawyer San Diego".</div>
+          <div class="b go"><span class="lab">They buy products or browse</span>Performance Max, with the product feed for stores.</div>
+        </div></div></div>
+    </div>
+    <div class="vizlabel">Bidding moves up as data grows</div>
+    <div class="stairs">
+      <div><span class="when">week 1–2, if few conversions</span><b>Maximize Clicks</b>with a cost-per-click cap</div>
+      <div><span class="when">default start</span><b>Maximize Conversions</b></div>
+      <div><span class="when">~30 conversions in 30 days</span><b>Target CPA</b>set near actual cost per lead</div>
+      <div><span class="when">then</span><b>Lower the target</b>10–15% at a time</div>
+    </div>
+    <div class="note"><b>AI Max: not used for now.</b> It's new and not well proven yet. Google switched many Search campaigns to it automatically in September 2026, so check it's off on every Search campaign.</div>
+  </div>
+
+  <div data-p="m">
+    <div class="sub" style="margin-top:36px"><span class="pl m">Meta</span><h3>4M · Meta Ads</h3></div>
+    <div class="twoup">
+      <div><div class="vizlabel">Keep it small so each ad set learns</div>
+        <ul class="otree"><li><span class="nd top">Leads campaign<small>Advantage+ on</small></span><ul>
+          <li><span class="nd">Ad set 1<small>broad, area radius</small></span><ul><li><span class="nd">4 creatives<small>distinct concepts</small></span></li></ul></li>
+          <li><span class="nd">Ad set 2 (optional)</span></li>
+          <li><span class="nd">Retargeting<small>once ~1,000 visitors/30 days</small></span></li>
+        </ul></li></ul></div>
+      <div><div class="vizlabel">Settings to check</div>
+        <div class="dials">
+          <div class="dial"><b>Audience</b><span class="sw-on">Advantage+</span><br>Only location and minimum age are hard limits.</div>
+          <div class="dial"><b>Placements</b><span class="sw-on">all, incl. Threads</span><br>Needs 9:16 and 4:5 versions.</div>
+          <div class="dial"><b>Attribution</b><span class="sw-cond">7-day click, 1-day view</span><br>Engage-through off.</div>
+          <div class="dial"><b>Creative enhancements</b><span class="sw-off">review, mostly off</span><br>Meta rewrites image text by default.</div>
+        </div></div>
+    </div>
+    <div class="vizlabel">Where the form lives</div>
+    <div class="tree"><div class="q">Leads objective: website form or Instant Form?</div><div class="bs" style="--n:2">
+      <div class="b"><span class="lab">Website form</span>Better leads. Needs a good page and working tracking.</div>
+      <div class="b"><span class="lab">Instant Form</span>Cheaper, more leads, lower quality. Use "Higher intent" and 1–3 questions. Switch to <b>Conversion leads</b> once the CRM sends stages back.</div>
+    </div></div>
+  </div>
+
+  <div class="sub" style="margin-top:36px"><span class="pl s">Shared</span><h3>4L · Free campaign landing page</h3></div>
+  <div class="chain">
+    <div class="st"><b>We write the copy</b>headline matches the ad</div>
+    <div class="st"><b>We draw a wireframe</b>phone first, plus tracking notes</div>
+    <div class="st fork"><div class="o"><i>JML web client</i>Our web team builds it</div><div class="o"><i>Anyone else</i>They use it however they like</div></div>
+    <div class="st lm"><b>We check tracking</b>on whatever page goes live</div>
+  </div>
+  <ul class="keys"><li><b>One per campaign,</b> copy and wireframe only. No revision rounds.</li><li><b>Page late?</b> Launch to their closest existing page and switch later.</li></ul>
+  <details class="all"><summary>All tasks <span>26 tasks with owners and outputs</span></summary><div class="inner"><div class="sub" data-p="g"><span class="pl g">Google</span><h3>4G · Google Ads build</h3></div><div class="tasks" data-p="g">
+<div class="task" data-p="g"><span class="tid">4G.1</span><div class="tbody"><h4>Choose the campaign types</h4>
+
+<p>See the campaign types diagram above.</p>
+</div><div class="tmeta"><span class="own">MB</span><span class="out">Campaign list in the build sheet</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.2</span><div class="tbody"><h4>Lock the account settings</h4><ul><li>Auto-tagging on</li><li>Auto-applied recommendations off (otherwise Google can add keywords and rewrite ads without us)</li><li>Location option: "Presence", meaning people in or regularly in the area, not people merely interested in it</li><li>Search campaigns: Search Partners off and Display expansion off at launch</li><li>Ad schedule matched to business hours when calls are the goal</li><li>AI Max off. We don't use it yet, and Google switched many Search campaigns on automatically in September 2026 (4G.11).</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Settings checklist</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.3</span><div class="tbody"><h4>Research keywords and group them by intent</h4><p>Use Keyword Planner, past search terms, and the words the client's customers actually use.</p><ul><li><b>High intent:</b> service + location, "near me", "emergency", "cost", "quote"</li><li><b>Mid intent:</b> "best", comparisons, reviews</li><li><b>Skip:</b> DIY, "how to", "jobs", "free", "salary", "course"</li></ul><p>Start with phrase and exact match. Broad match lets Google go beyond the keyword list, so add it only once smart bidding has about 30 conversions a month to learn from.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Keyword sheet</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.4</span><div class="tbody"><h4>Build the negative keyword list</h4><p>A shared list applied to the whole account from day one: jobs, careers, salary, free, DIY, training, course, used, and anything the client doesn't offer. It is the cheapest way to stop wasted spend.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Shared negative list</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.5</span><div class="tbody"><h4>Structure the campaigns</h4><p>Keep brand searches (people typing the client's name) in their own campaign. They are cheap and convert well, and mixing them in makes everything else look better than it is. Split other campaigns by service or area when budgets or goals differ. Keep ad groups tightly themed, roughly 10 to 20 related keywords each.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Account structure map</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.6</span><div class="tbody"><h4>Write the search ads</h4><p>Responsive search ads: up to 15 headlines (30 characters each) and 4 descriptions (90 characters each). Cover the keyword, the location, the offer, proof, and a call to action. Pin a headline in place only when legally required. Aim for an Ad Strength of Good or Excellent.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Ad copy sheet</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.7</span><div class="tbody"><h4>Add assets (extensions)</h4><p>Sitelinks (4 or more), callouts (4 or more), structured snippets, call, location (linked to the Google Business Profile), price, and image assets. Image assets come from Creative: our designed static images, in the Google sizes.</p></div><div class="tmeta"><span class="own">MB · CR</span><span class="out">Assets attached</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.8</span><div class="tbody"><h4>Set bidding</h4>
+<div class="branch"><div class="bq"><span class="label">Branch</span>How much conversion history is there?</div><div class="bopts"><div><b>None or very little</b>Maximize Conversions. If very few conversions are expected, Maximize Clicks with a cost-per-click cap for the first 1 to 2 weeks.</div><div><b>About 30+ in the last 30 days</b>Switch to Target CPA, set near the actual cost per lead, then lower it 10 to 15% at a time.</div><div><b>Online store</b>Maximize Conversion Value, then Target ROAS once there is history.</div></div></div>
+</div><div class="tmeta"><span class="own">MB</span><span class="out">Bid strategy per campaign</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.9</span><div class="tbody"><h4>Set budgets</h4><p>Daily budget per campaign = monthly ÷ 30.4. Google may spend up to twice the daily budget on a busy day but won't go over the monthly total.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Budgets set</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.10</span><div class="tbody"><h4>Performance Max extras (if used)</h4><ul><li>Asset groups by product or service theme</li><li>Audience signals: customer list, site visitors, custom search terms</li><li>All asset sizes, including our own videos in 16:9, 1:1 and 9:16. Without them Google auto-makes low-quality videos from the images.</li><li>Review the settings that let Google create or pull in its own images and video (including "sourced videos" from YouTube, added October 2026). Keep only what the client would approve.</li><li>Brand exclusions, and the product feed from Merchant Center for stores</li></ul></div><div class="tmeta"><span class="own">MB · CR</span><span class="out">Asset groups complete</span></div></div>
+<div class="task" data-p="g"><span class="tid">4G.11</span><div class="tbody"><h4>Keep AI Max off</h4><p>AI Max is a newer Search setting that lets Google match searches beyond our keywords, write its own headlines, and choose the landing page. We don't use it for now. Google switched many Search campaigns over automatically in September 2026, so open each Search campaign's settings and confirm all three parts are off.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">AI Max off on every campaign</span></div></div>
+
+    <div class="task" data-p="g"><span class="tid">4G.12</span><div class="tbody"><h4>Local Services Ads (now inside Performance Max)</h4><p>The client pays per valid lead (call, message or booking), not per click, and the ads show only on Search and Maps. Eligibility needs licenses, insurance and background checks, plus a complete Google Business Profile with reviews. After the move into Google Ads: budgets are daily instead of weekly, manual bidding and per-category targets are replaced by one campaign-level Target CPA, and leads are handled in Lead Manager inside Google Ads.</p>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Has the client's Local Services account been moved yet?</div><div class="bopts"><div><b>Not yet</b>New sign-ups may still start on the Local Services site. Before the move, export all historical reports (they don't transfer) and make sure the admin email gets Google's 14-day notice.</div><div><b>Moved</b>Manage it in Google Ads next to Search. BBB callouts are no longer supported, so add at least six of our own callouts.</div></div></div>
+</div><div class="tmeta"><span class="own">MB · CL</span><span class="out">Local Services campaign live</span></div></div>
+</div><div class="sub" data-p="m" style="margin-top:40px"><span class="pl m">Meta</span><h3>4M · Meta Ads build</h3></div><div class="tasks" data-p="m">
+<div class="task" data-p="m"><span class="tid">4M.1</span><div class="tbody"><h4>Check the business setup</h4><p>Ad account inside the client's Business Manager, Page and Instagram connected, dataset assigned, payment on file, domain verified.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Setup checklist</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.2</span><div class="tbody"><h4>Choose the campaign objective</h4>
+<div class="branch"><div class="bq"><span class="label">Branch</span>What does the client sell?</div><div class="bopts"><div><b>Services (most clients)</b>Leads objective. Then choose where the form lives (next branch).</div><div><b>Online store</b>Sales objective with the product catalog.</div><div><b>Brand push</b>Awareness or Engagement, only for a specific reason and time.</div></div></div>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Website form or Instant Form?</div><div class="bopts"><div><b>Website form</b>Form on the landing page. Usually better-quality leads. Needs a good page and working tracking.</div><div><b>Instant Form</b>Form opens inside Facebook or Instagram. Cheaper and more leads, but lower quality. Use the "Higher intent" form type and add 1 to 3 qualifying questions. Once the CRM sends stages back (3.9M), switch the goal to <b>Conversion leads</b>.</div></div></div>
+<p style="margin-top:8px">Avoid the Traffic objective for clients who want leads. It buys clicks, not customers.</p>
+</div><div class="tmeta"><span class="own">MB</span><span class="out">Objective in the build sheet</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.3</span><div class="tbody"><h4>Apply the Special Ad Category if needed</h4><p>From the audit (0.9). It must be set at campaign level before launch, or ads get rejected.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Category set</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.4</span><div class="tbody"><h4>Keep the structure simple</h4><p>Meta merged its manual and Advantage+ setup into one flow, and Leads and Sales campaigns now start with Advantage+ settings switched on. Meta learns per ad set. Fewer ad sets means each one gets enough conversions to learn. Start with one prospecting campaign using campaign-level budget (Advantage campaign budget) and 1 to 2 ad sets. Add a retargeting campaign once the website audience is big enough, roughly 1,000 visitors in 30 days.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Structure map</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.5</span><div class="tbody"><h4>Set audiences</h4><ul><li>Location: a radius around the service area, set to people living there for local services</li><li>Minimum age only if there is a real reason</li><li>Advantage+ audience is the default. Interests, customer lists and lookalikes count only as suggestions, and Meta can go beyond them. Location and minimum age are the only hard limits.</li><li>Excluding people by interest is no longer possible. To keep existing customers out, upload them as a custom audience and add it as an exclusion.</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Audience notes</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.6</span><div class="tbody"><h4>Placements</h4><p>Ads now run across all placements. Meta removed ad-set-level placement exclusions in August 2026 (a few controls remain at account level), and Threads became a default placement in October 2026 with no full opt-out. So every ad needs 9:16 and 4:5 versions, or it gets cropped badly. Preview each placement, including Threads, before saving.</p></div><div class="tmeta"><span class="own">MB · CR</span><span class="out">Previews checked</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.7</span><div class="tbody"><h4>Build the ads</h4><ul><li>Launch with the month's 4 creatives, each a different concept, not tiny variations. New creatives are added each month and the weakest are paused.</li><li>Primary text: the first 125 characters show before "See more", so the point goes first</li><li>Headline of about 40 characters, plus a call-to-action button</li><li>Add several text options so Meta can mix them</li><li>Review Advantage+ creative enhancements. Several are on by default, including rewriting the text inside images. Turn off any that change our video or copy unless the client approves, and add banned words in the Branding settings.</li><li>Meta now treats visually similar ads as one creative, so near-copies don't count as separate tests</li><li>Point every ad at the campaign landing page, and turn off any option that lets Meta send people to a page it generates itself</li></ul></div><div class="tmeta"><span class="own">MB · CR</span><span class="out">Ads built, paused</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.8</span><div class="tbody"><h4>Set the budget against the learning phase</h4><p>Meta's guide is about 50 conversions per ad set per week to finish learning. At our $1,000 minimum, ad sets usually still finish learning, just more slowly. Keep to one or two ad sets so conversions aren't split, and don't treat a slow learning phase as a reason to change things.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Budget set</span></div></div>
+<div class="task" data-p="m"><span class="tid">4M.9</span><div class="tbody"><h4>Set the attribution window</h4><p>Since March 2026, Meta only counts a "click" when someone actually clicks a link. Likes, shares, comments and video views of 5 seconds or more now fall under a separate 1-day "engage-through" window, which is on by default. For lead generation, use 7-day click and 1-day view (Meta's standard), and turn engage-through off (or report it in its own column) so reported leads aren't inflated. Don't compare cost per lead from before and after March 2026 directly.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Attribution setting noted</span></div></div>
+</div><div class="sub" style="margin-top:40px"><span class="pl s">Shared</span><h3>4L · Campaign landing page</h3></div><p class="lede">Included at no extra cost: <b>one landing page per campaign</b>, as copy and a suggested wireframe. It's an offer, not a managed deliverable: we don't do revision rounds on it, and clients with their own web team can use it however they like. Clients on JML web services get it built by our web team.</p><div class="tasks">
+<div class="task" data-p="s"><span class="tid">4L.1</span><div class="tbody"><h4>Write the landing page copy <span class="pl s">Shared</span></h4><ul><li>Headline that repeats the ad's promise, so visitors know they're in the right place</li><li>The offer, in one or two sentences</li><li>Proof: reviews, numbers, logos, guarantees</li><li>What happens after they get in touch</li><li>Short FAQ that answers the common objections</li><li>One call to action, repeated, plus tap-to-call</li></ul></div><div class="tmeta"><span class="own">AL · MB</span><span class="out">Copy doc</span></div></div>
+<div class="task" data-p="s"><span class="tid">4L.2</span><div class="tbody"><h4>Draw the suggested wireframe <span class="pl s">Shared</span></h4><p>A simple layout, phone first: the order of sections, where the form and phone number sit, where proof goes, and where our creative (a static design or a short video loop) can be used. Add the tracking requirements: thank-you page or success message, hidden fields for click IDs and UTMs (task 3.4), and the tags to install.</p></div><div class="tmeta"><span class="own">WD · MB</span><span class="out">Wireframe + tracking notes</span></div></div>
+<div class="task" data-p="s"><span class="tid">4L.3</span><div class="tbody"><h4>Hand off for build <span class="pl s">Shared</span></h4>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Who runs the client's website? (from kickoff, 1.6)</div><div class="bopts"><div><b>JML web team</b>Our web team builds the page from the copy and wireframe, with tracking installed.</div><div><b>Client's own team or no team</b>We send the copy, wireframe and tracking notes. What they build, and when, is up to them.</div></div></div>
+</div><div class="tmeta"><span class="own">AL · WD</span><span class="out">Build date agreed</span></div></div>
+<div class="task" data-p="s"><span class="tid">4L.4</span><div class="tbody"><h4>Check tracking on the page the ads will use <span class="pl s">Shared</span></h4><p>Whatever page goes live, we make sure the form and tap-to-call work and that a test conversion from it shows up in every platform. Our tracking has to work even when the design isn't ours.</p>
+<div class="branch"><div class="bq"><span class="label">Branch</span>Is the page live by launch day?</div><div class="bopts"><div><b>Yes</b>Point the campaign's ads to it.</div><div><b>No</b>Launch to the closest existing page (from 0.7). Switch when the campaign page is live and re-test tracking.</div></div></div>
+</div><div class="tmeta"><span class="own">MB</span><span class="out">Page approved for traffic</span></div></div>
+</div><div class="task" data-p="s" style="border-top:1px solid var(--line);margin-top:24px"><span class="tid">4.1</span><div class="tbody"><h4>Name everything the same way <span class="pl s">Shared</span></h4><p><span class="mono" style="font-size:.82rem">Platform_Goal_Audience_Geo_Date</span>, for example <span class="mono" style="font-size:.82rem">META_Leads_Broad_SD25mi_2026-11</span>. Ads carry the creative's file name (see Creative). Consistent names make reports and diagnosis fast.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Names applied</span></div></div></div></details>
+</section>
+
+<!-- CREATIVE -->
+<section id="pc">
+  <div class="sechead"><div class="num">5</div><h2>Creative production</h2><div class="meta"><b>When:</b> from week 2, then monthly · <b>Allowance:</b> 4 creatives per campaign per month</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip std" href="#t-figma">Figma</a><a class="tchip std" href="#t-adobe">Photoshop + Illustrator</a><a class="tchip std" href="#t-cgi">Blender or Cinema 4D</a><a class="tchip std" href="#t-ae">After Effects</a><a class="tchip std" href="#t-edit">Premiere Pro or DaVinci Resolve</a><a class="tchip std" href="#t-stock">Licensed stock and music</a><a class="tchip core" href="#t-adlib" data-p="m">Meta Ad Library</a><a class="tchip core" href="#t-adclarity">AdClarity (in Semrush)</a></div>
+  <div class="tree"><div class="q">Static image or video?</div><div class="bs" style="--n:3">
+    <div class="b go"><span class="lab">Static</span>Route S: we design it</div>
+    <div class="b"><span class="lab">Video with real people or place</span>Route B: edit the client's footage. No footage? Out of scope until they film.</div>
+    <div class="b go"><span class="lab">Video of a product, process or idea</span>Route A: CGI and motion</div>
+  </div></div>
+  <details class="routes"><summary>How each route works <span>Route S, A and B, step by step</span></summary>
+    <div class="routegrid">
+      <div class="rcard"><header><span class="lt">ROUTE S</span><b>Designed static</b><span>Image ads we design</span></header>
+        <ol>
+          <li><span><b>Copy:</b> a headline, one supporting line, and the call to action. Few words.</span></li>
+          <li><span><b>Layouts:</b> 2 or 3 rough directions.</span></li>
+          <li><span><b>Design</b> in the client's brand, using their photos, our CGI renders, or licensed stock.</span></li>
+          <li><span><b>Resize</b> for every placement, checking text stays readable on a phone.</span></li>
+        </ol>
+        <div class="use">Best for: offers, prices, proof, announcements. A large share of what we make.</div></div>
+      <div class="rcard"><header><span class="lt">ROUTE A</span><b>CGI and motion</b><span>Animation we build from scratch</span></header>
+        <ol>
+          <li><span><b>Script:</b> voiceover, on-screen text, and timing.</span></li>
+          <li class="key"><span><b>Style frames:</b> 3 to 6 stills of the final look. The client approves these before we build, because changes are cheap now and expensive later.</span></li>
+          <li><span><b>Animatic:</b> a rough cut to lock timing.</span></li>
+          <li><span><b>Build</b> in 3D or 2D motion, then add music, sound and voiceover (usually recorded by the client).</span></li>
+          <li><span><b>Render</b> every size and length.</span></li>
+        </ol>
+        <div class="use">Best for: products, processes, apps and services that are hard to film.</div></div>
+      <div class="rcard"><header><span class="lt">ROUTE B</span><b>Client footage edit</b><span>Their video, cut into ads</span></header>
+        <ol>
+          <li class="key"><span><b>Check the footage:</b> original files, 1080p or better, everyone on camera has agreed, no copyrighted music.</span></li>
+          <li><span><b>Cut</b> with the hook in the first 1 to 3 seconds, then problem, proof, offer, call to action.</span></li>
+          <li><span><b>Add</b> burned-in captions, motion graphics for key points, and a branded end card.</span></li>
+          <li><span><b>Clean up</b> color and audio; add licensed music and voiceover.</span></li>
+          <li><span><b>Export</b> every size and length.</span></li>
+        </ol>
+        <div class="use">Best for: real people, places and results. No usable footage means no Route B.</div></div>
+    </div>
+    <div class="routeend"><div class="vizlabel" style="margin-top:0">Every route ends the same way</div><div class="chain"><div class="st"><b>QA</b>spelling, logo, offer, sizes, licenses</div><div class="st dk"><b>Client review</b></div><div class="st lm"><b>Upload</b>straight to their ad accounts</div></div></div>
+  </details>
+  <div class="vizlabel">Sizes we deliver (drawn to scale)</div>
+  <div class="sizes">
+    <div class="sz"><div class="box" style="aspect-ratio:9/16">9:16</div><b>1080×1920</b><span>Reels, Stories, Shorts</span></div>
+    <div class="sz"><div class="box" style="aspect-ratio:4/5">4:5</div><b>1080×1350</b><span>Meta feed, Threads</span></div>
+    <div class="sz"><div class="box" style="aspect-ratio:1/1">1:1</div><b>1080×1080</b><span>Square option, PMax</span></div>
+    <div class="sz wide"><div class="box" style="aspect-ratio:16/9">16:9</div><b>1920×1080</b><span>YouTube, PMax video</span></div>
+    <div class="sz wide"><div class="box" style="aspect-ratio:1.91/1">1.91:1</div><b>1200×628</b><span>Google image assets</span></div>
+  </div>
+  <ul class="keys">
+    <li><b>One creative</b> = one finished ad. Its sizes and cut-downs count as one.</li>
+    <li><b>Each month:</b> 4 new creatives go in, the weakest are paused.</li>
+    <li><b>Voiceover:</b> usually the client records it from our script.</li>
+    <li><b>Project files</b> stay with JML. Finished ads go straight to their ad accounts.</li>
+  </ul>
+  <details class="all"><summary>All tasks <span>6 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks">
+<div class="task" data-p="c"><span class="tid">5.1</span><div class="tbody"><h4>Write a brief for each concept <span class="pl c">Creative</span></h4><p>Format (static or video), platform and placement, goal, audience, angle, the hook (the headline for a static, the first 3 seconds for a video), the key message, offer, call to action, sizes, lengths for video, deadline, and route.</p></div><div class="tmeta"><span class="own">AL · CR</span><span class="out">Concept brief</span></div></div>
+<div class="task" data-p="c"><span class="tid">5.2</span><div class="tbody"><h4>Choose the route <span class="pl c">Creative</span></h4>
+<div class="branch"><div class="bq"><span class="label">Branch 1</span>Static image or video?</div><div class="bopts"><div><b>Static</b>Route S: designed static.</div><div><b>Video</b>Go to Branch 2.</div></div></div>
+<div class="branch"><div class="bq"><span class="label">Branch 2</span>Does the idea need real people, the real place, or real results on screen? (testimonials, the team, before and after)</div><div class="bopts"><div><b>Yes, and footage exists</b>Route B. Check the footage in 5.3.</div><div><b>Yes, but no footage</b>Out of scope. Send the client our self-shoot shot list and wait for footage, or quote a partner shoot.</div><div><b>No</b>Go to Branch 3.</div></div></div>
+<div class="branch"><div class="bq"><span class="label">Branch 3</span>Is the message about a product, a process, a concept, data, or something hard to film? (how a payment moves, an app, an invisible service)</div><div class="bopts"><div><b>Yes</b>Route A: CGI and motion.</div><div><b>Both apply</b>Route B footage with motion graphics on top. Treat it as Route B.</div></div></div>
+</div><div class="tmeta"><span class="own">CR</span><span class="out">Route on the brief</span></div></div>
+<div class="task" data-p="c"><span class="tid">5.3</span><div class="tbody"><h4>Check the client's footage (Route B) <span class="pl c">Creative</span></h4><ul><li>Original files, at least 1080p</li><li>Vertical footage available for Reels and Stories, if possible</li><li>Steady shots, decent light, clear audio if someone speaks</li><li>Everyone on camera has agreed to appear in ads</li><li>No copyrighted music in the background</li></ul><p>If the footage won't work, say so early, with the reason and what to reshoot.</p></div><div class="tmeta"><span class="own">CR</span><span class="out">Footage OK or a reshoot list</span></div></div>
+</div><div class="tasks" style="margin-top:16px">
+<div class="task" data-p="c"><span class="tid">5.4</span><div class="tbody"><h4>Run the QA checklist <span class="pl c">Creative</span></h4><p>Spelling, correct logo, the call to action matches the offer and landing page, captions in sync (video), safe zones respected, text readable on a phone (statics), audio levels even, music licensed, images and stock licensed, every claim provable (no "#1" or "best" without evidence), all sizes present, files named correctly.</p></div><div class="tmeta"><span class="own">CR, then MB</span><span class="out">Ticked checklist</span></div></div>
+<div class="task" data-p="c"><span class="tid">5.5</span><div class="tbody"><h4>Name and upload the finals <span class="pl c">Creative</span></h4><p><span class="mono" style="font-size:.82rem">Client_Concept_Route_Ratio_Length_v#</span>, for example <span class="mono" style="font-size:.82rem">NIK_ColdBrewPour_A_9x16_15s_v1</span> or <span class="mono" style="font-size:.82rem">NIK_SummerOffer_S_4x5_v2</span>. Finals are uploaded to the client's ad accounts under the same name, so results trace back to the file. Project files stay with JML.</p></div><div class="tmeta"><span class="own">CR</span><span class="out">Ads uploaded, JML library updated</span></div></div>
+<div class="task" data-p="c"><span class="tid">5.6</span><div class="tbody"><h4>Plan the refresh <span class="pl c">Creative</span></h4><p>Meta ads wear out as the same people see them again. Each month's 4 new creatives go in as fresh tests, and the weakest ads are paused to make room. Use the fatigue signs in Phase 8 to decide which to replace first. YouTube and Performance Max video usually last 2 to 3 months.</p></div><div class="tmeta"><span class="own">CR · MB</span><span class="out">Next month's concepts</span></div></div>
+</div></div></details>
+</section>
+
+<!-- P5 -->
+<section id="p5">
+  <div class="sechead"><div class="num">6</div><h2>QA and launch</h2><div class="meta"><b>When:</b> week 3 · <b>Goal:</b> go live with nothing broken</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip std" href="#t-preview" data-p="g">Google Ad Preview and Diagnosis</a><a class="tchip build" href="#t-meta" data-p="m">Meta Business Suite + Ads Manager</a><a class="tchip std" href="#t-tagassist" data-p="g">Google Tag Assistant</a><a class="tchip std" href="#t-pixelhelper" data-p="m">Meta Pixel Helper</a></div>
+  <div class="viz chain">
+    <div class="st"><b>Checklist</b>links, budgets, areas, billing</div>
+    <div class="st"><b>Policy check</b>Google and Meta rules</div>
+    <div class="st"><b>Second pair of eyes</b>someone who didn't build it</div>
+    <div class="st dk"><b>Gate 2</b>client approves in writing</div>
+    <div class="st lm"><b>Launch</b>Tue or Wed morning</div>
+    <div class="st"><b>One check</b>2–4 hours later</div>
+  </div>
+  <div class="twoup" style="margin-top:14px">
+    <div class="gate" style="margin:0"><span class="label">Gate 2</span><h4>Has the client approved the ads in writing?</h4><p>No launch without it.</p></div>
+    <div><div class="vizlabel" style="margin-top:0">Launch day</div><div class="wk"><div>Mon</div><div class="y">Tue</div><div class="y">Wed</div><div>Thu</div><div class="nx">Fri</div></div><p style="font-size:.82rem;color:var(--muted);margin-top:6px">Never Friday: problems would run all weekend unseen.</p></div>
+  </div>
+  <details class="all"><summary>All tasks <span>8 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks">
+<div class="task" data-p="s"><span class="tid">6.1</span><div class="tbody"><h4>Run the pre-launch checklist <span class="pl s">Shared</span></h4><ul><li>Gate 1 passed and tracking still working</li><li>Every ad link works and carries its UTMs</li><li>Campaign landing pages live and checked (4L.4), or the fallback page agreed</li><li>Locations, radius and schedule correct</li><li>Budgets are daily, not lifetime by mistake, and match the plan</li><li>Billing is on the client's card</li><li>Spelling checked; creative in the right sizes</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Ticked checklist</span></div></div>
+<div class="task" data-p="g"><span class="tid">6.2G</span><div class="tbody"><h4>Google policy check <span class="pl g">Google</span></h4><p>No competitor trademarks in ad text, no unprovable superlatives, no unusual capitals or punctuation, and verification done for restricted categories.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Policy notes</span></div></div>
+<div class="task" data-p="m"><span class="tid">6.2M</span><div class="tbody"><h4>Meta policy check <span class="pl m">Meta</span></h4><p>No copy that implies we know something personal about the viewer ("Are you in debt?" or "Struggling with your weight?"). No before-and-after health images. Special Ad Category set if needed.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Policy notes</span></div></div>
+<div class="task" data-p="s"><span class="tid">6.3</span><div class="tbody"><h4>Second-person review <span class="pl s">Shared</span></h4><p>A team member who didn't build the campaigns checks them against the approved plan.</p></div><div class="tmeta"><span class="own">AL or 2nd MB</span><span class="out">Review sign-off</span></div></div>
+<div class="task" data-p="s"><span class="tid">6.4</span><div class="tbody"><h4>Client approves ads <span class="pl s">Shared</span></h4><p>Send the final copy and creative in one link. Written approval required.</p></div><div class="tmeta"><span class="own">AL · CL</span><span class="out">Approval saved</span></div></div>
+</div><div class="tasks">
+<div class="task" data-p="s"><span class="tid">6.5</span><div class="tbody"><h4>Launch on a Tuesday or Wednesday morning <span class="pl s">Shared</span></h4><p>Client's time zone. Never on a Friday, because problems would run all weekend with nobody watching.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Campaigns live</span></div></div>
+<div class="task" data-p="s"><span class="tid">6.6</span><div class="tbody"><h4>Launch-day check <span class="pl s">Shared</span></h4><p>A one-time check 2 to 4 hours after launch: are ads approved and spending? Any rejections? Fix rejections the same day. After this, the work moves to the weekly session.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Launch note in the change log</span></div></div>
+<div class="task" data-p="s"><span class="tid">6.7</span><div class="tbody"><h4>Tell the client what to expect <span class="pl s">Shared</span></h4><p>Ads are live. The first 2 to 4 weeks are a learning period, and costs are often higher during it. We monitor the campaigns in-house every week, and they get a report at the end of each month.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Launch email</span></div></div>
+</div></div></details>
+</section>
+
+<!-- P6 + P7 -->
+<section id="p6">
+  <div class="sechead"><div class="num">7</div><h2>Learning period</h2><div class="meta"><b>When:</b> right after launch, usually 1 to 4 weeks · <b>Goal:</b> let the platforms learn; fix only what's broken</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip std" href="#t-rules">Automated rules</a><a class="tchip build" href="#t-gads" data-p="g">Google Ads + manager account</a><a class="tchip build" href="#t-meta" data-p="m">Meta Business Suite + Ads Manager</a></div>
+  <div class="note" style="margin-top:0"><b>This is the usual pattern, not a fixed schedule.</b> Learning ends when the platform says it has. On Meta that can be as soon as about one week, and optimization starts from there. Google and slower accounts can take the full four weeks.</div>
+  <div class="tlwrap">
+    <div class="tl">
+      <div></div><div class="h">Wk 1</div><div class="h">Wk 2</div><div class="h">Wk 3</div><div class="h">Wk 4</div><div class="h">Wk 5</div><div class="h">Wk 6</div><div class="h">Wk 7</div><div class="h">Wk 8</div>
+      <div class="rl">Phase</div><div class="c learn" style="grid-column:span 4">7 · Learning (typical length)</div><div class="c opt" style="grid-column:span 4">8 · Optimize</div>
+      <div class="rl">Session</div><div class="c">●</div><div class="c">●</div><div class="c">●</div><div class="c">●</div><div class="c">●</div><div class="c">●</div><div class="c">●</div><div class="c">●</div>
+      <div class="rl">Report</div><div class="c" style="grid-column:span 3"></div><div class="c rep">monthly</div><div class="c" style="grid-column:span 3"></div><div class="c rep">monthly</div>
+      <div class="rl">Alerts</div><div class="c alert" style="grid-column:span 8">automated alerts between sessions: overspend, no conversions, rejected ads</div>
+    </div>
+  </div>
+  <ul class="keys">
+    <li><b>No daily checks.</b> One weekly in-house check; alerts catch real problems.</li>
+    <li><span class="pl g">Google</span> Read search terms each session. Don't change bidding for 2 weeks.</li>
+    <li><span class="pl m">Meta</span> Big edits restart learning. Save changes for the session.</li>
+  </ul>
+  <details class="all"><summary>All tasks <span>4 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks">
+<div class="task" data-p="s"><span class="tid">7.1</span><div class="tbody"><h4>Set automated alerts instead of daily checks <span class="pl s">Shared</span></h4><p>Use automated rules in Google Ads and Meta Ads Manager to email us if a campaign overspends, gets no conversions for several days, or has ads rejected. Real problems reach us between sessions without anyone checking accounts daily.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Alerts set</span></div></div>
+<div class="task" data-p="s"><span class="tid">7.2</span><div class="tbody"><h4>Weekly session, light touch <span class="pl s">Shared</span></h4><p>During learning, the weekly session checks: spend on pace, rejected ads, tracking firing, leads arriving in the CRM (we check JML Crew directly; for the client's own CRM, the client confirms), and CRM stages flowing back to Google and Meta. Fix what's broken and leave the rest alone.</p></div><div class="tmeta"><span class="own">MB · CL</span><span class="out">Change log entry</span></div></div>
+<div class="task" data-p="g"><span class="tid">7.3G</span><div class="tbody"><h4>Google in the first weeks <span class="pl g">Google</span></h4><ul><li>Read the search terms report in each session and add negatives</li><li>Don't change the bid strategy for the first 2 weeks, apart from the planned switch off Maximize Clicks in 4G.8. Smart bidding needs time to settle.</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Negatives added</span></div></div>
+<div class="task" data-p="m"><span class="tid">7.3M</span><div class="tbody"><h4>Meta in the first weeks <span class="pl m">Meta</span></h4><ul><li>Avoid big edits. Changing the budget by more than about 20%, adding ads, or changing targeting restarts the learning phase. Saving changes for one session a week helps here.</li><li>If an ad set shows "Learning limited", combine ad sets, raise the budget, or optimize for a more common event</li></ul></div><div class="tmeta"><span class="own">MB</span><span class="out">Status notes</span></div></div>
+</div></div></details>
+</section>
+
+<section id="p7">
+  <div class="sechead"><div class="num">8</div><h2>Weekly optimization</h2><div class="meta"><b>When:</b> weekly, once learning ends · <b>Who:</b> run in-house by the head of marketing; nothing goes to the client weekly · <b>Goal:</b> lower cost per lead, one tested change at a time</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip build" href="#t-gads" data-p="g">Google Ads + manager account</a><a class="tchip build" href="#t-meta" data-p="m">Meta Business Suite + Ads Manager</a><a class="tchip std" href="#t-rules">Automated rules</a><a class="tchip std" href="#t-ga4">Google Analytics 4</a><a class="tchip std" href="#t-clarity">Microsoft Clarity</a><a class="tchip std" href="#t-preview" data-p="g">Google Ad Preview and Diagnosis</a><a class="tchip core" href="#t-spyfu" data-p="g">SpyFu</a><a class="tchip core" href="#t-adclarity">AdClarity (in Semrush)</a><a class="tchip opt" href="#t-optmyzr" data-p="g">Optmyzr</a></div>
+  <div class="vizlabel">The five weekly checks</div>
+  <div class="checks">
+    <div class="chk"><span class="no">1</span><span class="qq">Is tracking working?</span><span class="look">Conversions still recording in GA4, Google and Meta. CRM stages still arriving.</span><span class="act"><b>If not:</b> fix this first. No other number can be trusted.</span></div>
+    <div class="chk"><span class="no">2</span><span class="qq">Are ads showing and spending as planned?</span><span class="look">Spend on pace, no rejected ads, delivery steady.</span><span class="act"><b>If not:</b> check budget, bids, rejections and billing.</span></div>
+    <div class="chk"><span class="no">3</span><span class="qq">Are ads going stale?</span><span class="look"><span class="pl m">Meta</span>frequency above ~3, click rate falling, cost per lead rising. <span class="pl g">Google</span>assets rated "Low".</span><span class="act"><b>If yes:</b> swap in the month's new creatives.</span></div>
+    <div class="chk"><span class="no">4</span><span class="qq">Are people reaching the form?</span><span class="look"><b>Landing page:</b> page visits roughly match ad clicks, and people aren't leaving straight away. <b>Instant forms:</b> leads come through complete and land in the CRM.</span><span class="act"><b>If not:</b> check page speed and tags, or the form and its CRM connection.</span></div>
+    <div class="chk"><span class="no">5</span><span class="qq">Do the ads look right?</span><span class="look">Preview each placement: cropping, text, Meta's automatic edits, Google's headline combinations.</span><span class="act"><b>If not:</b> fix the creative or turn the setting off.</span></div>
+  </div>
+  <div class="vizlabel">Then optimize</div>
+  <div class="cols">
+    <div class="col" data-p="g"><h5><span class="pl g">Google</span> Every session</h5><ul><li>Search terms: add negatives and keywords</li><li>Pause what spent ~2× target with no conversion</li><li>Replace headlines rated "Low"</li><li>Move budget to the best campaigns</li><li>Lost impression share: budget or rank?</li></ul></div>
+    <div class="col" data-p="m"><h5><span class="pl m">Meta</span> Every session</h5><ul><li>Creative report: hook rate, hold rate, clicks, cost per lead</li><li>Pause what spent ~2× target with no lead</li><li>Scale winners about +20% per session</li><li>Watch frequency for fatigue</li><li>Add the month's new creatives</li></ul></div>
+    <div class="col"><h5><span class="pl s">Shared</span> Once a month</h5><ul><li>CRM stages arriving in both platforms</li><li>Cost per qualified lead</li><li>Plan one test (one change, 7+ days)</li><li>Brief next month's 4 creatives</li></ul></div>
+  </div>
+  </section>
+
+<!-- P8 + P9 -->
+<section id="p8">
+  <div class="sechead"><div class="num">9</div><h2>Reporting</h2><div class="meta"><b>When:</b> monthly, by the 5th business day · <b>Goal:</b> the client sees how it's going and whether they need to do anything</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip std" href="#t-looker">Looker Studio</a><a class="tchip opt" href="#t-supermetrics" data-p="m">Supermetrics</a></div>
+  <div class="viz chain">
+    <div class="st"><b>Weekly checks</b>in-house only, logged in the change log</div>
+    <div class="st dk"><b>Monthly report</b>the only regular client update</div>
+  </div>
+  <div class="vizlabel">What the report shows: 3 or 4 numbers, each against last month</div>
+  <div class="report">
+    <div class="rh"><b>Monthly ads report</b><span>EXAMPLE LAYOUT</span></div>
+    <div class="rn">
+      <div><span class="l">Ad spend</span><span class="v">$</span><span class="c">vs last month</span></div>
+      <div><span class="l">Cost per lead</span><span class="v">$</span><span class="c">vs last month</span></div>
+      <div><span class="l">Total leads</span><span class="v">#</span><span class="c">or total purchases</span></div>
+      <div class="opt"><span class="l">Purchase value</span><span class="v">$</span><span class="c">only when purchases have a value</span></div>
+    </div>
+    <div class="rf">Then, in plain words: why the numbers moved, what we'll do next month, and anything we need from them. No weekly updates and no walkthrough call.</div>
+  </div>
+  <details class="all"><summary>All tasks <span>2 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks">
+<div class="task" data-p="s"><span class="tid">9.1</span><div class="tbody"><h4>Keep a change log <span class="pl s">Shared</span></h4><p>Every change made in the weekly checks: what, when, why. It makes the monthly report quick to write and problems quick to trace.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Change log</span></div></div>
+<div class="task" data-p="s"><span class="tid">9.2</span><div class="tbody"><h4>Monthly report by the 5th business day <span class="pl s">Shared</span></h4><p>Follow the JML client document rules: results in business terms first, 3 or 4 numbers compared to last month: ad spend, cost per lead, total leads or purchases, and purchase value when there is one, the reason in plain words, what we'll do next, and what we need from the client. Leave out internal mechanics such as bid settings and audience setups.</p></div><div class="tmeta"><span class="own">AL · MB</span><span class="out">Monthly report</span></div></div>
+
+</div></div></details>
+</section>
+
+<section id="p9">
+  <div class="sechead"><div class="num">10</div><h2>Scale, pause, or exit</h2><div class="meta"><b>When:</b> at a monthly report, or when their situation changes</div></div>
+  <div class="tstrip"><span class="label">Tools</span><a class="tchip build" href="#t-gae" data-p="g">Google Ads Editor</a><a class="tchip std" href="#t-looker">Looker Studio</a></div>
+  <div class="tree"><div class="q">What do results and the client's situation call for?</div><div class="bs" style="--n:3">
+    <div class="b go"><span class="lab">Scale</span>At or under target for 4+ weeks and room for more leads. Raise ~20% at a time, add campaign types, areas, creatives.</div>
+    <div class="b"><span class="lab">Hold or pause</span>At capacity, slow season or tight cash. Lower budgets rather than stop. Agree a restart date.</div>
+    <div class="b no"><span class="lab">Exit</span>Final report, data export, keyword lists. Never delete campaigns. Remove our access last.</div>
+  </div></div>
+  <details class="all"><summary>All tasks <span>3 tasks with owners and outputs</span></summary><div class="inner"><div class="tasks" style="margin-top:12px">
+<div class="task" data-p="s"><span class="tid">10.1</span><div class="tbody"><h4>Final report <span class="pl s">Shared</span></h4><p>Results over the whole engagement and what we'd do next if we were staying.</p></div><div class="tmeta"><span class="own">AL</span><span class="out">Final report</span></div></div>
+<div class="task" data-p="s"><span class="tid">10.2</span><div class="tbody"><h4>Hand over <span class="pl s">Shared</span></h4><p>The accounts are already the client's. The finished ads are already in their ad accounts; project files (3D scenes, design and edit files) stay with JML. Hand over an export of performance data, the keyword and negative lists, and a short notes file for whoever takes over. Never delete campaigns: the history belongs to the client.</p></div><div class="tmeta"><span class="own">AL · MB · CR</span><span class="out">Handover folder</span></div></div>
+<div class="task" data-p="s"><span class="tid">10.3</span><div class="tbody"><h4>Remove our access last <span class="pl s">Shared</span></h4><p>Only after the client confirms they have everything and their admin access works.</p></div><div class="tmeta"><span class="own">MB</span><span class="out">Access removed, logged</span></div></div>
+</div></div></details>
+</section>
+
+<!-- TOOLKIT -->
+<section id="toolkit">
+  <div class="sechead"><div class="num">T</div><h2>Toolkit</h2><div class="meta">What we use for each job. Each phase above lists the tools it needs; click one to jump here.</div></div>
+  <div class="tierkey"><span class="tier core">We use</span> JML's current tools <span class="tier build">Build in</span> where the ads are made and run <span class="tier std">Standard</span> standard agency practice <span class="tier opt">Optional</span> add when the need appears</div>
+  <div class="tgroup"><div class="tgh"><h3>Keyword and demand research</h3><span>How much people search and what it costs</span></div><div class="tgrid"><div class="tool" data-p="g" id="t-kp"><div class="th"><b>Google Keyword Planner</b><span class="tier core">We use</span></div><div class="plats"><span class="pl g">Google</span></div><p>Search volumes, cost-per-click ranges and keyword ideas for a service and area.</p><p class="tnote">Free inside Google Ads. The API version (Keyword Plan Idea Service) gives the same data in bulk, but needs an approved Google Ads API developer token.</p><div class="ph">Phases 0 · 2 · 4</div></div><div class="tool" id="t-semrush"><div class="th"><b>Semrush</b><span class="tier core">We use</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Keyword research, plus Advertising Research to see which keywords competitors bid on and their search ad copy.</p><p class="tnote">Our main all-round research tool.</p><div class="ph">Phases 0 · 2 · 4</div></div><div class="tool" data-p="g" id="t-kwf"><div class="th"><b>KWFinder</b><span class="tier core">We use</span></div><div class="plats"><span class="pl g">Google</span></div><p>Fast keyword lookups with local search volumes and difficulty. Good for quick checks during the audit.</p><div class="ph">Phases 0 · 2</div></div><div class="tool" data-p="g" id="t-spyfu"><div class="th"><b>SpyFu</b><span class="tier core">We use</span></div><div class="plats"><span class="pl g">Google</span></div><p>A competitor's paid keywords and search ad history over years, plus estimated ad spend.</p><p class="tnote">Best tool for competitors' Google Search ads.</p><div class="ph">Phases 0 · 8</div></div></div></div>
+  <div class="tgroup"><div class="tgh"><h3>Competitor ads and creative</h3><span>What competitors run and how they look</span></div><div class="tgrid"><div class="tool" data-p="m" id="t-adlib"><div class="th"><b>Meta Ad Library</b><span class="tier core">We use</span></div><div class="plats"><span class="pl m">Meta</span></div><p>Every active ad on Facebook and Instagram. Search by keyword or advertiser to see creatives, start dates and how many ads a competitor runs.</p><p class="tnote">Free. Ads running for months are usually working.</p><div class="ph">Phases 0 · 5</div></div><div class="tool" data-p="g" id="t-gatc"><div class="th"><b>Google Ads Transparency Center</b><span class="tier core">We use</span></div><div class="plats"><span class="pl g">Google</span></div><p>The ads a specific advertiser runs on Google, by region and date.</p><p class="tnote">You must know the advertiser's name or website. You can't search by topic, and it shows no spend or keywords.</p><div class="ph">Phases 0</div></div><div class="tool" id="t-adclarity"><div class="th"><b>AdClarity (in Semrush)</b><span class="tier core">We use</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Competitors' display, video (including YouTube) and social ads (including Facebook and Instagram), with estimated spend and impressions.</p><p class="tnote">Opened from the Semrush App Center. It does not cover Google Search text ads; use SpyFu or Semrush for those.</p><div class="ph">Phases 0 · 2 · 5</div></div></div></div>
+  <div class="tgroup"><div class="tgh"><h3>Where we build</h3><span>Platforms, not research tools: this is where the ads live</span></div><div class="tgrid"><div class="tool" data-p="g" id="t-gads"><div class="th"><b>Google Ads + manager account</b><span class="tier build">Build in</span></div><div class="plats"><span class="pl g">Google</span></div><p>Where Google campaigns are built and run. Our manager account (MCC) links all client accounts.</p><div class="ph">Phases 1 · 4 · 8</div></div><div class="tool" data-p="g" id="t-gae"><div class="th"><b>Google Ads Editor</b><span class="tier build">Build in</span></div><div class="plats"><span class="pl g">Google</span></div><p>Free desktop app to build and change campaigns in bulk, then upload. Faster and safer for large builds.</p><div class="ph">Phases 4 · 10</div></div><div class="tool" data-p="m" id="t-meta"><div class="th"><b>Meta Business Suite + Ads Manager</b><span class="tier build">Build in</span></div><div class="plats"><span class="pl m">Meta</span></div><p>Where Meta campaigns, audiences, forms and partner access are managed. Ads Manager also gives audience size estimates and ad previews.</p><div class="ph">Phases 1 · 2 · 4 · 6 · 8</div></div></div></div>
+  <div class="tgroup"><div class="tgh"><h3>Tracking and data</h3><span>Counting conversions and feeding CRM results back</span></div><div class="tgrid"><div class="tool" id="t-gtm"><div class="th"><b>Google Tag Manager</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Installs every tag (Google Ads, Meta pixel, GA4) without touching site code.</p><div class="ph">Phases 3</div></div><div class="tool" id="t-ga4"><div class="th"><b>Google Analytics 4</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Site behavior and conversions, independent of the ad platforms. Used to compare ad clicks with landing page visits.</p><div class="ph">Phases 3 · 8</div></div><div class="tool" data-p="g" id="t-tagassist"><div class="th"><b>Google Tag Assistant</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span></div><p>Checks that Google tags fire on the right page.</p><p class="tnote">Free browser tool.</p><div class="ph">Phases 3 · 6</div></div><div class="tool" data-p="m" id="t-pixelhelper"><div class="th"><b>Meta Pixel Helper</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl m">Meta</span></div><p>Chrome extension that shows which Meta events fire on a page.</p><div class="ph">Phases 3 · 6</div></div><div class="tool" data-p="m" id="t-events"><div class="th"><b>Meta Events Manager</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl m">Meta</span></div><p>Test events, check pixel and Conversions API deduplication, and see event match quality.</p><div class="ph">Phases 3 · 8</div></div><div class="tool" data-p="m" id="t-capi"><div class="th"><b>Meta Conversions API</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl m">Meta</span></div><p>Sends events from the server so they survive ad blockers. Set up through the site platform, Meta's CAPI Gateway, or server-side Tag Manager. CAPI for CRM sends lead stages back.</p><div class="ph">Phases 3</div></div><div class="tool" data-p="g" id="t-datamgr"><div class="th"><b>Google Ads Data Manager</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span></div><p>Connects the CRM to Google Ads so qualified leads and customers are imported as conversions.</p><div class="ph">Phases 3</div></div><div class="tool" id="t-crew"><div class="th"><b>JML Crew CRM</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Our own CRM. Clients without a CRM use it, and we connect it to Google and Meta.</p><div class="ph">Phases 1 · 3</div></div><div class="tool" id="t-zapier"><div class="th"><b>Zapier or Make</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Connects lead forms and CRMs when there's no native integration.</p><div class="ph">Phases 3</div></div><div class="tool" data-p="g" id="t-callrail"><div class="th"><b>CallRail</b><span class="tier opt">Optional</span></div><div class="plats"><span class="pl g">Google</span></div><p>Call tracking with call recordings, for clients where phone calls are the main lead.</p><p class="tnote">Optional. Google forwarding numbers cover the basics.</p><div class="ph">Phases 3</div></div></div></div>
+  <div class="tgroup"><div class="tgh"><h3>Creative production</h3><span>Making statics, CGI, motion and edits</span></div><div class="tgrid"><div class="tool" id="t-figma"><div class="th"><b>Figma</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Static ad design and landing page wireframes, with easy client review links.</p><div class="ph">Phases 4 · 5</div></div><div class="tool" id="t-adobe"><div class="th"><b>Photoshop + Illustrator</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Image editing and design for statics.</p><div class="ph">Phases 5</div></div><div class="tool" id="t-cgi"><div class="th"><b>Blender or Cinema 4D</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>3D modeling, lighting and rendering for CGI ads.</p><div class="ph">Phases 5</div></div><div class="tool" id="t-ae"><div class="th"><b>After Effects</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Motion graphics, animated text and end cards.</p><div class="ph">Phases 5</div></div><div class="tool" id="t-edit"><div class="th"><b>Premiere Pro or DaVinci Resolve</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Editing client footage, captions, color and audio.</p><div class="ph">Phases 5</div></div><div class="tool" id="t-stock"><div class="th"><b>Licensed stock and music</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Images, video and music cleared for ads, such as Adobe Stock, Artlist or Epidemic Sound.</p><p class="tnote">Never use unlicensed music; platforms mute or reject it.</p><div class="ph">Phases 5</div></div></div></div>
+  <div class="tgroup"><div class="tgh"><h3>Landing pages, monitoring and QA</h3><span>Checking pages, alerts and how ads appear</span></div><div class="tgrid"><div class="tool" id="t-psi"><div class="th"><b>PageSpeed Insights</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Checks how fast a page loads on a phone.</p><p class="tnote">Free from Google.</p><div class="ph">Phases 0 · 4 · 8</div></div><div class="tool" id="t-clarity"><div class="th"><b>Microsoft Clarity</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Free session recordings and heatmaps. Shows where landing page visitors drop off.</p><p class="tnote">Helps answer weekly check 4: are people reaching the form?</p><div class="ph">Phases 8</div></div><div class="tool" data-p="g" id="t-preview"><div class="th"><b>Google Ad Preview and Diagnosis</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span></div><p>Shows how a Google ad appears for a search and location, without clicking (and paying for) your own ad.</p><div class="ph">Phases 6 · 8</div></div><div class="tool" id="t-rules"><div class="th"><b>Automated rules</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Built into Google Ads and Meta Ads Manager. Email alerts for overspend, no conversions or rejected ads.</p><p class="tnote">Replaces daily checking.</p><div class="ph">Phases 7 · 8</div></div><div class="tool" data-p="g" id="t-optmyzr"><div class="th"><b>Optmyzr</b><span class="tier opt">Optional</span></div><div class="plats"><span class="pl g">Google</span></div><p>Paid tool for alerts, audits and bulk changes across many Google accounts.</p><p class="tnote">Optional, worth it as the client list grows.</p><div class="ph">Phases 8</div></div></div></div>
+  <div class="tgroup"><div class="tgh"><h3>Reporting</h3><span>The monthly report</span></div><div class="tgrid"><div class="tool" id="t-looker"><div class="th"><b>Looker Studio</b><span class="tier std">Standard</span></div><div class="plats"><span class="pl g">Google</span><span class="pl m">Meta</span></div><p>Free dashboards that pull Google Ads and GA4 data for the monthly report.</p><div class="ph">Phases 9</div></div><div class="tool" data-p="m" id="t-supermetrics"><div class="th"><b>Supermetrics</b><span class="tier opt">Optional</span></div><div class="plats"><span class="pl m">Meta</span></div><p>Connector that brings Meta Ads data into Looker Studio or Sheets.</p><p class="tnote">Optional; needed only if the report pulls Meta data automatically.</p><div class="ph">Phases 9</div></div></div></div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="sechead"><div class="num">§</div><h2>Rules of thumb</h2><div class="meta">Starting points, adjusted as we collect our own client data.</div></div>
+  <div class="tiles">
+    <div class="tile hi"><span class="l">Minimum ad budget</span><span class="v">$1,000</span><span class="w">per platform, per month</span></div>
+    <div class="tile hi"><span class="l">Creatives</span><span class="v">4 / month</span><span class="w">per campaign; sizes count as one</span></div>
+    <div class="tile"><span class="l">Daily budget</span><span class="v">÷ 30.4</span><span class="w">monthly budget divided by average days</span></div>
+    <div class="tile"><span class="l"><span class="pl m">Meta</span> Learning</span><span class="v">~50 / week</span><span class="w">conversions per ad set. At $1,000 it still gets there, just slower.</span></div>
+    <div class="tile"><span class="l"><span class="pl g">Google</span> Target CPA</span><span class="v">~30 / month</span><span class="w">conversions before switching to a target cost per lead</span></div>
+    <div class="tile"><span class="l">Pause an ad or keyword</span><span class="v">2× target</span><span class="w">spent with no conversion. If that's over a fifth of the budget, judge earlier on clicks.</span></div>
+    <div class="tile"><span class="l"><span class="pl m">Meta</span> Scale step</span><span class="v">+20%</span><span class="w">per weekly session, never doubling</span></div>
+    <div class="tile"><span class="l"><span class="pl m">Meta</span> Fatigue</span><span class="v">freq &gt; 3</span><span class="w">plus falling click rate and rising cost per lead, for a week</span></div>
+    <div class="tile"><span class="l">Retargeting</span><span class="v">~1,000</span><span class="w">site visitors in 30 days before it's worth running</span></div>
+    <div class="tile"><span class="l">Phone lead</span><span class="v">≥ 60 s</span><span class="w">shorter calls don't count</span></div>
+    <div class="tile"><span class="l">Tests</span><span class="v">7+ days</span><span class="w">one change at a time, 10–20% of spend</span></div>
+  </div>
+</section>
+
+<section id="changes">
+<div class="sechead"><div class="num">↻</div><h2>Platform changes in 2026</h2><div class="meta">Checked 28 October 2026. These are why some steps look different from older playbooks. Most details come from trade coverage of Google and Meta announcements, so confirm in the platform when a step doesn't match.</div></div>
+<div class="tbl"><table>
+<thead><tr><th style="width:22%">Change</th><th>What it means for us</th><th style="width:18%">Source</th></tr></thead>
+<tbody>
+<tr><td class="k"><span class="pl g">Google</span> Local Services move into Performance Max</td><td>Phased from August 2026 (limited US accounts), more US accounts later in 2026, the rest through 2027. Still pay per lead, Search and Maps only. Old dashboard and historical reports go away.</td><td><a href="https://www.searchenginejournal.com/google-is-bringing-local-services-ads-into-google-ads/582816/">Search Engine Journal</a></td></tr>
+<tr><td class="k"><span class="pl g">Google</span> Display retired into Demand Gen</td><td>No more standalone Display campaigns. Banner inventory runs through Demand Gen, which continues as its own campaign type (it is not part of Performance Max). Migration from June 2026 through 2027.</td><td><a href="https://www.searchenginejournal.com/google-is-retiring-standalone-display-campaigns-in-favor-of-demand-gen/575889/">Search Engine Journal</a></td></tr>
+<tr><td class="k"><span class="pl g">Google</span> AI Max for Search</td><td>Eligible Search campaigns auto-upgraded in September 2026. Dynamic Search Ads can't be created and are scheduled to move into AI Max in early 2027. We don't use it yet; keep it switched off.</td><td><a href="https://blog.google/products/ads-commerce/dsa-upgrade-to-ai-max-2026/">Google</a> · <a href="https://searchengineland.com/google-to-auto-upgrade-some-search-campaigns-to-ai-max-484428">Search Engine Land</a></td></tr>
+<tr><td class="k"><span class="pl g">Google</span> Language targeting removed in Search</td><td>Google now matches language from the ad copy and landing page (September 2026). Nothing to set.</td><td><a href="https://commonthreadco.com/blogs/coachs-corner/google-ads-changes-2026">Common Thread</a></td></tr>
+<tr><td class="k"><span class="pl m">Meta</span> One setup flow, Advantage+ by default</td><td>Leads and Sales campaigns start with Advantage+ on. Interests are suggestions only; location and minimum age are the only hard limits.</td><td><a href="https://hawky.ai/blog/meta-ads-updates-2026">Hawky</a></td></tr>
+<tr><td class="k"><span class="pl m">Meta</span> Fewer exclusion and placement controls</td><td>Interest exclusions removed; exclude customers with an uploaded custom audience. Ad-set placement exclusions removed (August). Threads is a default placement (October).</td><td><a href="https://commonthreadco.com/blogs/coachs-corner/meta-ads-changes-2026/">Common Thread</a></td></tr>
+<tr><td class="k"><span class="pl m">Meta</span> Attribution redefined</td><td>Since March 2026 a "click" must be a link click. Other engagement counts in a 1-day "engage-through" window, on by default.</td><td><a href="https://www.dataslayer.ai/blog/meta-attribution-change-2026-what-engage-through-attribution-is-and-why-your-numbers-look-different">Dataslayer</a></td></tr>
+<tr><td class="k"><span class="pl m">Meta</span> Creative automation and diversity</td><td>Advantage+ Creative rewrites text in images by default. Visually similar ads are grouped as one creative, so distinct concepts matter more.</td><td><a href="https://commonthreadco.com/blogs/coachs-corner/meta-ads-changes-2026/">Common Thread</a></td></tr>
+<tr><td class="k"><span class="pl m">Meta</span> CRM feedback for lead quality</td><td>Conversions API for CRM sends lead stages back and enables the Conversion leads goal.</td><td><a href="https://marketingql.com/blog/meta-conversion-leads-crm-feedback/">MarketingQL</a></td></tr>
+</tbody></table></div>
+</section>
+
+<footer>Jay Marketing Lab · Paid Marketing Playbook v9 · Internal · October 2026. Platform settings and feature names change often. Check the current interface when a step doesn't match.</footer>
+</main>
+
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.filter button');
+  function apply(f){
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===f))});
+    document.querySelectorAll('[data-p]').forEach(function(el){
+      var p=el.dataset.p;
+      el.classList.toggle('off', f!=='all' && (p==='g'||p==='m') && p!==f);
+    });
+    try{localStorage.setItem('jml-pm-filter',f)}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.f)})});
+  var saved='all';try{saved=localStorage.getItem('jml-pm-filter')||'all'}catch(e){}
+  apply(saved);
+})();
+</script>
+<script>
+(function(){var b=document.getElementById('expand');if(!b)return;b.addEventListener('click',function(){var open=b.getAttribute('aria-pressed')!=='true';document.querySelectorAll('details.all').forEach(function(d){d.open=open});b.setAttribute('aria-pressed',String(open));b.textContent=open?'Close all tasks':'Open all tasks';});})();
+</script>
+
+</body></html>

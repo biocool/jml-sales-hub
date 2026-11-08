@@ -1,5 +1,10 @@
-# JML Sales Hub
+# JML Resource Library
 
-Static working guides for J Marketing Lab. Public GitHub Pages site. The shared passphrase is a convenience screen only; it does not secure content. No private customer records should be added.
+Responsive HTML resource hub published with GitHub Pages.
 
-Pages: index.html, sales.html, gbp.html.
+The passphrase is cosmetic, not access control. All content is public.
+
+## Add a resource
+Add the viewable HTML and its standalone copy under downloads/, then add a card in index.html with a category and search terms. Update category counts. Check mobile, open/download links and any document dependencies. Never include private records or credentials.
+
+Existing sales.html and gbp.html retained.
