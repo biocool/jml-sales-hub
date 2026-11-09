@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="JML analysis of 800 top ads across LinkedIn, Facebook, Instagram, TikTok, X, Pinterest and YouTube in Semrush AdClarity.">
+  <title>JML Social Ad Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=8">
+</head>
+<body><div style="padding:10px 20px;background:#210437;color:white;font:14px Arial"><a style="color:#B1EB1E" href="../index.html">← JML Hub</a> · Public review edition</div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Jay Marketing Lab dashboard home">
+      <img src="assets/jml-logo-light.svg" alt="Jay Marketing Lab">
+    </a>
+    <div class="header-meta">
+      <span>Ad Intelligence</span>
+      <span class="header-rule" aria-hidden="true"></span>
+      <span id="header-context">Social platforms / United States</span>
+    </div>
+  </header>
+
+  <main id="top">
+    <nav class="intelligence-tabs" aria-label="Intelligence mode">
+      <div class="shell intelligence-tabs-inner">
+        <button class="intelligence-tab active" type="button" data-mode="paid" aria-selected="true">Paid Ad Intelligence</button>
+        <button class="intelligence-tab" type="button" data-mode="organic" aria-selected="false">Organic Content Intelligence</button>
+        <a class="full-dashboard-download" href="downloads/jml-social-ad-intelligence-standalone.html" download>Download standalone HTML</a>
+      </div>
+    </nav>
+
+    <div id="paid-view" class="intelligence-view">
+    <section class="platform-toolbar" aria-labelledby="platform-picker-title">
+      <div class="shell platform-toolbar-inner">
+        <div class="platform-toolbar-copy">
+          <span id="platform-picker-title">Choose platform</span>
+          <strong id="platform-selection-label" aria-live="polite">LinkedIn · 100 ads</strong>
+        </div>
+        <div class="network-switch network-switch-top" id="network-switch-top" aria-label="Platform selector"></div>
+      </div>
+    </section>
+
+    <section class="hero shell" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Creative intelligence / April to September 2026</p>
+        <h1 id="page-title">What 800 top social ads are teaching us</h1>
+        <p class="lede" id="hero-lede">A working library of the highest-impression ads across seven social platforms and two YouTube device views. Compare creative formats, spend, reach, longevity, advertisers, landing pages and direct ad assets.</p>
+      </div>
+      <aside class="source-note" aria-label="Data scope">
+        <p class="source-label">Source scope</p>
+        <p><strong>Publisher:</strong> <span id="source-publisher">linkedin.com</span></p>
+        <p><strong>Channel / device:</strong> <span id="source-device">Social / All devices</span></p>
+        <p><strong>Market:</strong> United States</p>
+        <p><strong>Sort:</strong> Estimated impressions</p>
+        <p><strong>Extracted:</strong> 26 Oct 2026</p>
+      </aside>
+    </section>
+
+    <section class="metric-band" aria-label="Key metrics">
+      <div class="shell metric-grid" id="metric-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="shell analysis-section" aria-labelledby="analysis-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Pattern scan</p>
+          <h2 id="analysis-title">The shape of the winning set</h2>
+        </div>
+            <p>Signals describe the selected top-100 view, not the platform as a whole.</p>
+      </div>
+
+      <div class="analysis-grid">
+        <article class="panel format-panel">
+          <div class="panel-heading">
+            <h3>Creative format mix</h3>
+            <span>100 ads</span>
+          </div>
+          <div id="format-chart" class="bar-chart" role="img" aria-label="Creative format mix"></div>
+        </article>
+
+        <article class="panel advertiser-panel">
+          <div class="panel-heading">
+            <h3>Most frequent advertisers</h3>
+            <span>Count in top 100</span>
+          </div>
+          <div id="advertiser-chart" class="rank-chart"></div>
+        </article>
+
+        <article class="panel theme-panel">
+          <div class="panel-heading">
+            <h3>Message themes</h3>
+            <span>Heuristic, title-based</span>
+          </div>
+          <div id="theme-chart" class="rank-chart"></div>
+        </article>
+
+        <article class="panel learning-panel">
+          <div class="panel-heading">
+            <h3>What to test next</h3>
+            <span>Evidence-led prompts</span>
+          </div>
+          <ol id="learning-list" class="learning-list"></ol>
+        </article>
+      </div>
+
+      <div class="device-note" role="note">
+        <span class="device-dot" aria-hidden="true"></span>
+        <div>
+          <strong id="device-note-title">Device split is unavailable in this source view.</strong>
+          <p id="device-note-copy">AdClarity disables Mobile/Desktop segmentation for Social publisher reports and returns “All devices” only. The dashboard preserves that source limitation instead of estimating a split.</p>
+        </div>
+      </div>
+
+      <article class="panel benchmark-panel">
+        <div class="panel-heading">
+          <h3>Cross-network benchmark</h3>
+          <span>Each view contains 100 ads</span>
+        </div>
+        <div class="benchmark-wrap">
+          <table class="benchmark-table">
+            <thead><tr><th>Network</th><th>Device</th><th>Spend</th><th>Impressions</th><th>Weighted CPM</th></tr></thead>
+            <tbody id="benchmark-body"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="library-section" aria-labelledby="library-title">
+      <div class="shell">
+        <div class="section-heading library-heading">
+          <div>
+            <p class="eyebrow">Creative library</p>
+            <h2 id="library-title">100 ads, with destinations</h2>
+          </div>
+          <div class="network-switch" id="network-switch" aria-label="Choose network"></div>
+        </div>
+
+        <div class="controls" aria-label="Ad library controls">
+          <label class="search-control">
+            <span>Search</span>
+            <input id="search" type="search" placeholder="Advertiser, campaign or landing page" autocomplete="off">
+          </label>
+          <label>
+            <span>Format</span>
+            <select id="format-filter">
+              <option value="all">All formats</option>
+            </select>
+          </label>
+          <label>
+            <span>Advertiser</span>
+            <select id="advertiser-filter">
+              <option value="all">All advertisers</option>
+            </select>
+          </label>
+          <label>
+            <span>Sort</span>
+            <select id="sort-control">
+              <option value="rank">Rank: high to low</option>
+              <option value="spend">Spend: high to low</option>
+              <option value="impressions">Impressions: high to low</option>
+              <option value="cpm-low">CPM: low to high</option>
+              <option value="duration">Newest first seen</option>
+            </select>
+          </label>
+          <div class="control-actions">
+            <button id="reset-filters" class="quiet-button" type="button">Reset</button>
+            <a class="download-button" href="data.csv" download>Download 800-row CSV</a>
+          </div>
+        </div>
+
+        <div class="results-line">
+          <p id="results-count" aria-live="polite"></p>
+          <p>Spend and impressions are AdClarity estimates.</p>
+        </div>
+
+        <div id="ad-grid" class="ad-grid"></div>
+        <div class="load-more-wrap">
+          <button id="load-more" class="load-more" type="button">Show 24 more</button>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <section id="organic-view" class="intelligence-view organic-view" hidden aria-labelledby="organic-title">
+      <div class="shell organic-hero">
+        <div>
+          <p class="eyebrow">Organic intelligence / public trends + competitor monitoring</p>
+          <h1 id="organic-title">Find posts that outperform their audience size</h1>
+          <p class="lede">The public trend feed now includes 300 sourced records: 100 each from YouTube, TikTok and Pinterest. Every platform selector shows its real record count; competitor-profile monitoring remains a separate layer.</p>
+        </div>
+        <aside class="source-note" aria-label="Organic data status">
+          <p class="source-label">Collection status</p>
+          <p><strong>Status:</strong> Public trend feed live</p>
+          <p><strong>Market:</strong> United States</p>
+          <p><strong>Language:</strong> English</p>
+          <p><strong>Lookback:</strong> Source-specific now; 6 months for competitor sets</p>
+          <p><strong>Coverage:</strong> Public data only</p>
+        </aside>
+      </div>
+
+      <div class="organic-status-band">
+        <div class="shell organic-status-grid">
+          <article><strong id="organic-set-count">0</strong><span>Competitor sets loaded</span></article>
+          <article><strong id="organic-post-count">—</strong><span>Public records loaded</span></article>
+          <article><strong id="organic-platform-count">—</strong><span>Platforms live</span></article>
+          <article><strong id="organic-refresh-date">—</strong><span>Source snapshot</span></article>
+        </div>
+      </div>
+
+      <div class="shell organic-workspace">
+        <div class="organic-subtabs" role="tablist" aria-label="Organic intelligence tools">
+          <button class="organic-subtab active" type="button" data-organic-tab="explorer" role="tab" aria-selected="true">Organic Explorer</button>
+          <button class="organic-subtab" type="button" data-organic-tab="lab" role="tab" aria-selected="false">Scoring Lab</button>
+        </div>
+
+        <div id="organic-explorer" class="organic-panel" role="tabpanel">
+          <div class="section-heading organic-heading">
+            <div>
+              <p class="eyebrow">Ranking presets</p>
+              <h2>Choose what “winning” means</h2>
+            </div>
+            <p>Presets alter the ranking logic without changing the source data.</p>
+          </div>
+          <div class="preset-grid" id="organic-presets">
+            <button class="preset-card active" type="button" data-preset="balanced"><strong>Balanced</strong><span>45% rate · 35% velocity · 20% reach</span></button>
+            <button class="preset-card" type="button" data-preset="velocity"><strong>Velocity First</strong><span>30% rate · 55% velocity · 15% reach</span></button>
+            <button class="preset-card" type="button" data-preset="scale"><strong>Scale First</strong><span>30% rate · 20% velocity · 50% reach</span></button>
+          </div>
+          <div class="organic-data-note">
+            <strong>Baseline feed vs. competitor monitoring</strong>
+            <p>The cards below are real public trend records, not a six-month census of every social post. The large badge is the current display rank; each card separately shows its source rank. TikTok is a deduplicated sample across official US rankings and categories. Pinterest combines 21 public collections and 79 public topic pages because Pin-level performance metrics are not publicly exposed.</p>
+          </div>
+          <div class="organic-controls" aria-label="Organic feed controls">
+            <div id="organic-platform-switch" class="organic-platform-switch" role="group" aria-label="Filter public posts by platform"></div>
+            <label><span>Sort records</span><select id="organic-sort"><option value="score">Organic Score</option><option value="rank">Source rank</option><option value="reach">Total views</option><option value="velocity">24-hour views</option><option value="rate">Engagement rate</option></select></label>
+          </div>
+          <p id="organic-results-count" class="organic-results-count"></p>
+          <div id="organic-grid" class="organic-grid" aria-live="polite"></div>
+          <div class="source-readiness" aria-label="Planned organic data sources">
+            <article><strong>LinkedIn</strong><span>Taplio + public profiles</span><em>Awaiting competitor list</em></article>
+            <article><strong>TikTok</strong><span>Creative Center · US · 7/30 days</span><em>100 / 100 unique · multi-ranking sample</em></article>
+            <article><strong>YouTube</strong><span>US trending + Shorts</span><em>100 / 100 live</em></article>
+            <article><strong>Instagram / Facebook</strong><span>Competitor analytics tool</span><em>Profile-based</em></article>
+            <article><strong>X</strong><span>Public metrics API</span><em>Usage-based</em></article>
+            <article><strong>Pinterest</strong><span>Explore collections + topics</span><em>100 / 100 live · limited metrics</em></article>
+          </div>
+        </div>
+
+        <div id="organic-lab" class="organic-panel" role="tabpanel" hidden>
+          <div class="section-heading organic-heading">
+            <div>
+              <p class="eyebrow">Custom scoring</p>
+              <h2>Set the weights manually</h2>
+            </div>
+            <p>Weights must total 100%. The live records re-rank immediately; missing source metrics are excluded and the available weights are re-normalized.</p>
+          </div>
+          <div class="scoring-grid">
+            <div class="weight-controls">
+              <label><span>Engagement rate</span><output id="rate-weight-output">45%</output><input id="rate-weight" type="range" min="0" max="100" step="5" value="45"></label>
+              <label><span>Engagement velocity</span><output id="velocity-weight-output">35%</output><input id="velocity-weight" type="range" min="0" max="100" step="5" value="35"></label>
+              <label><span>Reach / views</span><output id="reach-weight-output">20%</output><input id="reach-weight" type="range" min="0" max="100" step="5" value="20"></label>
+              <div class="weight-total-row"><span>Total weight</span><strong id="weight-total">100%</strong></div>
+              <button id="apply-organic-weights" class="download-button" type="button">Apply custom weights</button>
+            </div>
+            <article class="formula-card">
+              <span class="source-label">Organic Score</span>
+              <p id="organic-formula">0.45 × Rate Percentile + 0.35 × Velocity Percentile + 0.20 × Reach Percentile</p>
+              <small>Each percentile is calculated within Platform × Format × Age Bucket. The score measures relative public performance, not conversion or revenue.</small>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <img src="assets/jml-j-dark.svg" alt="" aria-hidden="true">
+      <p>Jay Marketing Lab · Paid intelligence from Semrush AdClarity · Organic intelligence uses public platform and competitor-profile data.</p>
+    </div>
+  </footer>
+
+  <template id="ad-card-template">
+    <article class="ad-card">
+      <div class="ad-media-wrap">
+        <img class="ad-media" alt="" loading="lazy" referrerpolicy="no-referrer">
+        <span class="rank-badge"></span>
+        <span class="format-badge"></span>
+      </div>
+      <div class="ad-body">
+        <div class="ad-topline">
+          <span class="advertiser"></span>
+          <span class="seen-range"></span>
+        </div>
+        <h3 class="ad-title"></h3>
+        <dl class="ad-metrics">
+          <div><dt>Spend</dt><dd class="spend"></dd></div>
+          <div><dt>Impressions</dt><dd class="impressions"></dd></div>
+          <div><dt>CPM</dt><dd class="cpm"></dd></div>
+        </dl>
+        <div class="ad-actions">
+          <a class="primary-link landing-link" target="_blank" rel="noopener noreferrer">Landing page</a>
+          <a class="secondary-link creative-link" target="_blank" rel="noopener noreferrer">View creative</a>
+          <a class="icon-link source-link" target="_blank" rel="noopener noreferrer" aria-label="Open source report">↗</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js?v=10" defer></script>
+</body>
+</html>
