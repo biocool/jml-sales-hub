@@ -11,7 +11,10 @@ function renderControl(fs,q,answers){
   const hint=document.createElement('p');hint.id='sliderHelp';hint.className='sliderhint';hint.textContent='Drag to a labeled level, use the arrow keys, or tap a choice below. Four levels, not a precise measurement.';
   selection=document.createElement('div');selection.className='sliderselection';selection.setAttribute('aria-live','polite');
   range=document.createElement('input');range.type='range';range.id='level';range.min='0';range.max='3';range.step='1';range.value=typeof answers[step]==='number'?answers[step]:0;range.setAttribute('aria-label',q.text);range.setAttribute('aria-describedby','sliderHelp');range.oninput=()=>choose(Number(range.value));
-  wrap.append(selection,range,hint);fs.append(wrap);
+  const ends=document.createElement('div');ends.className='spectrum-ends';
+  const axis=q.readiness?'Readiness':current.mode==='fit'?'Fit':'Gap';
+  for(const [symbol,title,detail] of [['−','Lower '+axis.toLowerCase(),q.options[0]],['+','Higher '+axis.toLowerCase(),q.options[3]]]){const end=document.createElement('div');const icon=document.createElement('b');icon.textContent=symbol;icon.setAttribute('aria-hidden','true');const label=document.createElement('span');label.textContent=title;const caption=document.createElement('small');caption.textContent=detail;end.append(icon,label,caption);ends.append(end)}
+  wrap.append(selection,range,ends,hint);fs.append(wrap);
  }
  q.options.forEach((opt,i)=>{
  const l=document.createElement('label');l.className='option';l.style.setProperty('--order',i);
@@ -30,7 +33,7 @@ function renderControl(fs,q,answers){
   }
   l.append(span);
   const selected=document.createElement('span');selected.className='selectedcaption';selected.setAttribute('aria-hidden','true');selected.textContent='Your current situation';l.append(selected);
- }else l.append(inp,span);
+ }else {l.classList.add('answer-sheet');const mark=document.createElement('span');mark.className='sheet-mark';mark.setAttribute('aria-hidden','true');mark.textContent='✓';l.append(inp,mark,span);}
  optionBox.append(l)
 });fs.append(optionBox);
  const unknown=document.createElement('label');unknown.className='option unknown';const unk=document.createElement('input');unk.type='radio';unk.name='answer';unk.value='4';unk.onchange=()=>choose('unknown');const txt=document.createElement('span');txt.textContent='Not sure / I need to check';unknown.append(unk,txt);fs.append(unknown);
