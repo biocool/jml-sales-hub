@@ -1,0 +1,931 @@
+[
+  {
+    "id": "web-design",
+    "name": "Website Design & Development",
+    "kind": "service",
+    "intro": "Is your website helping people take the next step?",
+    "questions": [
+      {
+        "text": "How easy is it to complete your main action on a phone?",
+        "options": [
+          "Easy and tested",
+          "A little friction",
+          "Often difficult",
+          "Impossible / no website"
+        ],
+        "action": "Test your main call-to-action on a real phone.",
+        "control": "slider"
+      },
+      {
+        "text": "How well does your site explain what makes you different?",
+        "options": [
+          "Clear and specific",
+          "Mostly clear",
+          "Generic or confusing",
+          "Missing / no website"
+        ],
+        "action": "Write a concrete promise for your best-fit customer.",
+        "control": "cards"
+      },
+      {
+        "text": "How reliable are your key pages, forms and links?",
+        "options": [
+          "Recently tested, all work",
+          "A few small issues",
+          "Recurring failures",
+          "Broken / no website"
+        ],
+        "action": "Fix broken forms and navigation before redesigning.",
+        "control": "list"
+      },
+      {
+        "text": "How easily can your team update important content?",
+        "options": [
+          "Easy without help",
+          "Occasional help needed",
+          "Most edits need a developer",
+          "Updates are blocked"
+        ],
+        "action": "Choose an editing workflow your team can maintain.",
+        "control": "cards"
+      },
+      {
+        "text": "How well can you trace website inquiries to their source?",
+        "options": [
+          "Reliably tracked",
+          "Partly tracked",
+          "Rarely tracked",
+          "Not tracked"
+        ],
+        "action": "Connect form and call conversions to useful reporting.",
+        "control": "slider"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/web-design",
+    "mode": "need"
+  },
+  {
+    "id": "seo",
+    "name": "SEO & Search Visibility",
+    "kind": "service",
+    "intro": "Find out whether organic search deserves closer attention.",
+    "questions": [
+      {
+        "text": "How easily do ideal customers find you for relevant searches?",
+        "options": [
+          "Consistently visible",
+          "Visible for a few",
+          "Rarely visible",
+          "Not visible"
+        ],
+        "action": "Validate non-branded visibility in your target market.",
+        "control": "slider"
+      },
+      {
+        "text": "How complete are pages for your key services and markets?",
+        "options": [
+          "Strong, useful coverage",
+          "A few gaps",
+          "Many gaps",
+          "Little or no coverage"
+        ],
+        "action": "Prioritize pages for services people actually want.",
+        "control": "cards"
+      },
+      {
+        "text": "When were crawling and indexing last checked?",
+        "options": [
+          "Recent check, no major issues",
+          "Some unresolved issues",
+          "Major issues reported",
+          "Never checked"
+        ],
+        "action": "Check Search Console before buying more content.",
+        "control": "list"
+      },
+      {
+        "text": "How well does organic traffic turn into useful inquiries?",
+        "options": [
+          "Meets our goals",
+          "Slightly below goal",
+          "Far below goal",
+          "No useful inquiries"
+        ],
+        "action": "Review intent and conversion paths, not rankings alone.",
+        "control": "cards"
+      },
+      {
+        "text": "How consistently do you improve content using search data?",
+        "options": [
+          "Regular, evidence-led cycle",
+          "Occasional updates",
+          "Rare updates",
+          "No process"
+        ],
+        "action": "Set a small, measurable search improvement backlog.",
+        "control": "slider"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/seo",
+    "mode": "need"
+  },
+  {
+    "id": "ads",
+    "name": "Paid Advertising",
+    "kind": "service",
+    "intro": "Check for waste and missing foundations before scaling spend.",
+    "questions": [
+      {
+        "text": "How reliably are qualified leads or sales tracked?",
+        "options": [
+          "Reliable, tested tracking",
+          "Some gaps",
+          "Major gaps",
+          "No conversion tracking"
+        ],
+        "action": "Validate conversions before increasing budget.",
+        "control": "list"
+      },
+      {
+        "text": "How well do campaigns meet your cost-per-customer target?",
+        "options": [
+          "At or below target",
+          "Slightly above",
+          "Well above",
+          "No target / no campaigns"
+        ],
+        "action": "Set an affordable acquisition-cost target first.",
+        "control": "slider"
+      },
+      {
+        "text": "How closely do landing pages match the ads?",
+        "options": [
+          "Dedicated and well matched",
+          "Mostly matched",
+          "Generic destination",
+          "No suitable landing page"
+        ],
+        "action": "Align one offer, one audience and one landing page.",
+        "control": "list"
+      },
+      {
+        "text": "How regularly do you test and review campaign performance?",
+        "options": [
+          "Structured ongoing review",
+          "Occasional review",
+          "Rarely",
+          "No review process"
+        ],
+        "action": "Start with a controlled test, not unlimited scaling.",
+        "control": "slider"
+      },
+      {
+        "text": "How ready is your team to respond to new inquiries?",
+        "options": [
+          "Fast, reliable process",
+          "Some delays",
+          "Frequent missed leads",
+          "No follow-up process"
+        ],
+        "action": "Fix response and follow-up before paying for more leads.",
+        "control": "list"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/ads",
+    "mode": "need"
+  },
+  {
+    "id": "ai-agent",
+    "name": "AI Agents & Automation",
+    "kind": "service",
+    "intro": "Find repeatable work worth improving, with human oversight.",
+    "questions": [
+      {
+        "text": "How much time goes to repeatable inquiries or admin each week?",
+        "options": [
+          "Under 1 hour",
+          "1\u20133 hours",
+          "4\u201310 hours",
+          "More than 10 hours"
+        ],
+        "action": "Measure task volume before automating.",
+        "control": "slider"
+      },
+      {
+        "text": "How often do slow replies or manual handoffs hold up customers?",
+        "options": [
+          "Rarely",
+          "Monthly",
+          "Weekly",
+          "Daily"
+        ],
+        "action": "Choose one delay with a measurable customer impact.",
+        "control": "slider"
+      },
+      {
+        "text": "How standardized are answers and workflow rules?",
+        "options": [
+          "Mostly judgment-based",
+          "A few repeatable steps",
+          "Mostly documented",
+          "Clear and repeatable"
+        ],
+        "action": "Document a narrow workflow before building an agent.",
+        "readiness": true,
+        "control": "list"
+      },
+      {
+        "text": "Can the tools and information involved be connected safely?",
+        "options": [
+          "Not currently",
+          "Needs major cleanup",
+          "Mostly ready",
+          "Ready with access controls"
+        ],
+        "action": "Review data access and integrations before deployment.",
+        "readiness": true,
+        "control": "cards"
+      },
+      {
+        "text": "Who would review exceptions and monitor quality?",
+        "options": [
+          "No owner available",
+          "Owner not yet assigned",
+          "Someone can review weekly",
+          "Clear owner and review process"
+        ],
+        "action": "Assign a human owner and escalation rules.",
+        "readiness": true,
+        "control": "list"
+      }
+    ],
+    "gate": "A high fit score is not approval to automate sensitive decisions. Low readiness in the last three answers calls for a preparation step, not an immediate agent rollout.",
+    "url": "https://jaymarketinglab.com/services/ai-agent",
+    "mode": "need"
+  },
+  {
+    "id": "email-marketing",
+    "name": "Email Marketing",
+    "kind": "service",
+    "intro": "Look for useful lifecycle opportunities, not just more sends.",
+    "questions": [
+      {
+        "text": "How consistently do new subscribers or customers receive a welcome sequence?",
+        "options": [
+          "Useful automated sequence",
+          "Basic welcome only",
+          "Manual, inconsistent",
+          "No sequence"
+        ],
+        "action": "Design a welcome flow around the next useful action.",
+        "control": "list"
+      },
+      {
+        "text": "How relevant are messages to each customer group?",
+        "options": [
+          "Based on lifecycle and interest",
+          "A few segments",
+          "Mostly one-size-fits-all",
+          "No segmentation"
+        ],
+        "action": "Start with a small number of meaningful customer groups.",
+        "control": "cards"
+      },
+      {
+        "text": "How effectively do you reconnect with inactive customers?",
+        "options": [
+          "Tested re-engagement flow",
+          "Occasional campaigns",
+          "Rarely",
+          "No process"
+        ],
+        "action": "Plan respectful re-engagement and suppression rules.",
+        "control": "slider"
+      },
+      {
+        "text": "How well do you measure email-driven business outcomes?",
+        "options": [
+          "Reliable revenue/lead tracking",
+          "Partial tracking",
+          "Opens/clicks only",
+          "Not measured"
+        ],
+        "action": "Connect campaign activity to real outcomes.",
+        "control": "cards"
+      },
+      {
+        "text": "How ready is your permission-based contact list?",
+        "options": [
+          "No usable permission-based list",
+          "Needs substantial cleanup",
+          "Mostly clean and permission-based",
+          "Clean, permission-based and maintained"
+        ],
+        "action": "Confirm consent, unsubscribe handling and list hygiene first.",
+        "readiness": true,
+        "control": "list"
+      }
+    ],
+    "gate": "The final answer is a readiness check, not a need score. Without a usable permission-based list, build that foundation before a campaign. Do not upload a purchased list.",
+    "url": "https://jaymarketinglab.com/services/email-marketing",
+    "mode": "need"
+  },
+  {
+    "id": "social-media-marketing",
+    "name": "Social Media Marketing",
+    "kind": "service",
+    "intro": "Check whether your content supports a clear business goal.",
+    "questions": [
+      {
+        "text": "How consistently do you publish useful content?",
+        "options": [
+          "Consistent and sustainable",
+          "Occasional gaps",
+          "Long gaps",
+          "No plan"
+        ],
+        "action": "Choose a cadence your team can sustain.",
+        "control": "slider"
+      },
+      {
+        "text": "How tailored is your content to the audience and platform?",
+        "options": [
+          "Clearly tailored",
+          "Some adaptation",
+          "Mostly recycled unchanged",
+          "Generic / no content"
+        ],
+        "action": "Adapt the message and format for each channel.",
+        "control": "cards"
+      },
+      {
+        "text": "How clearly does your content show your expertise or proof?",
+        "options": [
+          "Specific proof and examples",
+          "Some examples",
+          "Mostly promotions",
+          "Little useful proof"
+        ],
+        "action": "Build a library of credible examples and stories.",
+        "control": "list"
+      },
+      {
+        "text": "How reliable is your response to relevant comments and messages?",
+        "options": [
+          "Timely and consistent",
+          "Occasional delays",
+          "Frequently missed",
+          "No owner"
+        ],
+        "action": "Assign response ownership before increasing reach.",
+        "control": "slider"
+      },
+      {
+        "text": "How well do you connect social activity to useful outcomes?",
+        "options": [
+          "Clear goals and reporting",
+          "Some useful metrics",
+          "Followers/likes only",
+          "Not measured"
+        ],
+        "action": "Measure inquiries and next steps, not likes alone.",
+        "control": "list"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/social-media-marketing",
+    "mode": "need"
+  },
+  {
+    "id": "crm",
+    "name": "CRM & Lead Management",
+    "kind": "service",
+    "intro": "See where leads lose momentum between first contact and follow-up.",
+    "questions": [
+      {
+        "text": "Where are inquiries and customer details kept?",
+        "options": [
+          "One reliable system",
+          "Mostly one system",
+          "Several disconnected places",
+          "Inbox / memory / paper"
+        ],
+        "action": "Unify essential lead records before adding tools.",
+        "control": "list"
+      },
+      {
+        "text": "How often do follow-ups get missed?",
+        "options": [
+          "Rarely",
+          "Monthly",
+          "Weekly",
+          "Daily"
+        ],
+        "action": "Create next-action reminders and ownership.",
+        "control": "slider"
+      },
+      {
+        "text": "How clear is ownership of each opportunity?",
+        "options": [
+          "Always clear",
+          "Usually clear",
+          "Often unclear",
+          "No assigned owner"
+        ],
+        "action": "Define one accountable owner for each lead.",
+        "control": "list"
+      },
+      {
+        "text": "How visible is the current sales pipeline?",
+        "options": [
+          "Accurate and current",
+          "Mostly current",
+          "Often outdated",
+          "No shared view"
+        ],
+        "action": "Agree a few pipeline stages with exit criteria.",
+        "control": "cards"
+      },
+      {
+        "text": "How well can you identify which channels produce customers?",
+        "options": [
+          "Reliably",
+          "Partly",
+          "Only guesses",
+          "Cannot tell"
+        ],
+        "action": "Capture source through the full customer journey.",
+        "control": "list"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/crm",
+    "mode": "need"
+  },
+  {
+    "id": "gtm-strategy",
+    "name": "Go-to-Market Strategy",
+    "kind": "service",
+    "intro": "Check the assumptions behind your next growth move.",
+    "questions": [
+      {
+        "text": "How specific is your ideal customer profile?",
+        "options": [
+          "Validated and specific",
+          "Clear but lightly tested",
+          "Broad assumptions",
+          "Not defined"
+        ],
+        "action": "Interview a focused customer segment.",
+        "control": "slider"
+      },
+      {
+        "text": "How clear is the problem and outcome your offer addresses?",
+        "options": [
+          "Validated with customers",
+          "Mostly clear",
+          "Still changing",
+          "Unclear"
+        ],
+        "action": "Test the promise before scaling production.",
+        "control": "cards"
+      },
+      {
+        "text": "How well is pricing supported by customer and margin evidence?",
+        "options": [
+          "Tested and sustainable",
+          "Some evidence",
+          "Mostly competitor-based",
+          "Not tested"
+        ],
+        "action": "Check willingness to pay alongside delivery economics.",
+        "control": "list"
+      },
+      {
+        "text": "How confident are you about which channels work?",
+        "options": [
+          "Evidence from repeatable tests",
+          "A few early signals",
+          "Mostly guesses",
+          "No channel tests"
+        ],
+        "action": "Run small channel experiments before a big launch.",
+        "control": "cards"
+      },
+      {
+        "text": "How clear are launch ownership, milestones and success measures?",
+        "options": [
+          "Clear and agreed",
+          "Some gaps",
+          "Major gaps",
+          "No execution plan"
+        ],
+        "action": "Turn strategy into owners, milestones and stop/go rules.",
+        "control": "list"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/gtm-strategy",
+    "mode": "need"
+  },
+  {
+    "id": "design",
+    "name": "Brand Identity",
+    "kind": "service",
+    "intro": "Find the gaps between what you deliver and how you look.",
+    "questions": [
+      {
+        "text": "How consistent is your visual identity across touchpoints?",
+        "options": [
+          "Consistent",
+          "Minor differences",
+          "Frequent inconsistency",
+          "No shared identity"
+        ],
+        "action": "Audit a few high-visibility customer touchpoints.",
+        "control": "slider"
+      },
+      {
+        "text": "How distinct is your brand from close competitors?",
+        "options": [
+          "Clearly distinct",
+          "Some differences",
+          "Very similar",
+          "Hard to tell apart"
+        ],
+        "action": "Define the difference before changing the logo.",
+        "control": "cards"
+      },
+      {
+        "text": "How well does your current identity fit your desired audience?",
+        "options": [
+          "Strong fit",
+          "Mostly fits",
+          "Often feels wrong",
+          "No clear fit"
+        ],
+        "action": "Validate direction with the audience you want to serve.",
+        "control": "list"
+      },
+      {
+        "text": "How easy is it for your team to make on-brand materials?",
+        "options": [
+          "Templates and rules ready",
+          "Some guidance",
+          "Frequent improvisation",
+          "No reusable assets"
+        ],
+        "action": "Create a practical mini brand kit and templates.",
+        "control": "cards"
+      },
+      {
+        "text": "How well do brand assets work across mobile, print and social?",
+        "options": [
+          "Tested and adaptable",
+          "Small issues",
+          "Frequent limitations",
+          "Missing usable formats"
+        ],
+        "action": "Deliver accessible, scalable and reusable formats.",
+        "control": "list"
+      }
+    ],
+    "gate": null,
+    "url": "https://jaymarketinglab.com/services/design",
+    "mode": "need"
+  },
+  {
+    "id": "digital-storefront",
+    "name": "Digital Storefront",
+    "kind": "package",
+    "intro": "A focused starting point for a local business.",
+    "questions": [
+      {
+        "text": "Do you need a clear online home for a local or service business?",
+        "options": [
+          "No",
+          "Possibly",
+          "Yes, soon",
+          "Yes, now"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "slider"
+      },
+      {
+        "text": "How closely does a small, focused brochure website fit your needs?",
+        "options": [
+          "Not at all",
+          "Partly",
+          "Mostly",
+          "Very well"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How important are calls, inquiry forms or bookings?",
+        "options": [
+          "Not important",
+          "Helpful",
+          "Important",
+          "Core goal"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      },
+      {
+        "text": "Would simple integrations meet your current requirements?",
+        "options": [
+          "No, highly custom platform needed",
+          "Somewhat",
+          "Mostly",
+          "Yes"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "Do you need a manageable foundation rather than a complex growth system?",
+        "options": [
+          "No",
+          "Maybe",
+          "Mostly",
+          "Exactly"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      }
+    ],
+    "gate": "Package fit is not proof that you need every included service. Confirm scope and readiness in a short discovery conversation. Choose a smaller solution when it is sufficient.",
+    "url": "https://jaymarketinglab.com/services/digital-storefront",
+    "mode": "fit"
+  },
+  {
+    "id": "authority-platform",
+    "name": "Authority Platform",
+    "kind": "package",
+    "intro": "A platform for expertise, useful content and qualified inquiries.",
+    "questions": [
+      {
+        "text": "How important is demonstrating expertise before a sales conversation?",
+        "options": [
+          "Not important",
+          "Helpful",
+          "Important",
+          "Essential"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "slider"
+      },
+      {
+        "text": "How much useful expert content could you publish regularly?",
+        "options": [
+          "None",
+          "Occasional",
+          "Monthly",
+          "Ongoing content program"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How important is editing case studies, articles and service content yourself?",
+        "options": [
+          "Not needed",
+          "Occasionally",
+          "Important",
+          "Essential"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "slider"
+      },
+      {
+        "text": "Would connected inquiries, booking and basic CRM improve your workflow?",
+        "options": [
+          "Not needed",
+          "A little",
+          "Significantly",
+          "Core requirement"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How closely does an expertise-led CMS site match your growth stage?",
+        "options": [
+          "Not a fit",
+          "Possibly",
+          "Good fit",
+          "Strong fit"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      }
+    ],
+    "gate": "Package fit is not proof that you need every included service. Confirm scope and readiness in a short discovery conversation. Choose a smaller solution when it is sufficient.",
+    "url": "https://jaymarketinglab.com/services/authority-platform",
+    "mode": "fit"
+  },
+  {
+    "id": "startup-growth",
+    "name": "Startup Growth",
+    "kind": "package",
+    "intro": "A connected growth system when the foundations have traction.",
+    "questions": [
+      {
+        "text": "How much evidence supports demand for your offer?",
+        "options": [
+          "Not yet tested",
+          "Early interest",
+          "Paying customers",
+          "Repeatable demand"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      },
+      {
+        "text": "How many growth channels need a shared measurement system?",
+        "options": [
+          "None",
+          "One",
+          "Two",
+          "Three or more"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How important are connected website, CRM and campaign workflows?",
+        "options": [
+          "Not needed",
+          "Helpful later",
+          "Important now",
+          "Critical bottleneck"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      },
+      {
+        "text": "How ready is your team to execute and review growth experiments?",
+        "options": [
+          "Not ready",
+          "Needs planning",
+          "Mostly ready",
+          "Owners and capacity ready"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How much does limited growth infrastructure constrain proven demand?",
+        "options": [
+          "Not at all",
+          "Slightly",
+          "Often",
+          "Severely"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "slider"
+      }
+    ],
+    "gate": "Package fit is not proof that you need every included service. Confirm scope and readiness in a short discovery conversation. Choose a smaller solution when it is sufficient.",
+    "url": "https://jaymarketinglab.com/services/startup-growth",
+    "mode": "fit"
+  },
+  {
+    "id": "enterprise-ecosystem",
+    "name": "Enterprise Ecosystem",
+    "kind": "package",
+    "intro": "A fit check for genuinely complex systems, not simply a bigger budget.",
+    "questions": [
+      {
+        "text": "How many business systems need coordinated integration?",
+        "options": [
+          "One simple system",
+          "Two",
+          "Three or four",
+          "Five or more"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "slider"
+      },
+      {
+        "text": "How complex are roles, approvals and data access requirements?",
+        "options": [
+          "Simple",
+          "Some variation",
+          "Multiple teams",
+          "Complex governance"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How much custom functionality is essential?",
+        "options": [
+          "Standard tools suffice",
+          "A little customization",
+          "Several custom workflows",
+          "Substantial custom architecture"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      },
+      {
+        "text": "How important is consolidated reporting across teams or locations?",
+        "options": [
+          "Not needed",
+          "Helpful",
+          "Important",
+          "Essential"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How prepared is your organization to own a phased implementation?",
+        "options": [
+          "Not ready",
+          "Early discussion",
+          "Sponsor identified",
+          "Sponsor, owners and governance ready"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      }
+    ],
+    "gate": "Package fit is not proof that you need every included service. Confirm scope and readiness in a short discovery conversation. Choose a smaller solution when it is sufficient.",
+    "url": "https://jaymarketinglab.com/services/enterprise-ecosystem",
+    "mode": "fit"
+  },
+  {
+    "id": "founders-essentials",
+    "name": "Founder's Essentials",
+    "kind": "package",
+    "intro": "Check the launch foundations first; final package scope must be confirmed.",
+    "questions": [
+      {
+        "text": "How soon do you need an initial brand and online presence?",
+        "options": [
+          "Not planned",
+          "Later this year",
+          "Within a few months",
+          "Preparing to launch now"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "slider"
+      },
+      {
+        "text": "How much of your basic brand system is still missing?",
+        "options": [
+          "Nothing",
+          "A few assets",
+          "Most assets",
+          "Starting from scratch"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "Would a focused starter website meet your initial needs?",
+        "options": [
+          "No",
+          "Partly",
+          "Mostly",
+          "Yes"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      },
+      {
+        "text": "How much help do you need connecting initial launch assets?",
+        "options": [
+          "None",
+          "A little",
+          "Several pieces",
+          "A coordinated foundation"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "cards"
+      },
+      {
+        "text": "How ready are your offer and customer assumptions?",
+        "options": [
+          "Not yet defined",
+          "Early draft",
+          "Clear enough to test",
+          "Validated enough to launch"
+        ],
+        "action": "Review this requirement against the proposed package scope.",
+        "control": "list"
+      }
+    ],
+    "gate": "Package fit is not proof that you need every included service. Confirm scope and readiness in a short discovery conversation. Choose a smaller solution when it is sufficient.",
+    "url": "https://jaymarketinglab.com/services/founders-essentials",
+    "mode": "fit",
+    "scopeNote": "Current service index describes operations modules, while this page describes a brand-and-website bundle. This assessment follows the page; resolve that inconsistency before live implementation."
+  }
+]
