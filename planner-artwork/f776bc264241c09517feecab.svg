@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1136" height="944" viewBox="0 0 1136 944" role="img" aria-labelledby="title-v3 desc-v3">
+  <title id="title-v3">Zee’s Booking contained mark for light backgrounds, version 3</title>
+  <desc id="desc-v3">Approved gray-and-yellow Zee’s Booking mark inside a black rounded tile, using direct coordinates without transforms.</desc>
+  <rect width="1136" height="944" rx="48" fill="#040404"/>
+  <path fill="#585858" d="M236 168h688q16 0 7 16L641 561l-102-77 140-176H156q-20 0-9-17l73-114q6-9 16-9Z"/>
+  <path fill="#585858" d="M151 727h438l61 62 81-76 126 149q10 13-7 13h52q-17 0-6-14l96-125q4-9 9-9Z"/>
+  <g fill="#F8C521">
+    <rect x="151" y="567" width="101" height="129" rx="9"/>
+    <rect x="283" y="466" width="101" height="230" rx="9"/>
+    <rect x="414" y="361" width="101" height="335" rx="9"/>
+  </g>
+  <path fill="#F8C521" d="m539 517 111 88 443-313q10-7 13 1 3 6-6 15L651 742 539 638Z"/>
+</svg>
