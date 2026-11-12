@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive JML analysis of 800 paid social ads, public video trends, and advertising landing pages.">
+  <title>JML Social Advertising Intelligence Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --jml-purple: #4C0099;
+      --jml-lime: #B1EB1E;
+      --jml-ink: #1A1A1A;
+      --jml-paper: #FFFFFF;
+      --jml-mist: #F7F5FA;
+      --jml-lavender: #E9DDF5;
+      --jml-plum: #2D005C;
+      --jml-gray: #6D6872;
+      --jml-line: #DED8E5;
+      --jml-font-display: "DM Serif Display", Georgia, serif;
+      --jml-font-body: "DM Sans", Arial, sans-serif;
+      --jml-font-mono: "JetBrains Mono", "Courier New", monospace;
+      --page-width: 1180px;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--jml-paper);
+      color: var(--jml-ink);
+      font-family: var(--jml-font-body);
+      line-height: 1.55;
+    }
+    a { color: var(--jml-purple); text-underline-offset: 3px; }
+    a:hover { text-decoration-thickness: 2px; }
+    button, select { font: inherit; }
+    button:focus-visible, a:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--jml-lime);
+      outline-offset: 3px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--jml-purple);
+      color: var(--jml-paper);
+      border-bottom: 4px solid var(--jml-lime);
+    }
+    .header-inner {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      min-height: 66px;
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .brand-mark { width: 26px; display: block; flex: 0 0 auto; }
+    .brand-text { font-weight: 500; letter-spacing: .01em; white-space: nowrap; }
+    .brand-text span { color: var(--jml-lime); }
+    .site-nav { display: flex; gap: 18px; flex-wrap: wrap; justify-content: flex-end; }
+    .site-nav a { color: var(--jml-paper); text-decoration: none; font-size: .88rem; }
+    .site-nav a:hover { text-decoration: underline; }
+
+    .hero {
+      background: var(--jml-purple);
+      color: var(--jml-paper);
+      padding: 74px 24px 82px;
+    }
+    .hero-inner { max-width: var(--page-width); margin: 0 auto; }
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--jml-lime);
+      font-family: var(--jml-font-mono);
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { margin-top: 0; }
+    h1 {
+      max-width: 840px;
+      margin-bottom: 20px;
+      font-family: var(--jml-font-display);
+      font-size: clamp(2.65rem, 6vw, 5.8rem);
+      font-weight: 400;
+      line-height: .98;
+      letter-spacing: -.025em;
+    }
+    .hero-copy { max-width: 760px; margin: 0; color: #EEE8F5; font-size: 1.08rem; }
+    .hero-copy strong { color: var(--jml-paper); font-weight: 500; }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-top: 30px;
+      color: var(--jml-lime);
+      font-family: var(--jml-font-mono);
+      font-size: .8rem;
+    }
+
+    main { display: block; }
+    .view-tabs-wrap { background: var(--jml-paper); border-bottom: 1px solid var(--jml-line); }
+    .view-tabs {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      gap: 8px;
+    }
+    .view-tab {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid var(--jml-purple);
+      background: var(--jml-paper);
+      color: var(--jml-purple);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .view-tab[aria-pressed="true"] { background: var(--jml-purple); color: var(--jml-paper); }
+    .section { padding: 74px 24px; }
+    .section[hidden] { display: none; }
+    .section:nth-of-type(even) { background: var(--jml-mist); }
+    .section-inner { max-width: var(--page-width); margin: 0 auto; }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
+      gap: 44px;
+      align-items: end;
+      margin-bottom: 36px;
+    }
+    h2 {
+      margin-bottom: 8px;
+      color: var(--jml-purple);
+      font-family: var(--jml-font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.06;
+    }
+    h3 {
+      margin-bottom: 10px;
+      color: var(--jml-purple);
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+    .lede { margin: 0; color: var(--jml-gray); max-width: 680px; }
+    .callout {
+      margin: 0;
+      padding: 15px 18px;
+      background: var(--jml-paper);
+      border-left: 8px solid var(--jml-lime);
+      color: var(--jml-ink);
+    }
+    .callout strong { color: var(--jml-purple); font-weight: 500; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .metric {
+      min-height: 150px;
+      padding: 22px;
+      background: var(--jml-paper);
+      border-top: 5px solid var(--jml-purple);
+      box-shadow: 0 12px 30px rgba(45, 0, 92, .08);
+    }
+    .metric-value {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--jml-purple);
+      font-family: var(--jml-font-display);
+      font-size: 2.55rem;
+      line-height: 1;
+    }
+    .metric-label { display: block; font-weight: 500; }
+    .metric-note { display: block; margin-top: 5px; color: var(--jml-gray); font-size: .84rem; }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 26px;
+    }
+    .control-button {
+      border: 1px solid var(--jml-purple);
+      background: transparent;
+      color: var(--jml-purple);
+      padding: 9px 13px;
+      border-radius: 999px;
+      transition: background-color .2s ease, color .2s ease, transform .2s ease;
+    }
+    .control-button:hover { transform: translateY(-1px); }
+    .control-button[aria-pressed="true"] {
+      background: var(--jml-purple);
+      color: var(--jml-paper);
+    }
+    .control-button.accent[aria-pressed="true"] {
+      background: var(--jml-lime);
+      border-color: var(--jml-lime);
+      color: var(--jml-plum);
+    }
+
+    .platform-panel {
+      display: grid;
+      grid-template-columns: minmax(270px, .7fr) minmax(0, 1.3fr);
+      gap: 34px;
+      align-items: start;
+      padding: 34px;
+      background: var(--jml-paper);
+      border: 1px solid var(--jml-line);
+    }
+    .platform-title {
+      margin-bottom: 4px;
+      color: var(--jml-purple);
+      font-family: var(--jml-font-display);
+      font-size: 2.4rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .platform-subtitle { margin: 0 0 22px; color: var(--jml-gray); }
+    .mini-stat { margin-bottom: 18px; }
+    .mini-stat-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 6px; font-size: .82rem; }
+    .mini-stat-head span:last-child { font-family: var(--jml-font-mono); }
+    .track { height: 10px; background: var(--jml-lavender); overflow: hidden; }
+    .fill { height: 100%; width: 0; background: var(--jml-purple); transition: width .35s ease; }
+    .fill.lime { background: var(--jml-lime); }
+    .detail-list { display: grid; gap: 20px; }
+    .detail-row { padding-bottom: 18px; border-bottom: 1px solid var(--jml-line); }
+    .detail-row:last-child { padding-bottom: 0; border-bottom: 0; }
+    .detail-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--jml-purple);
+      font-family: var(--jml-font-mono);
+      font-size: .75rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .detail-row p { margin: 0; }
+
+    .comparison-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .comparison-side {
+      padding: 28px;
+      background: var(--jml-paper);
+      border-top: 5px solid var(--jml-purple);
+    }
+    .comparison-side.public { border-top-color: var(--jml-lime); }
+    .comparison-side h3 { font-family: var(--jml-font-display); font-size: 1.65rem; font-weight: 400; }
+    .comparison-side ul { margin: 15px 0 0; padding-left: 20px; }
+    .comparison-side li + li { margin-top: 9px; }
+    .comparison-bottom {
+      grid-column: 1 / -1;
+      padding: 22px 28px;
+      background: var(--jml-purple);
+      color: var(--jml-paper);
+    }
+    .comparison-bottom strong { color: var(--jml-lime); font-weight: 500; }
+
+    .pattern-library { display: grid; gap: 44px; }
+    .pattern-group-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, .65fr);
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+    .pattern-group-head h3 {
+      margin-bottom: 5px;
+      font-family: var(--jml-font-display);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+    .pattern-group-head p { margin: 0; color: var(--jml-gray); }
+    .pattern-key {
+      padding: 14px 16px;
+      background: var(--jml-purple);
+      color: var(--jml-paper) !important;
+      font-size: .86rem;
+    }
+    .pattern-key strong { color: var(--jml-lime); font-weight: 500; }
+    .cluster-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .cluster-card {
+      min-width: 0;
+      padding: 22px;
+      background: var(--jml-paper);
+      border: 1px solid var(--jml-line);
+      border-top: 5px solid var(--jml-purple);
+    }
+    .cluster-card.cta { border-top-color: var(--jml-lime); }
+    .cluster-title-row { display: flex; gap: 14px; align-items: baseline; }
+    .cluster-number {
+      color: var(--jml-purple);
+      font-family: var(--jml-font-mono);
+      font-size: .75rem;
+    }
+    .cluster-card h4 { margin: 0; color: var(--jml-purple); font-size: 1.05rem; font-weight: 500; }
+    .cluster-card > p { margin: 10px 0 0; color: var(--jml-gray); font-size: .91rem; }
+    .cue-line { color: var(--jml-ink) !important; }
+    .cue-line strong { color: var(--jml-purple); font-weight: 500; }
+    .example-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .example-link {
+      padding: 7px 9px;
+      border: 1px solid var(--jml-purple);
+      background: var(--jml-paper);
+      color: var(--jml-purple);
+      cursor: pointer;
+      font-family: var(--jml-font-mono);
+      font-size: .69rem;
+      text-align: left;
+    }
+    .example-link:hover { background: var(--jml-purple); color: var(--jml-paper); }
+    .example-link::after { content: '  ↗'; }
+
+    .example-modal {
+      width: min(1080px, calc(100% - 32px));
+      max-height: 92vh;
+      padding: 0;
+      border: 0;
+      background: var(--jml-paper);
+      color: var(--jml-ink);
+      overflow: auto;
+    }
+    .example-modal::backdrop { background: rgba(45, 0, 92, .82); }
+    .modal-shell { display: grid; grid-template-columns: minmax(320px, .9fr) minmax(0, 1.1fr); min-height: 580px; }
+    .modal-media-panel { position: relative; display: grid; place-items: center; padding: 42px; background: var(--jml-mist); }
+    .modal-media-panel img, .modal-media-panel video {
+      width: 100%;
+      max-height: 72vh;
+      display: block;
+      object-fit: contain;
+      background: var(--jml-paper);
+      border: 1px solid var(--jml-line);
+    }
+    .modal-badge {
+      position: absolute;
+      top: 18px;
+      padding: 7px 10px;
+      font-family: var(--jml-font-mono);
+      font-size: .66rem;
+      text-transform: uppercase;
+    }
+    .modal-rank { left: 18px; background: var(--jml-lime); color: var(--jml-plum); }
+    .modal-format { right: 18px; background: var(--jml-purple); color: var(--jml-paper); }
+    .modal-body { display: flex; flex-direction: column; padding: 36px; }
+    .modal-close {
+      align-self: flex-end;
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--jml-purple);
+      background: var(--jml-paper);
+      color: var(--jml-purple);
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .modal-topline { display: flex; justify-content: space-between; gap: 16px; margin-top: 18px; color: var(--jml-gray); font-family: var(--jml-font-mono); font-size: .7rem; text-transform: uppercase; }
+    .modal-advertiser { color: var(--jml-purple); }
+    .modal-title { margin: 14px 0 20px; color: var(--jml-ink); font-family: var(--jml-font-display); font-size: clamp(1.75rem, 3vw, 2.7rem); font-weight: 400; line-height: 1.08; }
+    .modal-classification { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--jml-line); border: 1px solid var(--jml-line); }
+    .modal-classification div { padding: 12px; background: var(--jml-paper); }
+    .modal-classification span, .modal-metrics dt { display: block; color: var(--jml-gray); font-family: var(--jml-font-mono); font-size: .62rem; text-transform: uppercase; }
+    .modal-classification strong { display: block; margin-top: 3px; color: var(--jml-purple); font-size: .88rem; font-weight: 500; }
+    .modal-observation { margin: 20px 0; padding: 16px 18px; background: var(--jml-mist); border-left: 5px solid var(--jml-lime); }
+    .modal-observation strong { color: var(--jml-purple); font-weight: 500; }
+    .modal-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0; background: var(--jml-line); border: 1px solid var(--jml-line); }
+    .modal-metrics div { min-width: 0; padding: 11px; background: var(--jml-paper); }
+    .modal-metrics dd { margin: 3px 0 0; overflow: hidden; color: var(--jml-purple); font-family: var(--jml-font-mono); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+    .modal-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 22px; }
+    .modal-actions a { min-height: 41px; display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; text-decoration: none; font-size: .82rem; font-weight: 500; }
+    .modal-primary { background: var(--jml-purple); color: var(--jml-paper); }
+    .modal-secondary { border: 1px solid var(--jml-purple); color: var(--jml-purple); background: var(--jml-paper); }
+    .modal-actions a[hidden] { display: none; }
+
+    .landing-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+      margin-bottom: 36px;
+    }
+    .landing-stat {
+      padding: 20px;
+      background: var(--jml-purple);
+      color: var(--jml-paper);
+    }
+    .landing-stat b {
+      display: block;
+      color: var(--jml-lime);
+      font-family: var(--jml-font-display);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+    .landing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(310px, .85fr);
+      gap: 38px;
+      align-items: start;
+    }
+    .bar-chart { display: grid; gap: 15px; }
+    .bar-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 50px; align-items: center; gap: 12px; }
+    .bar-label { font-size: .86rem; }
+    .bar-value { text-align: right; font-family: var(--jml-font-mono); font-size: .82rem; }
+    .bar-track { height: 14px; background: var(--jml-lavender); }
+    .bar-mark { height: 100%; background: var(--jml-purple); transition: width .35s ease; }
+    .archetype-list { display: grid; gap: 10px; }
+    .archetype-button {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid var(--jml-line);
+      background: var(--jml-paper);
+      color: var(--jml-ink);
+      text-align: left;
+    }
+    .archetype-button[aria-pressed="true"] {
+      background: var(--jml-lime);
+      border-color: var(--jml-lime);
+      color: var(--jml-plum);
+    }
+    .archetype-detail { margin-top: 18px; padding: 20px; background: var(--jml-mist); border-left: 5px solid var(--jml-purple); }
+    .archetype-detail p { margin: 0 0 10px; }
+    .archetype-detail p:last-child { margin-bottom: 0; }
+
+    .evidence-filter { margin-bottom: 22px; }
+    .research-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; margin-bottom: 28px; }
+    .research-stat { padding: 18px 20px; background: var(--jml-paper); border-top: 5px solid var(--jml-purple); }
+    .research-stat.aligned { border-top-color: var(--jml-lime); }
+    .research-stat b { display: block; color: var(--jml-purple); font-family: var(--jml-font-display); font-size: 2.2rem; font-weight: 400; line-height: 1; }
+    .research-stat span { display: block; margin-top: 6px; color: var(--jml-gray); font-size: .84rem; }
+    .evidence-list { display: grid; gap: 12px; }
+    .evidence-item {
+      display: grid;
+      grid-template-columns: 145px minmax(0, 1fr) minmax(210px, .65fr);
+      gap: 22px;
+      align-items: start;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--jml-line);
+    }
+    .evidence-item[hidden] { display: none; }
+    .status {
+      display: inline-block;
+      width: fit-content;
+      padding: 5px 8px;
+      background: var(--jml-lavender);
+      color: var(--jml-purple);
+      font-family: var(--jml-font-mono);
+      font-size: .73rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .status.aligned { background: var(--jml-lime); color: var(--jml-plum); }
+    .status.different { background: var(--jml-purple); color: var(--jml-paper); }
+    .evidence-item h3 { margin: 0; font-size: 1rem; }
+    .evidence-item p { margin: 0; color: var(--jml-gray); font-size: .9rem; }
+
+    .proposal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 34px;
+      counter-reset: proposal;
+    }
+    .proposal {
+      counter-increment: proposal;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 14px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--jml-line);
+    }
+    .proposal::before {
+      content: counter(proposal, decimal-leading-zero);
+      color: var(--jml-purple);
+      font-family: var(--jml-font-mono);
+      font-size: .85rem;
+    }
+    .proposal b { display: block; margin-bottom: 4px; color: var(--jml-purple); font-weight: 500; }
+    .proposal p { margin: 0; color: var(--jml-gray); }
+
+    .sources {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 30px;
+      margin: 0;
+      padding-left: 20px;
+    }
+    .sources li { padding-left: 4px; }
+    details { margin-top: 28px; border-top: 1px solid var(--jml-line); padding-top: 18px; }
+    summary { color: var(--jml-purple); font-weight: 500; }
+    details p { max-width: 880px; color: var(--jml-gray); }
+
+    footer { background: var(--jml-plum); color: var(--jml-paper); padding: 38px 24px; }
+    .footer-inner { max-width: var(--page-width); margin: 0 auto; display: flex; justify-content: space-between; gap: 30px; align-items: end; }
+    .footer-inner p { margin: 0; max-width: 730px; color: #E9DDF5; }
+    .footer-date { color: var(--jml-lime); font-family: var(--jml-font-mono); font-size: .78rem; white-space: nowrap; }
+
+    @media (max-width: 900px) {
+      .metric-grid, .landing-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-head, .platform-panel, .landing-grid, .pattern-group-head, .modal-shell { grid-template-columns: 1fr; }
+      .modal-media-panel { min-height: 430px; }
+      .evidence-item { grid-template-columns: 120px minmax(0, 1fr); }
+      .evidence-item p { grid-column: 2; }
+    }
+    @media (max-width: 680px) {
+      .site-header { position: static; }
+      .header-inner, .footer-inner { align-items: flex-start; flex-direction: column; }
+      .site-nav { justify-content: flex-start; gap: 10px 14px; }
+      .hero { padding-top: 48px; }
+      .section { padding: 54px 18px; }
+      .metric-grid, .landing-summary, .comparison-layout, .proposal-grid, .sources, .cluster-grid, .research-summary { grid-template-columns: 1fr; }
+      .comparison-bottom { grid-column: auto; }
+      .platform-panel { padding: 23px; }
+      .modal-media-panel { min-height: 310px; padding: 50px 20px 24px; }
+      .modal-body { padding: 24px; }
+      .modal-classification, .modal-metrics { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 108px minmax(0, 1fr) 42px; }
+      .evidence-item { grid-template-columns: 1fr; gap: 10px; }
+      .evidence-item p { grid-column: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-lockup" aria-label="Jay Marketing Lab">
+        <svg class="brand-mark" viewBox="0 0 115.56 189.04" role="img" aria-label="Jay Marketing Lab J mark">
+          <path fill="#fff" d="M73.06,38.18l15.24.92-7.34,15.35c-.93,1.96-.1,4.32,1.85,5.25,1.96.94,4.32.1,5.25-1.85l7.5-15.69,12.75,12.88-.02-30.12h0V7.65l-3.91,3.17-1.1.89-.3.24-1.12.91-2.07,1.68-1.12.91-2.18,1.76-1.12.91-.77.63-23.78,19.33s1.43.06,2.24.11h0Z"/>
+          <path fill="#fff" d="M89.18,139.02c-2.81-.03-5.12,2.32-5.06,5.04-.05,2.65,2.16,5.03,4.99,5.04,2.82,0,5.1-2.25,5.1-5.04s-2.26-5.02-5.02-5.04h-.01ZM89.15,141.53c-1.42.03-2.51,1.11-2.54,2.5,0,.5-.36.87-.84.86-.47,0-.82-.38-.82-.87v-.08c.01-1.9,1.51-3.68,3.39-4,.27-.05.54-.07.81-.08.46,0,.83.39.83.84-.01.46-.37.81-.83.82h0Z"/>
+          <path fill="#fff" d="M108.31,130.94v-64.39l-6.46-6.46c-1.23,5.82-6.4,10.18-12.58,10.18-4.67,0-8.75-2.49-11.01-6.22v66.6c0,4.01-.91,7.99-2.87,11.5-2.78,4.96-8.19,10.26-18.59,10.26-11.63,0-16.74-7.19-18.96-13.03-1.19-3.1-1.7-6.41-1.7-9.73v-9.43H7.23c0,14.21-.61,61.17,50.91,61.17s50.18-50.45,50.18-50.45h0ZM98.35,152.68c-.15.56-.81.8-1.28.46-.08-.05-.14-.12-.21-.18-1.14-1.13-2.27-2.27-3.41-3.41-.06-.06-.1-.12-.15-.2-1.77,1.31-3.7,1.75-5.79,1.23-1.63-.4-2.92-1.33-3.88-2.7-1.88-2.69-1.49-6.39.93-8.68,2.42-2.29,6.13-2.46,8.78-.36,1.43,1.13,2.25,2.63,2.48,4.44.22,1.81-.27,3.45-1.39,4.94.07.05.14.08.2.14,1.15,1.14,2.29,2.29,3.43,3.43.26.25.39.54.3.9h-.01Z"/>
+          <path fill="#fff" d="M33.42,99.48c-1.08-.73-2.23-1.36-3.43-1.86-2.49-1.05-5.14-1.59-7.86-1.59s-5.37.53-7.86,1.59c-1.2.51-2.35,1.13-3.43,1.86-.29.19-.57.39-.84.6-.68.51-.78,1.49-.21,2.12h0c.5.57,1.35.65,1.96.19,1.13-.85,2.35-1.55,3.66-2.11,2.13-.9,4.4-1.36,6.73-1.36s4.6.46,6.73,1.36c1.31.55,2.53,1.26,3.65,2.1.6.45,1.46.37,1.96-.19h0c.56-.63.47-1.61-.21-2.12-.27-.21-.55-.4-.83-.59h-.02Z"/>
+          <path fill="#fff" d="M27.75,102.91c-1.78-.75-3.68-1.14-5.63-1.14s-3.84.38-5.63,1.14c-.93.39-1.81.88-2.64,1.46-.71.5-.83,1.5-.25,2.15h0c.49.55,1.31.65,1.91.23.66-.46,1.36-.85,2.1-1.16,1.42-.6,2.94-.91,4.5-.91s3.07.31,4.5.91c.74.31,1.44.7,2.1,1.16.6.42,1.42.32,1.91-.23h0c.58-.65.46-1.66-.25-2.15-.82-.57-1.7-1.06-2.63-1.45h.01Z"/>
+          <path fill="#fff" d="M25.51,108.21c-1.07-.45-2.21-.68-3.39-.68s-2.31.23-3.39.68c-.31.13-.6.28-.89.44-.8.45-.98,1.54-.36,2.22h0c.45.51,1.2.64,1.79.3.86-.49,1.84-.75,2.85-.75s1.99.26,2.84.74c.59.33,1.34.2,1.79-.3h0c.61-.69.44-1.77-.37-2.22-.28-.16-.58-.3-.88-.43h0Z"/>
+          <circle fill="#fff" cx="22.12" cy="114.49" r="1.75"/>
+        </svg>
+        <div class="brand-text">JML <span>Social Intelligence</span></div>
+      </div>
+      <nav class="site-nav" aria-label="Report sections">
+        <a href="#scope">Scope</a>
+        <a href="#platforms">Platforms</a>
+        <a href="#paid-organic">Paid vs public</a>
+        <a href="#hooks-ctas">Hooks &amp; CTAs</a>
+        <a href="#landing">Landing pages</a>
+        <a href="#evidence">Research</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Visual audit · paid social · public trends · landing pages</p>
+      <h1>What 800 high-distribution ads reveal.</h1>
+      <p class="hero-copy"><strong>One message, native execution.</strong> The strongest recurring pattern is not a universal visual style. It is a stable commercial promise translated into the visual grammar of each platform.</p>
+      <div class="hero-meta">
+        <span>US MARKET</span><span>APR TO SEP 2026</span><span>ANALYZED 27 OCT 2026</span><span>PROPOSALS, NOT APPROVED STRATEGY</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="view-tabs-wrap">
+    <div class="view-tabs" aria-label="Report views">
+      <button class="view-tab" id="analysis-tab" type="button" aria-pressed="true">Analysis and examples</button>
+      <button class="view-tab" id="research-tab" type="button" aria-pressed="false">Research comparison</button>
+    </div>
+  </div>
+
+  <main>
+    <section class="section" id="scope" data-report-view="analysis">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Audit coverage</p>
+            <h2>Every paid creative was checked.</h2>
+            <p class="lede">The review covered record-level thumbnails and unique video assets. Video analysis used the cover plus frames at approximately 15%, 50%, and 85% of runtime.</p>
+          </div>
+          <p class="callout"><strong>Important:</strong> this is a top-impression sample, not a controlled performance study. It identifies patterns in this selected set. It does not prove conversion lift, attribution, or ROI.</p>
+        </div>
+        <div class="metric-grid" aria-label="Audit coverage metrics">
+          <article class="metric"><span class="metric-value">800</span><span class="metric-label">Paid ad records</span><span class="metric-note">100 per platform or device view</span></article>
+          <article class="metric"><span class="metric-value">741</span><span class="metric-label">Unique paid covers</span><span class="metric-note">Every record was visually reviewed</span></article>
+          <article class="metric"><span class="metric-value">312</span><span class="metric-label">Unique paid videos</span><span class="metric-note">309 triple-sampled, 3 partially sampled</span></article>
+          <article class="metric"><span class="metric-value">300</span><span class="metric-label">Public trend records</span><span class="metric-note">YouTube, TikTok, and Pinterest</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="platforms" data-report-view="analysis">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Platform explorer</p>
+            <h2>The platform changes the execution.</h2>
+            <p class="lede">Choose a platform to compare format mix, visual grammar, video behavior, landing-page routing, and the most important caveat.</p>
+          </div>
+          <p class="callout">A reusable production system matters more than a single polished asset. Several advertisers repeat one template while changing the headline, product, audience, or offer.</p>
+        </div>
+        <div class="controls" id="platform-controls" aria-label="Choose a platform"></div>
+        <article class="platform-panel" aria-live="polite">
+          <div>
+            <h3 class="platform-title" id="platform-title">LinkedIn</h3>
+            <p class="platform-subtitle" id="platform-subtitle">B2B proof and editorial density</p>
+            <div class="mini-stat">
+              <div class="mini-stat-head"><span>Dominant format</span><span id="format-value">82% image</span></div>
+              <div class="track"><div class="fill" id="format-bar"></div></div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-head"><span>Homepage destinations</span><span id="root-value">28%</span></div>
+              <div class="track"><div class="fill lime" id="root-bar"></div></div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-head"><span>URLs with query strings</span><span id="tracking-value">70%</span></div>
+              <div class="track"><div class="fill" id="tracking-bar"></div></div>
+            </div>
+          </div>
+          <div class="detail-list">
+            <div class="detail-row"><span class="detail-label">Format and aspect mix</span><p id="platform-format"></p></div>
+            <div class="detail-row"><span class="detail-label">Visual grammar</span><p id="platform-visual"></p></div>
+            <div class="detail-row"><span class="detail-label">Video behavior</span><p id="platform-video"></p></div>
+            <div class="detail-row"><span class="detail-label">Landing behavior</span><p id="platform-landing"></p></div>
+            <div class="detail-row"><span class="detail-label">Interpretation limit</span><p id="platform-caveat"></p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="paid-organic" data-report-view="analysis">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Paid vs public content</p>
+            <h2>The difference is architectural, not just visual.</h2>
+            <p class="lede">Creator-style appearance is no longer evidence that a post is organic. Distribution, disclosure, destination, authorization, and measurement provide the more reliable distinction.</p>
+          </div>
+          <p class="callout"><strong>TikTok warning:</strong> 24 of 100 public records carried a commercial-disclosure flag. Several records without that flag still used terms such as #ad or partner in the caption.</p>
+        </div>
+        <div class="controls" id="comparison-controls" aria-label="Choose a comparison platform"></div>
+        <div class="comparison-layout" aria-live="polite">
+          <article class="comparison-side">
+            <h3 id="paid-heading">Paid YouTube</h3>
+            <ul id="paid-list"></ul>
+          </article>
+          <article class="comparison-side public">
+            <h3 id="public-heading">Public YouTube trends</h3>
+            <ul id="public-list"></ul>
+          </article>
+          <div class="comparison-bottom"><strong id="comparison-key">Key distinction:</strong> <span id="comparison-conclusion"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="hooks-ctas" data-report-view="analysis">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Hook and CTA pattern library</p>
+            <h2>Attention patterns and action patterns are different systems.</h2>
+            <p class="lede">A hook earns the next second or the click. A CTA turns that attention into one next step. The clusters below separate visual and narrative hooks from commercial actions.</p>
+          </div>
+          <p class="callout"><strong>How to use the examples:</strong> select any linked example to open its creative, classification, source metadata, and destination in one dashboard-style modal.</p>
+        </div>
+        <div class="pattern-library">
+          <section aria-labelledby="hook-clusters-title">
+            <div class="pattern-group-head">
+              <div>
+                <h3 id="hook-clusters-title">Hook clusters</h3>
+                <p>Grouped by what interrupts attention or creates a reason to continue.</p>
+              </div>
+              <p class="pattern-key"><strong>Observed pattern:</strong> public YouTube leans harder on thumbnail curiosity, emotion, and genre recognition. Paid creative more often connects the opening hook to an offer, product, or destination.</p>
+            </div>
+            <div class="cluster-grid" id="hook-cluster-grid"></div>
+          </section>
+          <section aria-labelledby="cta-clusters-title">
+            <div class="pattern-group-head">
+              <div>
+                <h3 id="cta-clusters-title">CTA clusters</h3>
+                <p>Grouped by the decision the ad or destination asks the person to make.</p>
+              </div>
+              <p class="pattern-key"><strong>Classification note:</strong> CTA labels use the ad title and destination when the provider record does not expose the exact button copy.</p>
+            </div>
+            <div class="cluster-grid" id="cta-cluster-grid"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="landing" data-report-view="analysis">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Landing-page intelligence</p>
+            <h2>Creative changes. Conversion infrastructure stays stable.</h2>
+            <p class="lede">Most large campaigns reuse a smaller set of destinations across multiple creatives and sometimes across multiple platforms.</p>
+          </div>
+          <p class="callout"><strong>Current-page caveat:</strong> live pages were inspected on 27 October 2026. A current homepage may differ from the version that appeared when the historical ad was active.</p>
+        </div>
+        <div class="landing-summary" aria-label="Landing-page metrics">
+          <div class="landing-stat"><b>399</b>normalized destinations</div>
+          <div class="landing-stat"><b>68.5%</b>ads in repeated-destination groups</div>
+          <div class="landing-stat"><b>20%</b>exact homepage or root destinations</div>
+          <div class="landing-stat"><b>76.3%</b>URLs with query strings</div>
+        </div>
+        <div class="landing-grid">
+          <div>
+            <h3>Homepage destination rate by platform</h3>
+            <p class="lede" style="margin-bottom:22px">A lower rate usually indicates a more specific destination, not necessarily a better page.</p>
+            <div class="bar-chart" id="landing-bars" aria-label="Homepage destination percentages"></div>
+          </div>
+          <div>
+            <h3>Five recurring page architectures</h3>
+            <div class="archetype-list" id="archetype-controls" aria-label="Choose a landing-page architecture"></div>
+            <div class="archetype-detail" id="archetype-detail" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="evidence" data-report-view="research" hidden>
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Independent evidence comparison</p>
+            <h2>Where the sample agrees with external research.</h2>
+            <p class="lede">Official platform guidance supports many of the format and creative patterns. It does not turn the observed correlations into causal performance claims.</p>
+          </div>
+          <p class="callout">The largest differences appear on Instagram and YouTube Mobile, where this sample is more static or more 16:9 than current platform guidance.</p>
+        </div>
+        <div class="research-summary" aria-label="Research comparison summary">
+          <div class="research-stat aligned"><b>8</b><span>findings aligned with external evidence</span></div>
+          <div class="research-stat"><b>3</b><span>findings different from current platform guidance</span></div>
+          <div class="research-stat"><b>2</b><span>claims with important evidence limits</span></div>
+        </div>
+        <div class="controls evidence-filter" id="evidence-controls" aria-label="Filter evidence"></div>
+        <div class="evidence-list" id="evidence-list"></div>
+      </div>
+    </section>
+
+    <section class="section" id="proposals" data-report-view="analysis">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">Proposed tests</p>
+            <h2>What JML can test next.</h2>
+            <p class="lede">These are evidence-informed proposals. They are not approved strategy and should not be treated as performance guarantees.</p>
+          </div>
+        </div>
+        <div class="proposal-grid">
+          <article class="proposal"><div><b>Build one message system, not one universal asset.</b><p>Keep the commercial promise stable. Redesign the execution for each platform.</p></div></article>
+          <article class="proposal"><div><b>Test the first three seconds.</b><p>Lead with a face, result, demonstration, or explicit problem on short-form video.</p></div></article>
+          <article class="proposal"><div><b>Create 6, 15, and 30 second video cuts.</b><p>Add native 9:16 versions instead of relying only on 16:9 mobile inventory.</p></div></article>
+          <article class="proposal"><div><b>Use modular creative families.</b><p>Vary one headline, benefit, audience, proof point, or offer at a time.</p></div></article>
+          <article class="proposal"><div><b>Match direct-response ads to dedicated pages.</b><p>Repeat the promise, keep one decision primary, and minimize required fields.</p></div></article>
+          <article class="proposal"><div><b>Scale proof to decision risk.</b><p>Simple signup pages can stay short. Complex B2B decisions need detail, examples, and risk reduction.</p></div></article>
+          <article class="proposal"><div><b>Version landing pages with campaigns.</b><p>Prevent a changing homepage from weakening message continuity while an ad remains active.</p></div></article>
+          <article class="proposal"><div><b>Separate measurement layers.</b><p>Track attention, engagement, intent, conversion, and business outcomes independently.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sources" data-report-view="research" hidden>
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" style="color:var(--jml-purple)">References</p>
+            <h2>Primary sources and research.</h2>
+          </div>
+        </div>
+        <ul class="sources">
+          <li><a href="https://ads.tiktok.com/resources/help/article/creative-best-practices" target="_blank" rel="noopener">TikTok creative best practices</a></li>
+          <li><a href="https://ads.tiktok.com/resources/help/article/spark-ads" target="_blank" rel="noopener">TikTok Spark Ads</a></li>
+          <li><a href="https://about.fb.com/news/2024/02/creator-marketplace-for-brands-and-creators-to-collaborate-on-instagram/" target="_blank" rel="noopener">Meta creator and partnership advertising</a></li>
+          <li><a href="https://business.linkedin.com/advertise/ads/sponsored-content/video-ads/tips" target="_blank" rel="noopener">LinkedIn video ad tips</a></li>
+          <li><a href="https://business.linkedin.com/advertise/ads/sponsored-content/thought-leader-ads/specs" target="_blank" rel="noopener">LinkedIn Thought Leader Ads</a></li>
+          <li><a href="https://business.pinterest.com/en-gb/creative-best-practices/" target="_blank" rel="noopener">Pinterest creative best practices</a></li>
+          <li><a href="https://business.x.com/en/advertising/creative-best-practices" target="_blank" rel="noopener">X creative best practices</a></li>
+          <li><a href="https://support.google.com/google-ads/answer/14783551?hl=en-AU" target="_blank" rel="noopener">Google ABCDs of effective video ads</a></li>
+          <li><a href="https://support.google.com/google-ads/answer/6238826?hl=en-AU" target="_blank" rel="noopener">Google landing-page guidance</a></li>
+          <li><a href="https://gsbpreserve.stanford.edu/view/40737/are-display-ad-content-and-landing-page-ad-content-complements-or-substitutes-a-field-experiment" target="_blank" rel="noopener">Stanford field experiment on ad and landing-page content</a></li>
+          <li><a href="https://arxiv.org/abs/1806.00923" target="_blank" rel="noopener">Landing-page content volume and consumer behavior</a></li>
+          <li><a href="https://link.springer.com/chapter/10.1007/978-3-032-12968-0_37" target="_blank" rel="noopener">Conversion Rate Optimization in e-Business</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/40880805/" target="_blank" rel="noopener">Native advertising disclosure and attention study</a></li>
+        </ul>
+        <details>
+          <summary>Methodology and limitations</summary>
+          <p>The paid dataset contains 100 records per platform or device view and is ranked by estimated impressions. It is not a random market sample. Spend, impressions, and CPM are provider estimates. The public-trend dataset is not an unpaid-only control group. TikTok includes disclosed and undisclosed commercial content. Pinterest provides limited post-level performance evidence. Missing metrics and inaccessible media were not estimated. Recommendations remain proposals until an explicit human decision creates a new approved strategy status or version.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="example-modal" id="example-modal" aria-labelledby="modal-title">
+    <div class="modal-shell">
+      <div class="modal-media-panel" id="modal-media-panel">
+        <span class="modal-badge modal-rank" id="modal-rank"></span>
+        <span class="modal-badge modal-format" id="modal-format"></span>
+        <img id="modal-image" alt="" referrerpolicy="no-referrer">
+        <video id="modal-video" controls playsinline preload="metadata" hidden></video>
+      </div>
+      <div class="modal-body">
+        <button class="modal-close" id="modal-close" type="button" aria-label="Close example">×</button>
+        <div class="modal-topline"><span class="modal-advertiser" id="modal-advertiser"></span><span id="modal-platform"></span></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-classification">
+          <div><span>Hook cluster</span><strong id="modal-hook"></strong></div>
+          <div><span>CTA cluster</span><strong id="modal-cta"></strong></div>
+        </div>
+        <p class="modal-observation"><strong>Why it belongs:</strong> <span id="modal-observation"></span></p>
+        <dl class="modal-metrics">
+          <div><dt id="modal-reach-label">Estimated impressions</dt><dd id="modal-reach"></dd></div>
+          <div><dt>Spend / status</dt><dd id="modal-spend"></dd></div>
+          <div><dt>Observed / ranking</dt><dd id="modal-period"></dd></div>
+        </dl>
+        <div class="modal-actions">
+          <a class="modal-primary" id="modal-landing" target="_blank" rel="noopener noreferrer">Open landing page</a>
+          <a class="modal-secondary" id="modal-creative" target="_blank" rel="noopener noreferrer">Open creative</a>
+          <a class="modal-secondary" id="modal-source" target="_blank" rel="noopener noreferrer">Open source</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <footer>
+    <div class="footer-inner">
+      <p>Jay Marketing Lab. Social advertising intelligence, separated into observations, evidence limits, and testable proposals.</p>
+      <div class="footer-date">27 OCT 2026</div>
+    </div>
+  </footer>
+
+  <script>
+    const platforms = [
+      {
+        id: 'linkedin', label: 'LinkedIn', subtitle: 'B2B proof and editorial density', dominant: 82, dominantLabel: '82% image', root: 28, tracking: 70,
+        format: '82 images, 14 social videos, and 4 carousels. The aspect mix is 56 square-ish, 27 portrait, and 17 landscape.',
+        visual: 'White space, reports, charts, product UI, operational frameworks, webinars, numeric proof, and role-specific messages. Many assets look like useful editorial material before they look like ads.',
+        video: 'Screen demonstrations, talking heads, slide sequences, and case-study structures dominate. The message is often legible without sound.',
+        landing: 'A relatively high 28% of records route to a homepage. Stronger direct-response examples use a specific demo, guide, report, or offer page.',
+        caveat: 'The dataset strongly favors static creative, while LinkedIn also recommends testing video. Format frequency here is not proof of an ideal mix.'
+      },
+      {
+        id: 'facebook', label: 'Facebook', subtitle: 'Direct response across mixed production styles', dominant: 85, dominantLabel: '85% image', root: 8, tracking: 93,
+        format: '85 images, 12 social videos, and 3 carousels. The aspect mix is 54 landscape, 35 portrait, and 11 square-ish.',
+        visual: 'Product offers, insurance, healthcare, software trials, retail goods, price claims, and feed-native screenshots. Production ranges from polished commercial work to creator-style captures.',
+        video: 'Both horizontal commercials and vertical UGC appear. A clear product, benefit, or offer generally arrives early.',
+        landing: 'Only 8% route to a homepage. Facebook shows one of the strongest tendencies toward a specific product, offer, quote, or signup destination.',
+        caveat: 'A high share of tracked, specific URLs indicates campaign routing. It does not prove reliable attribution or conversion quality.'
+      },
+      {
+        id: 'instagram', label: 'Instagram', subtitle: 'Portrait product merchandising', dominant: 96, dominantLabel: '96% image', root: 39, tracking: 36,
+        format: '96 images and 4 social videos. The sample is 96% portrait and 4% square-ish.',
+        visual: 'Packshots, clothing, vehicles, accessories, beauty, and clean catalog-like product presentation. Price and offer blocks are common. Product visibility is immediate.',
+        video: 'Only four paid videos appear, including app demonstrations, lifestyle, and recruitment content. The sample is not representative of the full Reels environment.',
+        landing: 'Instagram has the highest homepage rate at 39% and the lowest share of URLs with query strings at 36%.',
+        caveat: 'This static-heavy result differs from current Meta emphasis on creator and video formats. Advertiser concentration and placement mix likely shape the sample.'
+      },
+      {
+        id: 'tiktok', label: 'TikTok', subtitle: 'Creator-native vertical video', dominant: 100, dominantLabel: '100% video', root: 32, tracking: 83,
+        format: '100 social videos. 99 are portrait and one is landscape.',
+        visual: 'Faces, phone-camera framing, real environments, demonstrations, reviews, reactions, stories, and on-screen text. Paid creative often looks like a normal post.',
+        video: 'The first frame usually introduces a person, result, product, or problem. Branding and commercial intent become clearer through the middle and end of the video.',
+        landing: '32% route to a homepage. The rest include product, campaign, marketplace, movie, and service destinations with substantial query-string use.',
+        caveat: 'Creator style is not evidence of organic distribution. Spark Ads and disclosed partnerships deliberately blur the visual boundary.'
+      },
+      {
+        id: 'x', label: 'X', subtitle: 'One benefit, one card, one exit', dominant: 96, dominantLabel: '96% image', root: 14, tracking: 80,
+        format: '96 images and 4 carousels. 88 are square-ish and 12 are landscape.',
+        visual: 'A single benefit headline, product context, strong contrast, and direct action. Repeated modular templates are unusually visible.',
+        video: 'Only four video assets appear. They include gaming, product information, and direct-response offers.',
+        landing: '14% route to a homepage. Many destinations use tracked product or profile paths.',
+        caveat: 'Starlink accounts for 33 of 100 records. Part of the apparent platform pattern is one advertiser\'s operating system.'
+      },
+      {
+        id: 'pinterest', label: 'Pinterest', subtitle: 'Shoppable inspiration in portrait format', dominant: 70, dominantLabel: '70% image', root: 7, tracking: 82,
+        format: '70 images, 16 social videos, and 14 carousels. 98 are portrait and 2 are square-ish.',
+        visual: 'Food, recipes, packages, product use, travel, household tasks, seasonal moments, and readable overlay copy. The product usually stays central.',
+        video: 'Motion often extends a static pin: product sequence, simple demonstration, recipe progression, or story stack. Some horizontal commercials are repurposed.',
+        landing: 'Only 7% route to a homepage, the lowest rate in the dataset. Specific product, commerce, and content destinations are common.',
+        caveat: 'The public Pinterest comparison has limited post-level metrics, so visual similarity cannot be converted into a performance claim.'
+      },
+      {
+        id: 'youtube-desktop', label: 'YouTube Desktop', subtitle: 'Short-form 16:9 commercial storytelling', dominant: 100, dominantLabel: '100% video', root: 13, tracking: 83,
+        format: '100 videos. 99 are landscape and one is portrait. Median observed duration is 15 seconds.',
+        visual: 'Cinematic scenes, recognizable characters, service demonstrations, emotional situations, product close-ups, and clear brand end cards.',
+        video: 'The set concentrates in the 7 to 30 second range. Body frames often carry little text. The offer and CTA become explicit in end cards.',
+        landing: '13% route to a homepage. Quote, product, subscription, movie, and campaign pages are common.',
+        caveat: 'This inventory view does not represent Shorts. The aspect-ratio finding should not be generalized to all YouTube placements.'
+      },
+      {
+        id: 'youtube-mobile', label: 'YouTube Mobile', subtitle: 'Mobile inventory, mostly desktop-shaped assets', dominant: 100, dominantLabel: '100% video', root: 19, tracking: 83,
+        format: '100 videos and all are landscape. Median observed duration is 15 seconds.',
+        visual: 'The same commercial grammar appears on mobile: narrative scenes, offers, demonstrations, food, retail, insurance, entertainment, and brand end cards.',
+        video: '59 exact creative asset URLs overlap with the desktop view. This suggests reuse across device inventory more than device-native redesign.',
+        landing: '19% route to a homepage. The remaining destinations frequently support direct response or product consideration.',
+        caveat: 'Current Google guidance encourages a mix of 16:9, 1:1, and 9:16. This sample is narrower, likely because of the selected inventory and ranking method.'
+      }
+    ];
+
+    const comparisons = [
+      {
+        id: 'youtube', label: 'YouTube', paidHeading: 'Paid YouTube', publicHeading: 'Public YouTube trends',
+        paid: ['Cinematic 16:9 scenes and short commercial narratives', 'Limited text during the body of the video', 'Offer, brand, and CTA become explicit in the end card', 'Median duration is 15 seconds in both device views'],
+        public: ['Thumbnail and title work as one attention package', 'Large faces, reactions, arrows, numbers, and high contrast', 'Gaming, trailers, music, news, and entertainment dominate', 'Curiosity and cultural relevance are more visible than an external CTA'],
+        conclusion: 'Paid video optimizes the path to a commercial action. Public video first has to win the click and continued attention.'
+      },
+      {
+        id: 'tiktok', label: 'TikTok', paidHeading: 'Paid TikTok', publicHeading: 'Public TikTok sample',
+        paid: ['Creator-led vertical framing and real environments', 'Product demonstrations, reviews, and reaction structures', 'Commercial intent becomes clearer through brand, offer, and destination', 'All 100 paid records are social video'],
+        public: ['Visually similar creator voice, faces, stories, recipes, and demonstrations', '24 of 100 records carry a commercial-disclosure flag', 'Several unflagged captions still contain #ad, partner, or brand language', 'The sample is not an unpaid-only control group'],
+        conclusion: 'Visual style cannot classify distribution. Disclosure, authorization, destination, and measurement are the better signals.'
+      },
+      {
+        id: 'pinterest', label: 'Pinterest', paidHeading: 'Paid Pinterest', publicHeading: 'Public Pinterest trends',
+        paid: ['Product, package, benefit, recipe, and use context', 'Portrait layouts with readable overlays', 'Clearer shopping or action intent', 'Only 7% route to a homepage'],
+        public: ['Mood, identity, season, fashion, décor, weddings, and future planning', 'More aesthetic collection behavior than direct selling', 'Limited post-level performance evidence', '38 records did not expose a public preview image'],
+        conclusion: 'Paid pins answer what to buy or do. Public trends more often express what to imagine, save, or become.'
+      }
+    ];
+
+    const examples = [
+      {
+        id: 'organic-youtube-2', sourceType: 'Public trend', platform: 'YouTube', rank: 2, advertiser: 'Marvel Entertainment',
+        title: 'Avengers: Doomsday | In Theaters December 18', thumbnail: 'https://i.ytimg.com/vi/UfNu7pcR0e8/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=UfNu7pcR0e8', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/UfNu7pcR0e8/avengers-doomsday-in-theaters-december-18/', reach: '11,972,852 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'Genre and event recognition', cta: 'Watch / platform continuation', observation: 'The title and thumbnail identify a major entertainment event immediately. Familiar characters and release timing do the attention work before any commercial explanation.'
+      },
+      {
+        id: 'organic-youtube-9', sourceType: 'Public trend', platform: 'YouTube', rank: 9, advertiser: 'CaseOh',
+        title: 'There Was A Creature In This Cave…', thumbnail: 'https://i.ytimg.com/vi/0g5oO9nRx8E/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=0g5oO9nRx8E', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/0g5oO9nRx8E/there-was-a-creature-in-this-cave/', reach: '400,966 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'Human reaction + curiosity gap', cta: 'Watch / platform continuation', observation: 'A reaction-led thumbnail and an unresolved threat create a question that can only be answered by opening the video.'
+      },
+      {
+        id: 'organic-youtube-11', sourceType: 'Public trend', platform: 'YouTube', rank: 11, advertiser: 'New Rockstars',
+        title: 'AVENGERS DOOMSDAY SPECIAL LOOK BREAKDOWN! Easter Eggs & Details You Missed!', thumbnail: 'https://i.ytimg.com/vi/JNSFV75NpaU/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=JNSFV75NpaU', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/JNSFV75NpaU/avengers-doomsday-special-look-breakdown-easter-eggs/', reach: '895,069 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'Annotation + missed-detail curiosity', cta: 'Watch / platform continuation', observation: 'Large thumbnail annotations and the promise of details the viewer missed turn explanation into a reveal.'
+      },
+      {
+        id: 'organic-youtube-32', sourceType: 'Public trend', platform: 'YouTube', rank: 32, advertiser: 'Wuthering Waves',
+        title: 'Wuthering Waves Lore Trailer | TRANSCENDO', thumbnail: 'https://i.ytimg.com/vi/LXyEJPjiMsU/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=LXyEJPjiMsU', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/LXyEJPjiMsU/wuthering-waves-lore-trailer-transcendo/', reach: '620,840 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'High contrast + trailer world-building', cta: 'Watch / platform continuation', observation: 'Cinematic contrast and a named lore event signal genre, mood, and importance without a direct external offer.'
+      },
+      {
+        id: 'organic-youtube-43', sourceType: 'Public trend', platform: 'YouTube', rank: 43, advertiser: 'Vampyro111',
+        title: 'INSANE COMBOS FOR HIGH SCORE', thumbnail: 'https://i.ytimg.com/vi/o4ez3ddySS0/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=o4ez3ddySS0', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/o4ez3ddySS0/insane-combos-for-high-score/', reach: '1,458,933 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'Result-first gaming proof', cta: 'Watch / platform continuation', observation: 'The high score and the word “INSANE” frame the outcome before the method, making the viewer seek the play sequence.'
+      },
+      {
+        id: 'organic-youtube-61', sourceType: 'Public trend', platform: 'YouTube', rank: 61, advertiser: 'GinoMachino',
+        title: 'I Beat the Entirety of Skyrim WITHOUT taking Damage', thumbnail: 'https://i.ytimg.com/vi/hI97aOdBJKw/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=hI97aOdBJKw', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/hI97aOdBJKw/i-beat-the-entirety-of-skyrim-without-taking-damage/', reach: '232,742 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'Result before explanation', cta: 'Watch / platform continuation', observation: 'The achievement is stated first. The unanswered question is how the creator completed an extreme challenge.'
+      },
+      {
+        id: 'organic-youtube-74', sourceType: 'Public trend', platform: 'YouTube', rank: 74, advertiser: 'Fox News',
+        title: 'WATCH: Trump rallies Michigan voters ahead of midterms', thumbnail: 'https://i.ytimg.com/vi/CkM_CFtIDUs/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=CkM_CFtIDUs', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/CkM_CFtIDUs/watch-trump-rallies-michigan-voters-ahead-of-midterms/', reach: '192,073 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'News event and public figure', cta: 'Watch / platform continuation', observation: 'Topical relevance, a recognizable public figure, and the imperative “WATCH” create urgency without an external conversion path.'
+      },
+      {
+        id: 'organic-youtube-90', sourceType: 'Public trend', platform: 'YouTube', rank: 90, advertiser: 'CaylusBlox',
+        title: 'I Sold JUNK for $829,821,673 in Roblox..', thumbnail: 'https://i.ytimg.com/vi/xofwe4nRDzQ/hqdefault.jpg', asset: 'https://www.youtube.com/watch?v=xofwe4nRDzQ', format: 'Video',
+        source: 'https://chartslist.com/youtube/video/xofwe4nRDzQ/i-sold-junk-for-829-821-673-in-roblox/', reach: '184,806 public views', spend: 'Not applicable', period: 'US trending',
+        hook: 'Large number + result-first claim', cta: 'Watch / platform continuation', observation: 'A precise, implausibly large number compresses the outcome into one visual and creates a how-did-that-happen question.'
+      },
+      {
+        id: 'paid-linkedin-13', sourceType: 'Paid ad', platform: 'LinkedIn', rank: 13, advertiser: 'apptegy.com',
+        title: 'Apptegy | Powering 5,250+ School District Brands and Communications', thumbnail: 'https://ads.adclarity.com/creatives/72ac67c0059f3eb81e49a05f52349fa9.jpeg', asset: 'https://ads.adclarity.com/creatives/72ac67c0059f3eb81e49a05f52349fa9.jpeg', format: 'Image',
+        landing: 'http://www.apptegy.com/?utm_campaign=beea680d-3732-4381-b313-aa70bbfc7a30&utm_source=Influ2&utm_term=+333854', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2510011?widget=TOP_ADS', reach: '194.4M est. impressions', spend: '$1.2M est. spend', period: 'Mar 21 to Oct 07, 2026',
+        hook: 'Authority and numeric proof', cta: 'View demo / consider product', observation: 'The 5,250+ customer count supplies proof before the product detail. The destination supports a higher-consideration B2B evaluation.'
+      },
+      {
+        id: 'paid-linkedin-14', sourceType: 'Paid ad', platform: 'LinkedIn', rank: 14, advertiser: 'apptegy.com',
+        title: "Apptegy's Attendance Pro | Solve Chronic Absenteeism", thumbnail: 'https://ads.adclarity.com/creatives/0892c12d4bb35fbf693acd91f1f490f5.jpeg', asset: 'https://ads.adclarity.com/creatives/0892c12d4bb35fbf693acd91f1f490f5.jpeg', format: 'Image',
+        landing: 'http://www.apptegy.com/attendance-pro/', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2510011?widget=TOP_ADS', reach: '187.8M est. impressions', spend: '$1.2M est. spend', period: 'Feb 10 to Oct 09, 2026',
+        hook: 'Narrow problem-first promise', cta: 'Solve one defined problem', observation: 'The creative names one operational problem and one product built for it. This reduces ambiguity before the viewer reaches the page.'
+      },
+      {
+        id: 'paid-linkedin-30', sourceType: 'Paid ad', platform: 'LinkedIn', rank: 30, advertiser: 'databricks.com',
+        title: 'Understanding ETL by O’Reilly | Databricks', thumbnail: 'https://ads.adclarity.com/creatives/3bfd00a05d095b9d7b552ac86b110aec.jpeg', asset: 'https://ads.adclarity.com/creatives/3bfd00a05d095b9d7b552ac86b110aec.jpeg', format: 'Image',
+        landing: 'http://www.databricks.com/resources/ebook/understanding-etl', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2510011?widget=TOP_ADS', reach: '137.7M est. impressions', spend: '$862.8K est. spend', period: 'Mar 03, 2025 to Aug 14, 2026',
+        hook: 'Useful resource + borrowed authority', cta: 'Read / get guide', observation: 'A named technical subject and O’Reilly authority make the asset feel useful before it feels promotional.'
+      },
+      {
+        id: 'paid-facebook-6', sourceType: 'Paid ad', platform: 'Facebook', rank: 6, advertiser: 'libertymutual.com',
+        title: 'Insurance Quote | Liberty Mutual', thumbnail: 'https://ads.adclarity.com/capturer_creatives/d007c4b1ec533a197c650b9350cfd3d2.jpeg', asset: 'https://ads.adclarity.com/capturer_creatives/d007c4b1ec533a197c650b9350cfd3d2.jpeg', format: 'Image',
+        landing: 'http://www.libertymutual.com/multi-online-quotes?selectedOpt=auto', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2508680?widget=TOP_ADS', reach: '1.2B est. impressions', spend: '$6.5M est. spend', period: 'May 15 to Aug 17, 2026',
+        hook: 'Direct category promise', cta: 'Get quote', observation: 'The title and destination remove intermediate exploration. The next action is a multi-product insurance quote.'
+      },
+      {
+        id: 'paid-facebook-12', sourceType: 'Paid ad', platform: 'Facebook', rank: 12, advertiser: 'adobe.com',
+        title: 'Adobe Acrobat Pro free trial | Start a free trial', thumbnail: 'https://ads.adclarity.com/capturer_creatives/9d8366c10d74baf535e7886f403b410b.jpeg', asset: 'https://ads.adclarity.com/capturer_creatives/9d8366c10d74baf535e7886f403b410b.jpeg', format: 'Image',
+        landing: 'http://www.adobe.com/acrobat/free-trial-download.html', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2508680?widget=TOP_ADS', reach: '903.1M est. impressions', spend: '$5M est. spend', period: 'Mar 24 to Oct 25, 2026',
+        hook: 'Free-access offer', cta: 'Start free trial', observation: 'The product, cost reduction, and action appear in one line. The page continues directly into the trial path.'
+      },
+      {
+        id: 'paid-facebook-61', sourceType: 'Paid ad', platform: 'Facebook', rank: 61, advertiser: 'att.com',
+        title: 'Samsung Galaxy S26 Ultra: Price, Specs, Colors & Reviews', thumbnail: 'https://ads.adclarity.com/capturer_creatives/7dc91bc904ee2affca01b87ed16b2f40.jpeg', asset: 'https://ads.adclarity.com/capturer_creatives/7dc91bc904ee2affca01b87ed16b2f40.jpeg', format: 'Image',
+        landing: 'http://www.att.com/buy/phones/samsung-galaxy-s26-ultra.html', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2508680?widget=TOP_ADS', reach: '461.4M est. impressions', spend: '$2.6M est. spend', period: 'Mar 12 to Jun 05, 2026',
+        hook: 'Product and price evaluation', cta: 'Buy / shop product', observation: 'The destination is a product detail and purchase page. Price, specifications, colors, and reviews support a transaction decision.'
+      },
+      {
+        id: 'paid-facebook-42', sourceType: 'Paid ad', platform: 'Facebook', rank: 42, advertiser: 'elevenlabs.io',
+        title: 'Seedance 2.5: 30-second long-narrative video generation', thumbnail: 'https://ads.adclarity.com/capturer_creatives/13039fa78c6a8038508af14b14af72fe.jpeg', asset: 'https://ads.adclarity.com/capturer_creatives/13039fa78c6a8038508af14b14af72fe.jpeg', format: 'Image',
+        landing: 'http://elevenlabs.io/video/seedance-2-5', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2508680?widget=TOP_ADS', reach: '526.3M est. impressions', spend: '$2.9M est. spend', period: 'Aug 18 to Sep 19, 2026',
+        hook: 'Specific capability demonstration', cta: 'View product / learn more', observation: 'A named model and a concrete 30-second capability make the promise testable and narrow.'
+      },
+      {
+        id: 'paid-tiktok-5', sourceType: 'Paid ad', platform: 'TikTok', rank: 5, advertiser: 'booking.com',
+        title: 'Crown Suites Tropicana KLCC by Almohit, Kuala Lumpur (updated prices 2026)', thumbnail: 'https://ads.adclarity.com/creatives/e8166ce71dbd56cc212a99123ca471ef_8.jpeg', asset: 'https://ads.adclarity.com/creatives/e8166ce71dbd56cc212a99123ca471ef_8_video.mp4', format: 'Social video',
+        landing: 'http://www.booking.com/hotel/my/tropicana-the-residence-klcc-kuala-lumpur-crown-suites.html', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/29445035?widget=TOP_ADS', reach: '3.7B est. impressions', spend: '$38.4M est. spend', period: 'Oct 17, 2025 to Sep 23, 2026',
+        hook: 'Property reveal and price relevance', cta: 'Book / reserve', observation: 'The vertical video can show the property as proof, while the destination moves directly to one bookable listing.'
+      },
+      {
+        id: 'paid-tiktok-32', sourceType: 'Paid ad', platform: 'TikTok', rank: 32, advertiser: 'uber.com',
+        title: 'Create a free account | Uber for Business', thumbnail: 'https://ads.adclarity.com/creatives/9750dd0d7a9873eef726367d04c47f6f_8.jpeg', asset: 'https://ads.adclarity.com/creatives/9750dd0d7a9873eef726367d04c47f6f_8_video.mp4', format: 'Social video',
+        landing: 'http://www.uber.com/us/en/business/sign-up/', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/29445035?widget=TOP_ADS', reach: '1.5B est. impressions', spend: '$16.1M est. spend', period: 'Dec 12, 2025 to Oct 25, 2026',
+        hook: 'Workplace use case', cta: 'Sign up / create account', observation: 'The commercial path is explicit: a business use case leads to a free account creation page.'
+      },
+      {
+        id: 'paid-tiktok-54', sourceType: 'Paid ad', platform: 'TikTok', rank: 54, advertiser: 'depop.com',
+        title: 'Sell Clothes Online for Free - 0% Selling Fees | Depop', thumbnail: 'https://ads.adclarity.com/creatives/d66dd697f37830107843eac8d9b4ce80_8.jpeg', asset: 'https://ads.adclarity.com/creatives/d66dd697f37830107843eac8d9b4ce80_8_video.mp4', format: 'Social video',
+        landing: 'http://www.depop.com/campaign/sell/', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/29445035?widget=TOP_ADS', reach: '1B est. impressions', spend: '$10.7M est. spend', period: 'Jun 11 to Oct 07, 2026',
+        hook: 'Zero-fee economic result', cta: 'Sell / earn / list', observation: 'The offer states both the action and the reduced friction: sell clothing with zero selling fees.'
+      },
+      {
+        id: 'paid-pinterest-46', sourceType: 'Paid ad', platform: 'Pinterest', rank: 46, advertiser: 'walmart.com',
+        title: 'Walmart+ Membership | Start Your 30-Day Trial', thumbnail: 'https://ads.adclarity.com/capturer_creatives/2e90a58ec5817c1e5287b6a4e6f50d90.jpeg', asset: 'https://ads.adclarity.com/capturer_creatives/2e90a58ec5817c1e5287b6a4e6f50d90.jpeg', format: 'Image',
+        landing: 'http://www.walmart.com/plus', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2559298?widget=TOP_ADS', reach: '147.6M est. impressions', spend: '$559.6K est. spend', period: 'Apr 13 to Jun 30, 2026',
+        hook: 'Time-bounded trial offer', cta: 'Start trial', observation: 'The membership and 30-day trial are combined into one offer-first path with a specific next step.'
+      },
+      {
+        id: 'paid-pinterest-7', sourceType: 'Paid ad', platform: 'Pinterest', rank: 7, advertiser: "mcdonald's", 
+        title: "McDonald's App: Deals, Rewards, Order Pickup & Delivery", thumbnail: 'https://ads.adclarity.com/capturer_creatives/cd335e2cc0f3b9fc19d899fcc6ccde31.jpeg', asset: 'https://ads.adclarity.com/capturer_creatives/cd335e2cc0f3b9fc19d899fcc6ccde31.jpeg', format: 'Image',
+        landing: 'http://www.mcdonalds.com/us/en-us/download-app.html', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2559298?widget=TOP_ADS', reach: '362.2M est. impressions', spend: '$1.4M est. spend', period: 'May 11 to Sep 09, 2026',
+        hook: 'Benefit stack', cta: 'Download app', observation: 'Deals, rewards, pickup, and delivery are stacked as reasons to complete one action: download the app.'
+      },
+      {
+        id: 'paid-youtube-desktop-54', sourceType: 'Paid ad', platform: 'YouTube Desktop', rank: 54, advertiser: 'dell.com',
+        title: 'Dell XPS 13 Laptop Student Discount | Dell USA', thumbnail: 'https://ads.adclarity.com/creatives/8cdc8fc7c1b7f9b989349f41ed215d77_6.jpeg', asset: 'https://ads.adclarity.com/creatives/8cdc8fc7c1b7f9b989349f41ed215d77_6_video.mp4', format: 'Video',
+        landing: 'http://www.dell.com/en-us/lp/xps-13-student-discount', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/204389?widget=TOP_ADS&channel=VIDEO-DESKTOP', reach: '253.9M est. impressions', spend: '$1.4M est. spend', period: 'Jun 20 to Aug 01, 2026',
+        hook: 'Audience-specific discount', cta: 'Shop discounted product', observation: 'The product, audience, and incentive are bound together: an XPS 13 discount specifically for students.'
+      },
+      {
+        id: 'paid-youtube-desktop-58', sourceType: 'Paid ad', platform: 'YouTube Desktop', rank: 58, advertiser: 'sandals.com',
+        title: 'Sandals® Summer Sale: Up to $1500 Off + $750 Air Credit', thumbnail: 'https://ads.adclarity.com/creatives/4cfcd9364418abd580a33b6d3204a51c_6.jpeg', asset: 'https://ads.adclarity.com/creatives/4cfcd9364418abd580a33b6d3204a51c_6_video.mp4', format: 'Video',
+        landing: 'http://www.sandals.com/sale/', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/204389?widget=TOP_ADS&channel=VIDEO-DESKTOP', reach: '243.1M est. impressions', spend: '$1.3M est. spend', period: 'May 06 to Oct 25, 2026',
+        hook: 'Price and credit first', cta: 'Book sale offer', observation: 'Two numeric incentives lead the message before the resort detail, making the offer itself the hook.'
+      },
+      {
+        id: 'paid-x-64', sourceType: 'Paid ad', platform: 'X', rank: 64, advertiser: 'nyrabets.com',
+        title: 'NYRA Bets - New Member Sign Up Bonus', thumbnail: 'https://ads.adclarity.com/creatives/4ab01f05e9e324aa46a3ae12ea692f6c.jpeg', asset: 'https://ads.adclarity.com/creatives/4ab01f05e9e324aa46a3ae12ea692f6c.jpeg', format: 'Image',
+        landing: 'http://racing.nyrabets.com/sign-up-bonus', source: 'https://www.semrush.com/app/adclarity-advertising-intelligence/ad-intelligence/publisher/2792873?widget=TOP_ADS', reach: '250.8M est. impressions', spend: '$413.5K est. spend', period: 'Jul 03 to Sep 03, 2026',
+        hook: 'New-member bonus', cta: 'Register / sign up', observation: 'Membership status and incentive are explicit. The destination is a registration page rather than a broad homepage.'
+      }
+    ];
+
+    const hookClusters = [
+      { title: 'Human face and exaggerated reaction', definition: 'Emotion becomes a fast visual shorthand for surprise, danger, pleasure, or disbelief.', cues: 'Large face, direct gaze, open mouth, expressive gesture, close crop.', examples: ['organic-youtube-9', 'organic-youtube-43'] },
+      { title: 'High color and contrast', definition: 'Saturation, light-dark separation, and a clear silhouette make the focal subject readable at thumbnail size.', cues: 'Bright subject, dark background, complementary colors, cinematic lighting.', examples: ['organic-youtube-2', 'organic-youtube-32'] },
+      { title: 'Large text, arrows, circles, or numbers', definition: 'Annotations compress the promise and direct the eye to the claimed proof.', cues: 'Few large words, one highlighted object, precise number, visual pointer.', examples: ['organic-youtube-11', 'organic-youtube-90'] },
+      { title: 'Result before explanation', definition: 'The outcome appears first, while the method is withheld to create a reason to continue.', cues: 'Achievement, score, transformation, money, before-after, completed challenge.', examples: ['organic-youtube-61', 'organic-youtube-90', 'organic-youtube-43'] },
+      { title: 'Curiosity gap or reveal', definition: 'The title or first frame makes a specific information gap that the content promises to close.', cues: 'Unresolved threat, hidden detail, “you missed,” secret, unexpected comparison.', examples: ['organic-youtube-9', 'organic-youtube-11'] },
+      { title: 'Demonstration and proof in use', definition: 'The product, property, workflow, or result is shown rather than introduced abstractly.', cues: 'Screen or product demo, room reveal, use sequence, capability example.', examples: ['paid-tiktok-5', 'paid-facebook-42'] },
+      { title: 'Authority and proof', definition: 'A known source, customer count, expert, or specific metric reduces uncertainty early.', cues: 'Customer number, publisher name, research asset, recognizable institution.', examples: ['paid-linkedin-13', 'paid-linkedin-30'] },
+      { title: 'Problem-first', definition: 'One narrow pain point is named before the broader brand or product story.', cues: 'Role-specific problem, direct question, visible friction, one defined outcome.', examples: ['paid-linkedin-14', 'organic-youtube-9'] },
+      { title: 'Offer-first', definition: 'Price, discount, trial, fee reduction, or credit is the reason to pay attention.', cues: 'Dollar value, percent off, free period, zero fee, bonus or credit.', examples: ['paid-youtube-desktop-58', 'paid-pinterest-46', 'paid-tiktok-54'] },
+      { title: 'Genre, event, or cultural moment', definition: 'Recognition of a game, trailer, news event, public figure, or entertainment property provides the hook.', cues: 'Franchise character, breaking event, tournament, trailer language, release date.', examples: ['organic-youtube-2', 'organic-youtube-32', 'organic-youtube-74', 'organic-youtube-43'] }
+    ];
+
+    const ctaClusters = [
+      { title: 'Buy, shop, or order', definition: 'The next step is a product transaction or product-page evaluation.', cues: 'Buy, shop, order, see price, choose model, purchase.', examples: ['paid-facebook-61', 'paid-youtube-desktop-54'] },
+      { title: 'Get a quote or price', definition: 'The destination collects enough information to return a personalized price or rate.', cues: 'Get quote, check rate, calculate price, personalized estimate.', examples: ['paid-facebook-6'] },
+      { title: 'Start a trial', definition: 'The person receives time-limited or free access before a paid commitment.', cues: 'Start free, 30-day trial, try now, first month free.', examples: ['paid-facebook-12', 'paid-pinterest-46'] },
+      { title: 'Book, reserve, register, or sign up', definition: 'The action secures a place, account, membership, or reservation.', cues: 'Book now, reserve, create account, join, register, apply.', examples: ['paid-tiktok-5', 'paid-tiktok-32', 'paid-x-64'] },
+      { title: 'View demo, learn more, or consider', definition: 'The CTA advances a higher-consideration decision without demanding an immediate purchase.', cues: 'Book demo, view product, learn more, contact sales, see how it works.', examples: ['paid-linkedin-13', 'paid-facebook-42'] },
+      { title: 'Sell, earn, or list', definition: 'The platform recruits supply, sellers, hosts, partners, or affiliates.', cues: 'Sell now, list free, earn, become a partner, refer.', examples: ['paid-tiktok-54'] },
+      { title: 'Download, read, or get a resource', definition: 'The conversion is access to an app, guide, report, or other utility.', cues: 'Download app, get guide, read report, access ebook.', examples: ['paid-linkedin-30', 'paid-pinterest-7'] },
+      { title: 'Solve one narrow problem', definition: 'The action and destination stay tightly bound to one defined job or pain point.', cues: 'Fix, reduce, prevent, automate, solve, improve one task.', examples: ['paid-linkedin-14'] },
+      { title: 'Watch or continue on platform', definition: 'Public content often asks only for the next view, not an external conversion.', cues: 'Watch, continue, subscribe, follow, visit channel, no external CTA.', examples: ['organic-youtube-2', 'organic-youtube-61', 'organic-youtube-74'] }
+    ];
+
+    const landingRates = [
+      ['LinkedIn', 28], ['Facebook', 8], ['Instagram', 39], ['TikTok', 32], ['X', 14], ['Pinterest', 7], ['YouTube Desktop', 13], ['YouTube Mobile', 19]
+    ];
+
+    const archetypes = [
+      { id: 'conversion', label: 'Single-action conversion', description: 'A direct promise in the first viewport, one primary CTA, minimal navigation, a short form, and reassurance after the action.', examples: 'Examples: Liberty Mutual, GEICO, and Depop Sell.', fit: 'Best fit: quote, sell, join, trial, or other high-intent actions.' },
+      { id: 'offer', label: 'Offer-first subscription', description: 'Price or trial in the hero, a short benefit stack, numeric proof, repeated CTA, then plan details, FAQ, and disclosure.', examples: 'Example: Walmart+.', fit: 'Best fit: subscriptions, memberships, and retail services.' },
+      { id: 'reward', label: 'Reward or affiliate', description: 'Numeric earning claims, multiple benefit figures, risk reduction, a simple process, and repeated CTAs that all lead to the same action.', examples: 'Example: Temu Affiliate.', fit: 'Best fit: recruitment, referrals, and incentive-led acquisition.' },
+      { id: 'b2b', label: 'B2B proof-led', description: 'A named audience, specific problem, demo CTA, customer count or logos, case studies, and enough detail to reduce decision risk.', examples: 'Example: Apptegy.', fit: 'Best fit: complex products with multiple stakeholders.' },
+      { id: 'hub', label: 'Homepage or content hub', description: 'Broad authority, multiple topics, and several navigation paths. Useful for exploration but weaker for a single direct-response promise.', examples: 'Examples: Ducker Carlisle and the current Snowflake homepage.', fit: 'Best fit: awareness or broad consideration, not a narrow conversion ask.' }
+    ];
+
+    const evidence = [
+      { status: 'aligned', title: 'TikTok is vertical, creator-led, and fast to the proposition.', detail: 'Official guidance recommends 9:16, sound, creator or employee presence, DIY execution, an early hook, captions, and a clear CTA. This closely matches the paid TikTok sample.', source: 'TikTok creative best practices', url: 'https://ads.tiktok.com/resources/help/article/creative-best-practices' },
+      { status: 'aligned', title: 'Paid and organic visual styles overlap.', detail: 'Spark Ads explicitly use organic posts as paid creative. Meta Partnership Ads and LinkedIn Thought Leader Ads create the same structural overlap.', source: 'TikTok Spark Ads', url: 'https://ads.tiktok.com/resources/help/article/spark-ads' },
+      { status: 'aligned', title: 'Pinterest centers products in portrait use contexts.', detail: 'Pinterest recommends 2:3 creative, a visible product, real use, clear branding, and readable story stacks. These cues recur throughout the paid Pinterest set.', source: 'Pinterest creative best practices', url: 'https://business.pinterest.com/en-gb/creative-best-practices/' },
+      { status: 'aligned', title: 'X favors one message and one exit point.', detail: 'X recommends one message, one clear CTA, mobile-readable design, and compact creative. This agrees with the sample’s square, modular benefit cards.', source: 'X creative best practices', url: 'https://business.x.com/en/advertising/creative-best-practices' },
+      { status: 'different', title: 'X video is underrepresented in this sample.', detail: 'Only four video records appear, while current X guidance recommends testing short video. The difference may reflect advertiser concentration or sampled inventory, not a video-performance result.', source: 'X creative best practices', url: 'https://business.x.com/en/advertising/creative-best-practices' },
+      { status: 'different', title: 'Instagram is much more static than current Meta direction.', detail: 'This sample contains 96 images and four videos. Meta’s current product direction places substantial emphasis on creator and partnership advertising.', source: 'Meta creator and partnership advertising', url: 'https://about.fb.com/news/2024/02/creator-marketplace-for-brands-and-creators-to-collaborate-on-instagram/' },
+      { status: 'different', title: 'YouTube Mobile remains entirely 16:9.', detail: 'The sample appears to represent mobile in-stream inventory. Current Google guidance encourages an asset mix that also includes 1:1 and 9:16.', source: 'Google ABCDs and asset guidance', url: 'https://support.google.com/google-ads/answer/14783551?hl=en-AU' },
+      { status: 'aligned', title: 'YouTube paid creative uses early attention, branding, human connection, and direct action.', detail: 'The observed short commercials and end cards align with Google’s ABCD framework, even though the sample’s aspect-ratio mix is narrower.', source: 'Google ABCDs of effective video ads', url: 'https://support.google.com/google-ads/answer/14783551?hl=en-AU' },
+      { status: 'aligned', title: 'Conversion pages prioritize message continuity.', detail: 'Google recommends matching the ad promise and CTA, keeping navigation simple, supporting mobile use, and placing important information above the fold.', source: 'Google landing-page guidance', url: 'https://support.google.com/google-ads/answer/6238826?hl=en-AU' },
+      { status: 'aligned', title: 'Proof and trust cues recur on higher-consideration pages.', detail: 'Independent 2026 research ranks reviews, guarantees, detailed descriptions, and reliability among the strongest perceived conversion factors. This agrees with proof-led pages in the sample.', source: 'Ziakis et al., Conversion Rate Optimization in e-Business', url: 'https://link.springer.com/chapter/10.1007/978-3-032-12968-0_37' },
+      { status: 'limit', title: 'Shorter pages are not a universal rule.', detail: 'Lead-capture research supports focus and lower content volume in some contexts. Complex B2B decisions may still require proof, case studies, and risk reduction.', source: 'Dvir and Gafni', url: 'https://arxiv.org/abs/1806.00923' },
+      { status: 'limit', title: 'Exact ad-to-page message repetition is not always optimal.', detail: 'A field experiment found that ad and landing-page content can act as complements or substitutes depending on prior market knowledge. Continuity matters, but simple repetition is not a universal rule.', source: 'Kim and Kalyanam, Stanford field experiment', url: 'https://gsbpreserve.stanford.edu/view/40737/are-display-ad-content-and-landing-page-ad-content-complements-or-substitutes-a-field-experiment' },
+      { status: 'aligned', title: 'Native-looking paid posts can reduce visual separation from organic content.', detail: 'An eye-tracking study found that sponsored disclosure and CTA elements can trigger avoidance in a simulated feed. This supports the observed use of creator-native execution, but does not prove conversion lift.', source: 'Native advertising disclosure and attention study', url: 'https://pubmed.ncbi.nlm.nih.gov/40880805/' }
+    ];
+
+    const platformControls = document.getElementById('platform-controls');
+    const fields = {
+      title: document.getElementById('platform-title'), subtitle: document.getElementById('platform-subtitle'),
+      formatValue: document.getElementById('format-value'), rootValue: document.getElementById('root-value'), trackingValue: document.getElementById('tracking-value'),
+      formatBar: document.getElementById('format-bar'), rootBar: document.getElementById('root-bar'), trackingBar: document.getElementById('tracking-bar'),
+      format: document.getElementById('platform-format'), visual: document.getElementById('platform-visual'), video: document.getElementById('platform-video'),
+      landing: document.getElementById('platform-landing'), caveat: document.getElementById('platform-caveat')
+    };
+
+    function selectPlatform(id) {
+      const item = platforms.find(platform => platform.id === id) || platforms[0];
+      platformControls.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.id === item.id)));
+      fields.title.textContent = item.label;
+      fields.subtitle.textContent = item.subtitle;
+      fields.formatValue.textContent = item.dominantLabel;
+      fields.rootValue.textContent = item.root + '%';
+      fields.trackingValue.textContent = item.tracking + '%';
+      fields.formatBar.style.width = item.dominant + '%';
+      fields.rootBar.style.width = item.root + '%';
+      fields.trackingBar.style.width = item.tracking + '%';
+      fields.format.textContent = item.format;
+      fields.visual.textContent = item.visual;
+      fields.video.textContent = item.video;
+      fields.landing.textContent = item.landing;
+      fields.caveat.textContent = item.caveat;
+    }
+
+    platforms.forEach((platform, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'control-button';
+      button.dataset.id = platform.id;
+      button.textContent = platform.label;
+      button.setAttribute('aria-pressed', String(index === 0));
+      button.addEventListener('click', () => selectPlatform(platform.id));
+      platformControls.appendChild(button);
+    });
+    selectPlatform('linkedin');
+
+    const comparisonControls = document.getElementById('comparison-controls');
+    const paidHeading = document.getElementById('paid-heading');
+    const publicHeading = document.getElementById('public-heading');
+    const paidList = document.getElementById('paid-list');
+    const publicList = document.getElementById('public-list');
+    const comparisonConclusion = document.getElementById('comparison-conclusion');
+
+    function renderList(node, items) {
+      node.replaceChildren(...items.map(text => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        return li;
+      }));
+    }
+    function selectComparison(id) {
+      const item = comparisons.find(comparison => comparison.id === id) || comparisons[0];
+      comparisonControls.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.id === item.id)));
+      paidHeading.textContent = item.paidHeading;
+      publicHeading.textContent = item.publicHeading;
+      renderList(paidList, item.paid);
+      renderList(publicList, item.public);
+      comparisonConclusion.textContent = item.conclusion;
+    }
+    comparisons.forEach((comparison, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'control-button accent';
+      button.dataset.id = comparison.id;
+      button.textContent = comparison.label;
+      button.setAttribute('aria-pressed', String(index === 0));
+      button.addEventListener('click', () => selectComparison(comparison.id));
+      comparisonControls.appendChild(button);
+    });
+    selectComparison('youtube');
+
+    const analysisTab = document.getElementById('analysis-tab');
+    const researchTab = document.getElementById('research-tab');
+    function selectReportView(view, scrollToTop = false) {
+      document.querySelectorAll('[data-report-view]').forEach(section => {
+        section.hidden = section.dataset.reportView !== view;
+      });
+      analysisTab.setAttribute('aria-pressed', String(view === 'analysis'));
+      researchTab.setAttribute('aria-pressed', String(view === 'research'));
+      if (scrollToTop) document.querySelector('.view-tabs-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    analysisTab.addEventListener('click', () => selectReportView('analysis', true));
+    researchTab.addEventListener('click', () => selectReportView('research', true));
+    document.querySelectorAll('.site-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target?.dataset.reportView) selectReportView(target.dataset.reportView);
+      });
+    });
+
+    const exampleModal = document.getElementById('example-modal');
+    const modalVideo = document.getElementById('modal-video');
+    const modalImage = document.getElementById('modal-image');
+    let lastModalTrigger = null;
+
+    function setModalLink(id, url, label) {
+      const link = document.getElementById(id);
+      link.hidden = !url;
+      if (url) {
+        link.href = url;
+        link.textContent = label;
+      } else {
+        link.removeAttribute('href');
+      }
+    }
+
+    function closeExampleModal() {
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+      modalVideo.load();
+      exampleModal.close();
+      lastModalTrigger?.focus();
+    }
+
+    function openExample(id, trigger) {
+      const item = examples.find(example => example.id === id);
+      if (!item) return;
+      lastModalTrigger = trigger;
+      document.getElementById('modal-rank').textContent = `#${item.rank} ${item.sourceType}`;
+      document.getElementById('modal-format').textContent = item.format;
+      document.getElementById('modal-advertiser').textContent = item.advertiser;
+      document.getElementById('modal-platform').textContent = item.platform;
+      document.getElementById('modal-title').textContent = item.title;
+      document.getElementById('modal-hook').textContent = item.hook;
+      document.getElementById('modal-cta').textContent = item.cta;
+      document.getElementById('modal-observation').textContent = item.observation;
+      document.getElementById('modal-reach-label').textContent = item.sourceType === 'Public trend' ? 'Public views' : 'Estimated impressions';
+      document.getElementById('modal-reach').textContent = item.reach;
+      document.getElementById('modal-spend').textContent = item.spend;
+      document.getElementById('modal-period').textContent = item.period;
+
+      const directVideo = item.asset && item.asset.toLowerCase().includes('.mp4');
+      modalVideo.hidden = !directVideo;
+      modalImage.hidden = directVideo;
+      if (directVideo) {
+        modalVideo.poster = item.thumbnail;
+        modalVideo.src = item.asset;
+      } else {
+        modalImage.src = item.thumbnail || item.asset;
+        modalImage.alt = `Creative preview for ${item.title}`;
+      }
+
+      setModalLink('modal-landing', item.landing, 'Open landing page');
+      setModalLink('modal-creative', item.asset, item.sourceType === 'Public trend' ? 'Open public post' : 'Open creative');
+      setModalLink('modal-source', item.source, 'Open source');
+      exampleModal.showModal();
+    }
+
+    function renderClusterGroup(nodeId, clusters, type) {
+      const node = document.getElementById(nodeId);
+      clusters.forEach((cluster, index) => {
+        const article = document.createElement('article');
+        article.className = `cluster-card ${type}`;
+        const titleRow = document.createElement('div');
+        titleRow.className = 'cluster-title-row';
+        const number = document.createElement('span');
+        number.className = 'cluster-number';
+        number.textContent = String(index + 1).padStart(2, '0');
+        const title = document.createElement('h4');
+        title.textContent = cluster.title;
+        titleRow.append(number, title);
+
+        const definition = document.createElement('p');
+        definition.textContent = cluster.definition;
+        const cues = document.createElement('p');
+        cues.className = 'cue-line';
+        const cueLabel = document.createElement('strong');
+        cueLabel.textContent = 'Common cues: ';
+        cues.append(cueLabel, document.createTextNode(cluster.cues));
+
+        const links = document.createElement('div');
+        links.className = 'example-links';
+        links.setAttribute('aria-label', `Examples for ${cluster.title}`);
+        cluster.examples.forEach(exampleId => {
+          const item = examples.find(example => example.id === exampleId);
+          if (!item) return;
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'example-link';
+          button.textContent = `${item.platform} #${item.rank}: ${item.advertiser}`;
+          button.addEventListener('click', () => openExample(item.id, button));
+          links.appendChild(button);
+        });
+        article.append(titleRow, definition, cues, links);
+        node.appendChild(article);
+      });
+    }
+
+    renderClusterGroup('hook-cluster-grid', hookClusters, 'hook');
+    renderClusterGroup('cta-cluster-grid', ctaClusters, 'cta');
+    document.getElementById('modal-close').addEventListener('click', closeExampleModal);
+    exampleModal.addEventListener('click', event => {
+      if (event.target === exampleModal) closeExampleModal();
+    });
+    exampleModal.addEventListener('close', () => {
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+    });
+
+    const landingBars = document.getElementById('landing-bars');
+    landingRates.forEach(([label, value]) => {
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML = `<span class="bar-label">${label}</span><div class="bar-track" role="img" aria-label="${label}: ${value}% homepage destinations"><div class="bar-mark" style="width:${value}%"></div></div><span class="bar-value">${value}%</span>`;
+      landingBars.appendChild(row);
+    });
+
+    const archetypeControls = document.getElementById('archetype-controls');
+    const archetypeDetail = document.getElementById('archetype-detail');
+    function selectArchetype(id) {
+      const item = archetypes.find(archetype => archetype.id === id) || archetypes[0];
+      archetypeControls.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.id === item.id)));
+      archetypeDetail.innerHTML = `<h3>${item.label}</h3><p>${item.description}</p><p><strong>${item.examples}</strong></p><p>${item.fit}</p>`;
+    }
+    archetypes.forEach((archetype, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'archetype-button';
+      button.dataset.id = archetype.id;
+      button.textContent = archetype.label;
+      button.setAttribute('aria-pressed', String(index === 0));
+      button.addEventListener('click', () => selectArchetype(archetype.id));
+      archetypeControls.appendChild(button);
+    });
+    selectArchetype('conversion');
+
+    const evidenceControls = document.getElementById('evidence-controls');
+    const evidenceList = document.getElementById('evidence-list');
+    const filterLabels = { all: 'All findings', aligned: 'Aligned', different: 'Different from guidance', limit: 'Evidence limit' };
+    evidence.forEach(item => {
+      const article = document.createElement('article');
+      article.className = 'evidence-item';
+      article.dataset.status = item.status;
+      const statusLabel = item.status === 'different' ? 'Different from guidance' : item.status === 'limit' ? 'Evidence limit' : 'Aligned';
+      article.innerHTML = `<span class="status ${item.status}">${statusLabel}</span><h3>${item.title}</h3><p>${item.detail}<br><strong>Source:</strong> <a href="${item.url}" target="_blank" rel="noopener">${item.source}</a></p>`;
+      evidenceList.appendChild(article);
+    });
+    function filterEvidence(filter) {
+      evidenceControls.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === filter)));
+      evidenceList.querySelectorAll('.evidence-item').forEach(item => { item.hidden = filter !== 'all' && item.dataset.status !== filter; });
+    }
+    Object.entries(filterLabels).forEach(([filter, label], index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'control-button';
+      button.dataset.filter = filter;
+      button.textContent = label;
+      button.setAttribute('aria-pressed', String(index === 0));
+      button.addEventListener('click', () => filterEvidence(filter));
+      evidenceControls.appendChild(button);
+    });
+    filterEvidence('all');
+  </script>
+</body>
+</html>
