@@ -2,6 +2,7 @@
 (function (root) {
   'use strict';
   const C = typeof module !== 'undefined' && module.exports ? require('./core.js') : root.JMLCore;
+  const U=typeof module!=='undefined'&&module.exports?require('./workflow-ui.js'):root.JMLWorkflowUI;
   const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const ROUTES = {
     S:{name:'Designed static', field:'Layout and slide sequence', steps:['Set layout and visual references','Design and adapt each placement','Check slide order, copy and export']},
@@ -139,6 +140,26 @@
     if(task.gate)pr.checkpoints[id]={actor,at:task.at,note,briefRevision:p.briefRevision};
     C.event(p,task.gate?'Intermediate approval':'Production task complete',task.label+(note?' · '+note:''),actor);
   }
+  function completeRoutineTasks(p,ids,actor){
+    if(!Array.isArray(ids)||!ids.length)throw Error('Check at least one completed step.');
+    const selected=new Set(ids),ordered=[];
+    for(const task of p.production?.tasks||[]){
+      if(task.done)continue;
+      if(!selected.has(task.id))break;
+      if(task.gate)throw Error('Record the required sign-off separately before continuing.');
+      if(task.owner!==actor)throw Error('Only the assigned producer can complete this step.');
+      selected.delete(task.id);ordered.push(task.id);
+    }
+    if(selected.size)throw Error('Complete the earlier steps before saving later ones.');
+    for(const id of ordered)finishTask(p,id,actor);
+  }
+  function saveFoundation(state,brandId,data,actor){
+    const ops=account(state,brandId,true);
+    if(!data.business?.trim()||!data.audience?.trim()||!data.scope?.trim()||!data.priorities?.trim()||!data.finalApprover?.trim())throw Error('Add the offer, audience, goal, scope and client approver.');
+    const before=C.clone(ops.foundation),team=root.JMLGovernance?.eligiblePeople(state,brandId).filter(p=>!p.agencyAdmin).map(p=>p.name).join(', ');
+    ops.foundation={...before,...data,team:team||before.team||'',status:'Ready for client confirmation',actor,updatedAt:C.now()};
+    snapshot(ops,'foundation',ops.foundation,actor);record(ops,actor,'Client foundation saved','Ready for client confirmation');Object.assign(ops.events.at(-1),{before,after:C.clone(ops.foundation)});return ops.foundation;
+  }
   function dateToday(){return new Date().toLocaleDateString('sv-SE');}
   function boardLane(p) {
     const status=C.status(p);
@@ -179,10 +200,12 @@
     const tabs='<nav class="ops-tabs" aria-label="Account planning">'+sections.map(([key,label])=>'<button type="button" data-ops-action="plan-tab" data-ops-id="'+key+'" aria-pressed="'+(key===activePlanSection)+'">'+label+'</button>').join('')+'</nav>';
     let body;
     if(activePlanSection==='foundation'){
-      const f=ops.foundation;const brief=f.business?'<div class="ops-facts">'+[['Business & offers',f.business],['Audience',f.audience],['Service scope',f.scope],['90-day priorities',f.priorities],['Available media',f.media],['Brand book',f.brandBook],['Account access / outstanding inputs',f.access],['Responsible team',f.team],['Approval owner',f.finalApprover],['Community owner',f.communityOwner],['Weekly capacity',f.weeklyCapacity]].map(([name,value])=>'<div><small>'+esc(name)+'</small><p>'+human(value)+'</p></div>').join('')+'</div>':'<p>Capture the client’s scope, available media, delivery limits and named approvers.</p>';
-      body=card('Client foundation',f.updatedAt?'Last saved by '+f.actor+' · '+f.updatedAt.slice(0,10):'',brief,button(f.business?'Edit intake':'Set up intake','foundation','','primary'));
-      body+=card('Client confirmations','The named client confirms goals, scope and outstanding inputs against an exact intake version.',versionList(ops,'foundation'));
-      body+=card('Campaigns','',lines(ops.campaigns,'Add the campaign objective and delivery window for upcoming work.',v=>row(v.title,v.objective+' · '+v.start+' – '+v.end)),small('Add campaign','campaign'));
+      const f=ops.foundation,core=[['Offer',f.business],['Audience',f.audience],['Scope',f.scope],['Client approver',f.finalApprover]];
+      const facts=rows=>'<dl class="ops-facts full">'+rows.filter(([,v])=>v).map(([label,v])=>'<div><dt>'+esc(label)+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl>';
+      body=U.lead(f.business?'The account brief':'Start with the essentials',f.priorities||'Agree on the offer, audience, goal, scope and client approver.',button(f.business?'Edit foundation':'Set up foundation','foundation','','primary'))+
+        facts(core)+U.optional('Brand materials and delivery details',facts([['Brand references',f.brandBook],['Available media',f.media],['Access and missing inputs',f.access],['Team',f.team],['Community owner',f.communityOwner],['Weekly capacity',f.weeklyCapacity]]))+
+        card('Client confirmation','Approve the saved brief before strategy work.',versionList(ops,'foundation'))+
+        U.optional('Campaigns (optional)',lines(ops.campaigns,'Add a campaign when you need a separate objective and delivery window.',v=>row(v.title,v.objective+' · '+v.start+' – '+v.end))+small('Add campaign','campaign'));
     }else if(activePlanSection==='research'){
       body=options.watchlistsOnly?'':card('Research evidence','Keep observations and their source together.',lines(ops.sources.slice().reverse(),'No sources collected for this account.',s=>row(s.title,s.type+' · '+s.observed+' · '+s.observation,'<div class="actions">'+small('Inspect source','source-details',s.id)+small('Use as idea','source-idea',s.id)+'</div>')),button('Add evidence','source','','primary'));
       body+=card('Listening watchlists','Record coverage each time you review a source.',lines(ops.watchlists,'Create a watchlist for a competitor, brand or recurring audience question.',w=>row(w.title,w.reference+' · '+w.cadence,small('Record collection','collect',w.id))),small('Add watchlist','watchlist'));
@@ -205,25 +228,62 @@
       return '<section class="ops-lane"><header><h3>'+lane+'</h3><span>'+list.length+'</span></header>'+lines(list,'No items here.',p=>'<a class="ops-tile" href="'+esc(urlFor(p))+'"><small>'+esc(p.platform)+' · '+esc(p.format)+'</small><strong>'+esc(p.title)+'</strong><span>'+esc(p.production?.producer||p.brief.owner||'Unassigned')+' · '+esc(p.production?.draftDue||p.date||'Undated')+'</span>'+(p.production?'<small>'+esc(ROUTES[p.production.route]?.name)+' · '+p.production.tasks.filter(t=>t.done).length+'/'+p.production.tasks.length+' tasks</small>':'')+'</a>')+'</section>';
     }).join('')+'</div></section>';
   }
+  function productionStatus(ctx,p){
+    const G=root.JMLGovernance,allowed=cap=>!G||G.can(ctx.state,ctx.ui,cap,p);
+    const owners=cap=>G?G.eligiblePeople(ctx.state,p.brandId).filter(person=>G.can(ctx.state,{brand:p.brandId,personId:person.id},cap,p)):[];
+    const names=people=>people.filter(person=>!person.agencyAdmin).map(person=>person.name).join(', ')||people.map(person=>person.name).join(', ');
+    const configured=!!(p.production&&p.brief.productionSpec),accepted=p.planApproval?.revision===p.briefRevision;
+    const coverage=calendarCoverage(ctx.state,p),check=C.clone(p);check.planApproval={revision:p.briefRevision};
+    const gaps=readiness(check).filter(g=>configured||!['Choose a production route','Add route-specific instructions','Add a source asset or approved reference'].includes(g));
+    if(!configured)gaps.unshift('Configure the production route and assign a producer and reviewer');
+    if(p.strategyVersionId&&!coverage)gaps.unshift('Approve the current calendar scope before production');
+    return {configured,accepted,coverage,gaps:[...new Set(gaps)],canConfigure:allowed('coordinate'),canAccept:allowed('readiness'),coordinator:names(owners('coordinate'))||'An account coordinator',acceptor:names(owners('readiness'))||'The assigned operations owner'};
+  }
+  function briefGuidance(ctx,p){
+    const s=productionStatus(ctx,p),pending=ctx.hasPendingBrief?.();
+    let text=s.accepted?'Production brief accepted by '+p.planApproval.actor+'.':s.acceptor+' must accept production brief revision '+p.briefRevision+'.';
+    let controls='';
+    if(!s.configured){text=s.coordinator+' needs to prepare the production brief.';controls=s.canConfigure?button('Configure route','route',p.id,'primary'):button('Production setup responsibilities','route-help',p.id);}
+    else if(!s.accepted&&s.coverage&&!s.gaps.length&&s.canAccept&&!pending)controls=button('Accept production brief','brief-ready',p.id,'primary');
+    else if(!s.accepted&&!s.canAccept&&ctx.ui.tab!=='workflow')controls=button('Production setup responsibilities','route-help',p.id);
+    const issues=[...(pending?['Save the current brief version before acceptance']:[]),...s.gaps];
+    return card('Production brief readiness',text,(issues.length?'<ul class="ops-issues">'+issues.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul>':'')+'<p>Calendar approval covers the plan. Operations accepts the production brief; the client approves the finished creative separately.</p><div class="actions">'+link(p,'workflow','Open production workflow')+(s.canConfigure&&!s.coverage?'<a class="link-btn" href="#plan/strategy">Open planning decisions</a>':'')+'</div>',controls);
+  }
   function workflowView(ctx,p){
     const pr=p.production,gaps=readiness(p);
+    const status=productionStatus(ctx,p);
     const configured=pr && p.brief.productionSpec;
     const spec=p.brief.productionSpec||{};
     const started=pr?.startedRevision===p.briefRevision;
     const tasks=pr?.tasks || [], next=tasks.find(t=>!t.done);
-    let body=card('Production route',configured?ROUTES[pr.route].name:'Assign a producer, a reviewer and the package this item needs.',configured?'<div class="ops-facts"><div><small>Producer</small><p>'+esc(pr.producer)+'</p></div><div><small>Internal reviewer</small><p>'+esc(pr.qcReviewer)+'</p></div><div><small>Draft due</small><p>'+esc(pr.draftDue)+'</p></div><div><small>Client review due</small><p>'+esc(pr.reviewDue)+'</p></div></div><p class="ops-notes">'+esc(spec.instructions)+'</p>':'',button(configured?'Edit production route':'Configure route','route',p.id,'primary'));
+    let body=card('Production route',configured?ROUTES[pr.route].name:'Assign a producer, a reviewer and the package this item needs.',(configured?'<div class="ops-facts"><div><small>Producer</small><p>'+esc(pr.producer)+'</p></div><div><small>Internal reviewer</small><p>'+esc(pr.qcReviewer)+'</p></div><div><small>Draft due</small><p>'+esc(pr.draftDue)+'</p></div><div><small>Client review due</small><p>'+esc(pr.reviewDue)+'</p></div></div><p class="ops-notes">'+esc(spec.instructions)+'</p>':'')+(!status.canConfigure?'<p>'+esc(status.coordinator)+(configured?' manages this production route.':' needs to prepare the production brief.')+'</p>':''),status.canConfigure?button(configured?'Edit production route':'Configure route','route',p.id,'primary'):button('Production setup responsibilities','route-help',p.id));
     if(p.strategyVersionId){const coverage=calendarCoverage(ctx.state,p);body+=card('Planning scope',coverage?'Calendar V'+coverage.number+' approved by '+coverage.decision.actor:'Calendar decision required','<p>'+ (coverage?'This item matches the approved calendar purpose, format, channel, date and KPI.':'Capture and approve a calendar version covering this item before starting production.')+'</p><p>Detailed copy, assets and production instructions are reviewed separately as brief revision '+p.briefRevision+'.</p>','<a class="link-btn" href="#plan/strategy">Open planning decisions</a>');if(!coverage)gaps.push('Approve the current calendar scope before production');}
     if(configured)body+=card('Production handoff','The exact brief revision stays with its tasks.', '<div class="ops-facts">'+[['Placement',spec.placement],['Hook',spec.hook],['Output specifications',spec.output],['Delivery package',spec.deliveryPackage],['Acceptance & review',spec.acceptance],['Delivery deadline',spec.deliveryDue],['Production timezone',spec.productionTimezone],['Source references',spec.references]].map(([k,v])=>'<div><small>'+esc(k)+'</small><p>'+human(v)+'</p></div>').join('')+'</div>');
     if(configured){
       const coverage=calendarCoverage(ctx.state,p),needsBrief=p.planApproval?.revision!==p.briefRevision;
-      body+=card('Ready for production',started?'Working from brief revision '+p.briefRevision:'',gaps.length?'<ul class="ops-issues">'+gaps.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul><div class="actions">'+link(p,'brief','Edit brief & approval')+link(p,'requests','Manage inputs')+'</div>':'<p>The brief, permissions, timing and inputs are ready.</p>',!gaps.length&&!started?small('Start production','start',p.id):needsBrief&&coverage?small('Accept production brief','brief-ready',p.id):'');
-      body+=card('Production tasks','Steps run in order. Intermediate decisions record the reviewer and artifact.',tasks.map(t=>row(t.label,(t.done?'Complete':'Open')+' · '+t.owner+' · '+t.due,'<div class="actions">'+(!t.done?small('Reassign or reschedule','edit-task',t.id):'')+(t===next && started?small(t.gate?'Record sign-off':'Complete step','task',t.id):'')+'</div>')).join(''),next?'':link(p,'versions','Submit creative for QA'));
+      const setup=body;body='';
+      body+=p.strategyVersionId?briefGuidance(ctx,p):'';
+      body+=card('Ready for production',started?'Working from brief revision '+p.briefRevision:'',gaps.length?'<ul class="ops-issues">'+gaps.map(g=>'<li>'+esc(g==='Current brief needs plan approval'?status.acceptor+' must accept the production brief':g)+'</li>').join('')+'</ul><div class="actions">'+link(p,'brief','Edit brief & approval')+link(p,'requests','Manage inputs')+'</div>':'<p>The brief, permissions, timing and inputs are ready.</p>',!gaps.length&&!started&&(!root.JMLGovernance||root.JMLGovernance.can(ctx.state,ctx.ui,'produce',p))?small('Start production','start',p.id):!p.strategyVersionId&&needsBrief&&coverage&&status.canAccept?small('Accept production brief','brief-ready',p.id):'');
+      const readinessInfo=body;
+      body=(!started||gaps.length?readinessInfo:'')+U.summary('Creative direction',spec.instructions+(spec.output?' · Deliver: '+spec.output:''))+productionChecklist(ctx,p)+U.optional('Production brief and approved plan','<div class="full">'+setup+(started&&!gaps.length?readinessInfo:'')+'</div>');
     }
     if(p.requests.length)body+=card('Supplied media','Attach accepted files to the request that needs them.',p.requests.map(r=>row(r.title,r.state+' · '+(r.acceptedMedia?.name||r.owner),'<div class="actions">'+small('Attach input','supply',r.id)+(r.acceptedMedia?small('Download file','download-input',r.id)+small('Request correction','correct-input',r.id):'')+'</div>')).join(''));
     const draft=C.latest(p);
     if(draft?.state==='draft' && draft.briefRevision===p.briefRevision)body+=card('Internal quality review','Creative V'+draft.number,draft.internalFailure?'<p>Revision required · '+esc(draft.internalFailure.note)+' · '+esc(draft.internalFailure.reviewer)+'</p>':link(p,'versions','Open creative and complete QC'),draft.internalFailure?link(p,'versions','Upload corrected version'):small('Request internal fix','qc-failure',p.id));
     if(p.versions.length>=2)body+=card('Compare creative versions','Select any pair to compare ordered files and captions.','',small('Compare versions','compare',p.id));
     return '<div class="ops-stack">'+body+annotationsView(p)+'</div>';
+  }
+  function productionChecklist(ctx,p){
+    const pr=p.production,started=pr.startedRevision===p.briefRevision,canProduce=!root.JMLGovernance||root.JMLGovernance.can(ctx.state,ctx.ui,'produce',p);
+    let gated=false,available=0;
+    const rows=pr.tasks.map(t=>{const disabled=t.done||!started||!canProduce||gated||t.gate||t.owner!==ctx.ui.actor;if(!disabled)available++;if(t.gate&&!t.done)gated=true;return '<label'+(t.gate?' class="task-gate"':'')+'><input type="checkbox" name="taskIds" value="'+esc(t.id)+'"'+(t.done?' checked':'')+(disabled?' disabled':'')+'><span>'+esc(t.label)+(t.gate?' · Sign-off: '+esc(t.owner):'')+'</span></label>';}).join('');
+    const next=pr.tasks.find(t=>!t.done),form='<form data-ops-form="tasks" data-ops-id="'+esc(p.id)+'" data-ops-brand="'+esc(p.brandId)+'"><div class="task-checklist">'+rows+'</div><p class="form-error" data-ops-error role="alert"></p>'+(available?'<button class="btn primary" type="submit">Save completed steps</button>':'')+'</form>';
+    const coordination=root.JMLGovernance?.can(ctx.state,ctx.ui,'coordinate',p)?U.optional('Reassign or reschedule',pr.tasks.filter(t=>!t.done).map(t=>row(t.label,t.owner+' · '+t.due,small('Edit assignment','edit-task',t.id))).join('')):'';
+    return card('Production checklist',pr.producer+' · Draft due '+pr.draftDue+'. Check the steps you have completed, then save once.',form+coordination,next?.gate&&started?small('Record required sign-off','task',next.id):!next?link(p,'versions','Upload creative for QA'):'');
+  }
+  function updateRouteFields(form){
+    if(!form)return;
+    for(const group of form.querySelectorAll('[data-route-fields]')){const show=group.dataset.routeFields===form.elements.route.value;group.hidden=!show;group.querySelectorAll('input,textarea').forEach(el=>el.disabled=!show);}
   }
   function annotationsView(p){
     const notes=p.annotations || [];
@@ -295,7 +355,7 @@
     const G=root.JMLGovernance;if(!G)return;
     if(['dismiss','scope-tasks','plan-tab'].includes(action))return;
     const {ui}=context,p=context.post(),record=p||{brandId:ui.brand};
-    if(action.startsWith('inspect-')||['source-details','compare','brief-details','download-input'].includes(action)){
+    if(action.startsWith('inspect-')||['source-details','compare','brief-details','download-input','route-help'].includes(action)){
       if(!G.can(state,ui,'read',record)&&!(action.startsWith('inspect-')&&G.can(state,ui,'approve',{brandId:ui.brand})))throw Error('This record is not available to the selected person.');return;
     }
     let caps=['coordinate'];
@@ -304,7 +364,7 @@
     else if(['source','watchlist','collect'].includes(action))caps=['strategy','analyze'];
     else if(action==='strategy')caps=['strategy'];
     else if(action==='source-idea')caps=['strategy','coordinate'];
-    else if(['start','task'].includes(action))caps=action==='task'&&p?.production?.tasks.find(t=>t.id===id)?.gate?['approve','qa']:['produce'];
+    else if(['start','task','tasks'].includes(action))caps=action==='task'&&p?.production?.tasks.find(t=>t.id===id)?.gate?['approve','qa']:['produce'];
     else if(action==='qc-failure')caps=['qa'];
     else if(action==='annotate')caps=['qa','approve','edit'];
     else if(['restore','resolve','supply'].includes(action))caps=['edit','qa'];
@@ -319,15 +379,19 @@
   function showAction(action,id) {
     const {state,ui}=context,ops=account(state,ui.brand),post=context.post();
     assertAction(action,id);
+    if(action==='route-help'){
+      const status=productionStatus(context,post);
+      context.showModal('Production setup responsibilities','<div class="modal-body"><p>'+esc(status.coordinator)+' prepares the route, assigns production and QA, and sets the required package.</p><p>'+esc(status.acceptor)+' accepts the completed production brief after calendar approval.</p><p>Your producer assignment lets you create and revise the creative. Ask the named coordinator to complete setup before starting.</p></div>');return;
+    }
     if(action==='dismiss'){context.closeModal();return;}
     if(action==='scope-tasks'){mineOnly=id==='mine';context.render();return;}
     if(action==='plan-tab'){activePlanSection=id;context.render();return;}
     if(action==='foundation'){
       const f=ops.foundation;
-      openForm('Client foundation',action,id,foundationFields.map(([k,l])=>fullText(k,l,f[k],k==='business')).join('')+
-        personField('finalApprover','Named client approver',f.finalApprover,['client'])+personField('communityOwner','Community owner',f.communityOwner)+
-        field('weeklyCapacity','Planned content items per week',f.weeklyCapacity??'','number')+field('responseDue','Next input review',f.responseDue||'','date')+
-        select('status','Intake readiness',asText(['In progress','Ready for client confirmation']),f.status||'In progress'));
+      openForm('Client foundation',action,id,
+        U.section('The essentials','These five answers carry into strategy and production.',fullText('business','What does the business offer?',f.business,true)+fullText('audience','Who are we trying to reach?',f.audience,true)+fullText('priorities','What should social content achieve?',f.priorities,true)+fullText('scope','What is included, and what is out of scope?',f.scope,true)+personField('finalApprover','Client approver',f.finalApprover,['client']))+
+        U.optional('Brand materials and delivery details (optional)',fullText('brandBook','Brand guide or reference links',f.brandBook)+fullText('media','Available media and permissions',f.media)+fullText('access','Account access or missing inputs',f.access)+personField('communityOwner','Community owner',f.communityOwner)+field('weeklyCapacity','Content items per week, if agreed',f.weeklyCapacity??'','number')+field('responseDue','Next input review, if needed',f.responseDue||'','date'))+
+        U.summary('Team comes from People & access','Account memberships supply the team. You can add backup owners or escalation details when a handoff needs them.'),'Save foundation');
     }else if(action==='strategy'){
       const last=ops.strategies.at(-1)?.body||{};
       if(!ops.foundation.business || !ops.foundation.finalApprover)throw Error('Complete the client foundation and name the final approver first.');
@@ -366,14 +430,17 @@
       if(!item)throw Error('Source record is unavailable.');
       openForm(action==='convert-slot'?'Select a topic':'Create a sourced idea',action,id,field('title','Proposed content title',item.title,'text',true)+field('owner','Content owner',item.owner||ui.actor,'text',true)+field('platform','Platform','Instagram','text',true)+field('date','Proposed date',item.date||'','date'),'Create draft');
     }else if(action==='route'){
+      if(context.hasPendingBrief?.())throw Error('Save your brief version before configuring production.');
       if(post?.id!==id)throw Error('Select the content item again.');
       const pr=post.production||{},sp=post.brief.productionSpec||{},route=pr.route||(/video|reel/i.test(post.format)?'B':'S');
-      openForm('Configure production route',action,id,select('route','Route',Object.entries(ROUTES).map(([k,v])=>[k,k+' · '+v.name]),route)+
-        personField('producer','Producer',pr.producer||post.brief.owner,['copy','design'])+personField('qcReviewer','Internal QC reviewer',pr.qcReviewer,['creative'])+field('backupOwner','Backup owner',pr.backupOwner)+
-        field('draftDue','Draft due',pr.draftDue||post.date||todayDate(),'date',true)+field('reviewDue','Review due',pr.reviewDue||post.date||todayDate(),'date',true)+
-        fullText('instructions',ROUTES[route].field,sp.instructions,true)+fullText('references','Source assets and approved references',sp.references,true)+fullText('rights','Rights, consent scope and source',sp.rights,true)+
-        field('rightsExpiry','Permission expires, if applicable',sp.rightsExpiry,'date')+field('output','Format, sizes and required exports',sp.output,'text',true)+field('consent','People, releases and usage limits',sp.consent)+fullText('disclosure','AI tool, model, human checks and disclosure',sp.disclosure,route==='G')+
-        field('placement','Channel and placement',sp.placement||post.platform)+fullText('hook','Opening hook / message',sp.hook||post.brief.direction)+fullText('deliveryPackage','Delivery package: exports, editable source, cover and caption',sp.deliveryPackage)+fullText('acceptance','Acceptance criteria and review instructions',sp.acceptance)+field('deliveryDue','Final package due',sp.deliveryDue||post.date,'date')+field('productionTimezone','Production timezone',sp.productionTimezone||post.timezone),'Save route and brief revision');
+      const people=fn=>root.JMLGovernance?.eligiblePeople(state,ui.brand,fn).filter(p=>!p.agencyAdmin)||[];
+      openForm('Prepare production',action,id,
+        U.section('People and delivery','Use the brief as the starting point.',select('route','What are we making?',Object.entries(ROUTES).map(([k,v])=>[k,v.name]),route)+personField('producer','Producer',pr.producer||post.brief.owner||people('design')[0]?.name,['copy','design'])+personField('qcReviewer','Internal reviewer',pr.qcReviewer||people('creative')[0]?.name,['creative'])+field('draftDue','Draft due',pr.draftDue||post.date||todayDate(),'date',true))+
+        U.section('Creative instructions and assets','Keep the instructions, source material and permission together.',fullText('instructions',ROUTES[route].field,sp.instructions||post.brief.direction,true)+fullText('references','Source assets or approved references',sp.references||post.sources.join('\n'),true)+fullText('rights','Permission or licence covering these assets',sp.rights,true)+field('output','Required output',sp.output||post.format+' files, caption and editable source','text',true))+
+        '<div class="full" data-route-fields="B">'+U.section('People in the footage','Confirm releases and allowed use before production.',field('consent','People, releases and usage limits',sp.consent))+'</div>'+
+        '<div class="full" data-route-fields="G">'+U.section('AI use and disclosure','Record the tools, human checks and required disclosure.',fullText('disclosure','AI-use plan',sp.disclosure,true))+'</div>'+
+        U.optional('Timing, package and backup details',field('reviewDue','Review due',pr.reviewDue||post.date||todayDate(),'date',true)+field('rightsExpiry','Permission expires, if applicable',sp.rightsExpiry,'date')+field('backupOwner','Backup owner',pr.backupOwner)+field('placement','Channel and placement',sp.placement||post.platform)+fullText('hook','Opening hook',sp.hook||post.brief.direction)+fullText('deliveryPackage','Additional package requirements',sp.deliveryPackage)+fullText('acceptance','Acceptance criteria, if needed',sp.acceptance)+field('deliveryDue','Final package due',sp.deliveryDue||post.date,'date')+field('productionTimezone','Production timezone',sp.productionTimezone||post.timezone)), 'Save production brief');
+      updateRouteFields(document.querySelector('[data-ops-form="route"]'));
     }else if(action==='compare'){
       const opts=post.versions.map(v=>[v.id,'V'+v.number+' · '+v.createdAt.slice(0,10)]);
       const first=opts.at(-2)[0],second=opts.at(-1)[0];
@@ -390,6 +457,7 @@
       if(!post || post.id!==id)throw Error('Choose the content item again.');
       return context.commit(next=>startProduction(scopedPost(next,id,ui.brand),ui.actor,next),'Production started.');
     }else if(action==='brief-ready'){
+      if(context.hasPendingBrief?.())throw Error('Save your brief version before accepting it for production.');
       return context.commit(next=>acceptBriefReadiness(next,scopedPost(next,id,ui.brand),ui.actor),'Production brief accepted.');
     }else if(action==='qc-failure'){
       openForm('Request internal correction',action,id,field('reviewer','Internal reviewer',post.production?.qcReviewer||ui.actor,'text',true)+fullText('note','What must change before client review?','',true),'Return for correction');
@@ -454,11 +522,8 @@
       const ops=account(next,brandId,true), p=postId?scopedPost(next,postId,brandId):null;
       assertAction(kind,id,next);
       if(kind==='foundation'){
-        if(!f.business || !f.finalApprover || !f.communityOwner)throw Error('Enter the business, final approver and community owner.');
         if(root.JMLGovernance&&!root.JMLGovernance.eligiblePeople(next,brandId,'client').some(p=>p.name===f.finalApprover))throw Error('Choose an active named client approver for this account.');
-        if(!['In progress','Ready for client confirmation'].includes(f.status))throw Error('Choose an intake readiness state. Client confirmation is a separate decision.');
-        const before=C.clone(ops.foundation);ops.foundation={...f,actor,updatedAt:C.now()};
-        snapshot(ops,'foundation',ops.foundation,actor);record(ops,actor,'Client foundation saved',f.status);Object.assign(ops.events.at(-1),{before,after:C.clone(ops.foundation)});
+        saveFoundation(next,brandId,f,actor);
       }else if(kind==='strategy'){
         const version=snapshot(ops,kind,f,actor,{foundation:C.clone(ops.foundation),sourceIds:ops.sources.map(s=>s.id)});
         if(!version.body.kpi || !version.body.definition)throw Error('Define the KPI and its measurement method.');
@@ -499,7 +564,8 @@
         if(f.route==='G' && !f.disclosure)throw Error('Record your AI-use and disclosure plan.');
         configureProduction(scopedPost(next,id,brandId),{...f,approver:ops.foundation.finalApprover},actor);
         if(root.JMLGovernance){for(const [kind,name,due] of [['production',f.producer,f.draftDue],['qa',f.qcReviewer,f.reviewDue]]){const person=root.JMLGovernance.eligiblePeople(next,brandId).find(p=>p.name===name);if(!person)throw Error('Choose a person with an active account membership.');root.JMLGovernance.assign(next,ui,{brandId,contentId:id,kind,personId:person.id,due});}}
-      }else if(kind==='task')finishTask(p,id,f.actor,f.note);
+      }else if(kind==='tasks')completeRoutineTasks(p,new FormData(form).getAll('taskIds'),actor);
+      else if(kind==='task')finishTask(p,id,f.actor,f.note);
       else if(kind==='edit-task'){
         const task=p.production.tasks.find(t=>t.id===id && !t.done);
         if(!task)throw Error('Choose an open production task.');
@@ -557,10 +623,11 @@
       }
       if(ev.target.id==='ops-route-filter'){boardFilter=ev.target.value;context.render();}
       const form=ev.target.closest('[data-ops-form="route"]');
+      if(form&&ev.target.name==='draftDue'&&form.elements.reviewDue.value<form.elements.draftDue.value)form.elements.reviewDue.value=form.elements.draftDue.value;
       if(form && ev.target.name==='route'){
         const instructions=form.elements.instructions;
         instructions.parentElement.firstChild.textContent=ROUTES[ev.target.value].field+' ';
-        form.elements.disclosure.required=ev.target.value==='G';
+        updateRouteFields(form);
       }
     });
     document.addEventListener('submit',async ev=>{
@@ -635,7 +702,7 @@
     }
     return state;
   }
-  const api={view,mount,validate,account,snapshot,decision,calendarPackage,calendarScope,calendarCoverage,readiness,configureProduction,startProduction,acceptBriefReadiness,recordQcFailure,finishTask,queueFor,ROUTES};
+  const api={completeRoutineTasks,saveFoundation,productionStatus,briefGuidance,view,mount,validate,account,snapshot,decision,calendarPackage,calendarScope,calendarCoverage,readiness,configureProduction,startProduction,acceptBriefReadiness,recordQcFailure,finishTask,queueFor,ROUTES};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   else root.JMLOps=api;
 })(typeof window!=='undefined'?window:globalThis);

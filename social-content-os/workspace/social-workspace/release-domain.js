@@ -18,6 +18,28 @@
   const moment = v => string(v) && !Number.isNaN(Date.parse(v));
   const https = v => {try {const u = new URL(v);return u.protocol === 'https:' && !!u.hostname && !u.username && !u.password;}catch{return false;}};
   const tz = v => {try {return nonblank(v) && !!new Intl.DateTimeFormat('en',{timeZone:v});}catch{return false;}};
+  // A datetime-local value has no offset. Resolve it in the destination zone,
+  // never in the browser's zone, and reject DST gaps/overlaps rather than guessing.
+  function localToInstant(local, timezone) {
+    requireValue(/^\d{4}-\d\d-\d\dT\d\d:\d\d$/.test(local || '') && date(local.slice(0,10)) && +local.slice(11,13)<24 && +local.slice(14,16)<60,'Enter a valid local publication date and time.');
+    requireValue(tz(timezone),'Choose a valid destination time zone.');
+    const wall=Date.parse(local+':00Z');
+    const formatter=new Intl.DateTimeFormat('en-GB',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+    const wallAt=instant=>{const p=Object.fromEntries(formatter.formatToParts(new Date(instant)).map(x=>[x.type,x.value]));return Date.parse(p.year+'-'+p.month+'-'+p.day+'T'+p.hour+':'+p.minute+':'+p.second+'Z');};
+    const offsets=new Set();
+    for(let hours=-36;hours<=36;hours+=6){const sample=wall+hours*3600000;offsets.add(wallAt(sample)-sample);}
+    const matches=[...offsets].map(offset=>wall-offset).filter(instant=>wallAt(instant)===wall);
+    requireValue(matches.length!==0,'This local time does not exist because the clocks change. Choose another time.');
+    requireValue(matches.length===1,'This local time occurs twice because the clocks change. Choose an unambiguous time.');
+    return new Date(matches[0]).toISOString();
+  }
+  function briefSchedule(post) {
+    return {local:post.date&&post.time?post.date+'T'+post.time.slice(0,5):'',timezone:post.timezone||'UTC'};
+  }
+  function placementSchedule(post,fields) {
+    const approved=briefSchedule(post),instant=localToInstant(fields.scheduledLocal,fields.timezone);
+    return {instant,approved,changed:fields.scheduledLocal!==approved.local||fields.timezone!==approved.timezone};
+  }
   function clean(value, label, required = false) {
     const result = String(value ?? '').trim();
     requireValue(result.length < 100000 && (!required || !!result), 'Enter '+label+'.');
@@ -67,6 +89,11 @@
   }
   function createPlacement(state,brandId,fields,actor) {
     const post=sourcePost(state,brandId,fields.contentId), version=C.latest(post);
+    if(fields.scheduledLocal!==undefined){
+      const schedule=placementSchedule(post,fields);
+      requireValue(!schedule.changed||fields.timingChangeApproved===true,'Confirm approval for the timing change from the creative brief.');
+      fields={...fields,scheduledAt:schedule.instant};
+    }
     requireValue(C.isApproved(post) && !C.readiness(post).length,'Finish the brief, inputs and creative approval in Studio and Review.');
     requireValue(modes.includes(fields.mode),'Choose a release method.');
     requireValue(fields.mode==='simulation' || (!post.example && post.brandId!=='demo'),'Example content uses simulation.');
@@ -84,7 +111,7 @@
       state:'ready',attempts:[],verification:null,createdAt:C.now()};
     if(placement.rightsUntil)requireValue(date(placement.rightsUntil),'Choose a valid permission expiry date.');
     placement.handoff=handoffSnapshot(post,version,placement,actor);placement.receipt=null;
-    data(state).placements.push(placement);audit(state,brandId,'Placement prepared',placement.id,actor,platform+' · '+account);return placement;
+    data(state).placements.push(placement);audit(state,brandId,'Placement prepared',placement.id,actor,platform+' Â· '+account);return placement;
   }
   function receiveHandoff(state,brandId,id,actor,personId='') {
     const p=entry(state,'placements',brandId,id);
@@ -94,7 +121,7 @@
     requireValue(!p.receipt,'The publisher already accepted this handoff.');
     if(!p.handoff)p.handoff=handoffSnapshot(sourcePost(state,brandId,p.contentId),sourcePost(state,brandId,p.contentId).versions.find(v=>v.id===p.versionId),p,actor);
     p.receipt={id:C.id('receipt'),handoffId:p.handoff.id,versionId:p.versionId,decisionId:p.handoff.decisionId,actor,personId,at:C.now()};
-    audit(state,brandId,'Publisher accepted approved package',p.id,actor,'Version '+p.handoff.versionNumber+' · decision '+p.handoff.decisionId);return p.receipt;
+    audit(state,brandId,'Publisher accepted approved package',p.id,actor,'Version '+p.handoff.versionNumber+' Â· decision '+p.handoff.decisionId);return p.receipt;
   }
   function receiveCommunity(state,brandId,id,actor,personId='') {
     const p=entry(state,'placements',brandId,id);
@@ -179,7 +206,7 @@
       const checked=adapters[p.mode].verify(p,fields);
       p.verification={...checked,at:C.now(),actor,versionId:p.versionId};
       result={state:'verified',outcome:p.mode==='manual'?'Live publication verified manually':'Simulated publication verified',receipt:p.mode==='manual'?fields.url:'SIM-'+key};
-      const community=addWork(state,brandId,{kind:'Community case',title:'Community handoff · '+sourcePost(state,brandId,p.contentId).title,owner:p.communityOwner,due:releaseDate(p,p.verification.actualAt),evidence:result.receipt,detail:'Review replies and recurring questions for '+p.account+'.',fixture:p.mode==='simulation',placementId:p.id},actor);
+      const community=addWork(state,brandId,{kind:'Community case',title:'Community handoff Â· '+sourcePost(state,brandId,p.contentId).title,owner:p.communityOwner,due:releaseDate(p,p.verification.actualAt),evidence:result.receipt,detail:'Review replies and recurring questions for '+p.account+'.',fixture:p.mode==='simulation',placementId:p.id},actor);
       community.contentId=p.contentId;community.versionId=p.versionId;community.ownerPersonId=p.communityOwnerPersonId||'';p.communityWorkId=community.id;
     }else throw Error('Unknown release operation.');
     p.attempts.push({id:C.id('attempt'),key,payloadHash:packageFingerprint(p),operation,actor,at:C.now(),prior,state:result.state,outcome:result.outcome,receipt:result.receipt||''});
@@ -234,7 +261,7 @@
     return row;
   }
   function preview(state,brandId,rows,defaults={}){
-    requireValue(Array.isArray(rows)&&rows.length>0&&rows.length<=10000,'Import 1–10,000 observations at a time.');
+    requireValue(Array.isArray(rows)&&rows.length>0&&rows.length<=10000,'Import 1â€“10,000 observations at a time.');
     const existing=read(state).observations.filter(o=>o.brandId===brandId&&!o.supersededBy);
     const byKey=new Map(existing.map(o=>[identity(o),o])), mapped=[],errors=[],collisions=[],overlaps=[],seen=new Map();let duplicates=0;
     const seriesWindows=new Map();
@@ -305,15 +332,17 @@
   function snapshot(state,brandId,f,actor){
     requireValue(date(f.start)&&date(f.end)&&f.start<=f.end,'Choose a valid reporting window.');requireValue(origins.includes(f.origin),'Choose evidence type.');
     if(brandId==='demo')requireValue(f.origin==='fixture','Choose fixture evidence in Demo studio.');
-    const db=data(state), previous=db.reports.filter(r=>r.brandId===brandId&&r.start===f.start&&r.end===f.end&&r.origin===f.origin).at(-1);
-    const observations=db.observations.filter(o=>o.brandId===brandId&&!o.supersededBy&&o.origin===f.origin&&o.start>=f.start&&o.end<=f.end);
-    const delivery=db.placements.filter(p=>p.brandId===brandId&&p.state==='verified'&&(p.mode==='simulation')===(f.origin==='fixture')&&releaseDate(p,p.verification.actualAt)>=f.start&&releaseDate(p,p.verification.actualAt)<=f.end);
+    const db=data(state),selected=f.calculationId?entry(state,'calculations',brandId,f.calculationId):null;
+    if(selected)requireValue(selected.origin===f.origin&&selected.start>=f.start&&selected.end<=f.end,'Keep the selected result within the report period and evidence set.');
+    const previous=db.reports.filter(r=>r.brandId===brandId&&r.start===f.start&&r.end===f.end&&r.origin===f.origin&&(r.calculationId||'')===(f.calculationId||'')).at(-1);
+    const observations=selected?[selected.numerator,...(selected.denominator?[selected.denominator]:[])]:db.observations.filter(o=>o.brandId===brandId&&!o.supersededBy&&o.origin===f.origin&&o.start>=f.start&&o.end<=f.end);
+    const delivery=db.placements.filter(p=>p.brandId===brandId&&p.state==='verified'&&(!selected||p.id===selected.placementId)&&(p.mode==='simulation')===(f.origin==='fixture')&&releaseDate(p,p.verification.actualAt)>=f.start&&releaseDate(p,p.verification.actualAt)<=f.end);
     const names=state.posts.filter(p=>p.brandId===brandId);
     const report={id:C.id('report'),brandId,title:clean(f.title,'a report title',true),version:previous?previous.version+1:1,previous:previous?.id||null,
-      start:f.start,end:f.end,origin:f.origin,actor,createdAt:C.now(),summary:clean(f.summary,'findings',true),gaps:clean(f.gaps,'limitations',true),ask:clean(f.ask,'the decision needed',true),
+      start:f.start,end:f.end,origin:f.origin,calculationId:selected?.id||'',actor,createdAt:C.now(),summary:clean(f.summary,'findings',true),gaps:clean(f.gaps,'limitations',true),ask:clean(f.ask,'the decision needed',true),
       internal:clean(f.internal,'internal notes'),reviewer:clean(f.reviewer,'a reviewer',true),status:'Draft',feedback:[],approval:null,
       observations:C.clone(observations),deliveries:delivery.map(p=>({id:p.id,title:names.find(x=>x.id===p.contentId)?.title||p.contentId,platform:p.platform,account:p.account,versionId:p.versionId,actualAt:p.verification.actualAt})),
-      calculations:C.clone((db.calculations||[]).filter(c=>c.brandId===brandId&&c.origin===f.origin&&c.start>=f.start&&c.end<=f.end)),
+      calculations:C.clone(selected?[selected]:(db.calculations||[]).filter(c=>c.brandId===brandId&&c.origin===f.origin&&c.start>=f.start&&c.end<=f.end)),
       findings:C.clone(db.work.filter(w=>w.brandId===brandId&&w.kind==='Finding'&&w.origin===f.origin&&w.due>=f.start&&w.due<=f.end))};
     db.reports.push(report);audit(state,brandId,'Report snapshot created',report.id,actor,report.title);return report;
   }
@@ -358,7 +387,7 @@
       attempts:[],verification:verified?{at:q.verifiedAt||C.now(),actualAt:new Date(f.actualAt||f.scheduledAt).toISOString(),actor,url:mode==='manual'?q.url:'',note:'Imported manual verification. '+q.note,versionId:v.id}:null,createdAt:C.now()};
     data(state).placements.push(placement);
     if(q.state==='on-hold')pause(state,brandId,'placement',placement.id,actor);
-    audit(state,brandId,'Prior publishing record transferred',placement.id,actor,q.state+' · '+placement.account);
+    audit(state,brandId,'Prior publishing record transferred',placement.id,actor,q.state+' Â· '+placement.account);
     return placement;
   }
   function liftMetrics(state,brandId,f,actor){
@@ -376,22 +405,81 @@
     batch.legacyKeys=old.map(r=>JSON.stringify(r));return batch;
   }
 
+  const rawMeasures={
+    newfollows:{label:'New follows',unit:'follows',definition:'New follows during this reporting period'},
+    netfollowers:{label:'Net follower change',unit:'followers',definition:'Follows minus unfollows during this reporting period'},
+    qualifiedleads:{label:'Qualified leads',unit:'leads',definition:'Leads meeting the agreed qualification and attribution rules'},
+    views:{label:'Views',unit:'views',definition:'Number of views reported by the platform'},
+    reach:{label:'Reach',unit:'accounts',definition:'Unique accounts reached'},
+    impressions:{label:'Impressions',unit:'impressions',definition:'Number of times the content was displayed'},
+    saves:{label:'Saves',unit:'saves',definition:'Number of saves reported by the platform'},
+    likes:{label:'Likes',unit:'likes',definition:'Number of likes'},
+    comments:{label:'Comments',unit:'comments',definition:'Number of comments'},
+    shares:{label:'Shares',unit:'shares',definition:'Number of shares'},
+    clicks:{label:'Clicks',unit:'clicks',definition:'Number of link clicks'},
+    followers:{label:'Followers',unit:'followers',definition:'Follower count reported by the platform'},
+    leads:{label:'Leads',unit:'leads',definition:'Number of leads in the agreed source'}
+  };
+  const metricKey=v=>String(v).toLowerCase().replace(/[^a-z0-9]/g,'').replace(/^netfollowerchange$/,'netfollowers');
+  const matchingMeasure=(o,key)=>metricKey(o.metric)===metricKey(key)&&(!rawMeasures[key]||metricKey(o.unit)===metricKey(rawMeasures[key].unit));
+  const sameEvidenceScope=(a,b)=>a.id!==b.id&&['account','contentId','placementId','segment','source','timezone','aggregation','origin','start','end'].every(k=>a[k]===b[k]);
+  function observationDefaults(state,brandId,origin,instant=new Date()){
+    const brand=state.brands.find(b=>b.id===brandId),sample=brandId==='demo'||brand?.example;
+    const strategy=brand?.operations?.strategies?.at(-1)?.body,definition=brand?.operations?.kpis?.find(k=>k.id===strategy?.kpiDefinitionId);
+    const key=definition?.numerator in rawMeasures?definition.numerator:'reach',measure=rawMeasures[key],day=C.localDate(brand?.timezone,instant);
+    origin=sample?'fixture':origin||'recorded';
+    return {account:brand?.name||'',source:origin==='fixture'?'Local sample data':'',metric:measure.label,definition:measure.definition,unit:measure.unit,start:day,end:day,collectedAt:day,timezone:brand?.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone,segment:(definition?.distribution||'Organic').toLowerCase(),aggregation:'period',origin,contentId:'',placementId:''};
+  }
+  function matchesChannel(state,brandId,definition,observation){
+    return !definition.channel||!!observation.contentId&&sourcePost(state,brandId,observation.contentId).platform.toLowerCase()===definition.channel.toLowerCase();
+  }
+  function compatibleObservations(state,brandId,definitionId,origin,numeratorId=''){
+    const definition=state.brands.find(b=>b.id===brandId)?.operations?.kpis?.find(k=>k.id===definitionId);
+    if(!definition)return {primary:[],comparison:[]};
+    const windowDays=String(definition.window||'').match(/^(\d+)[ -]?day/i);
+    const rows=read(state).observations.filter(o=>o.brandId===brandId&&!o.supersededBy&&o.origin===origin&&matchesChannel(state,brandId,definition,o)&&(!definition.distribution||definition.distribution.toLowerCase()===o.segment)&&(!windowDays||(Date.parse(o.end)-Date.parse(o.start))/86400000+1===Number(windowDays[1]))&&(!o.contentId||!sourcePost(state,brandId,o.contentId).measurementDefinitionId||sourcePost(state,brandId,o.contentId).measurementDefinitionId===definition.id));
+    const primary=rows.filter(o=>matchingMeasure(o,definition.numerator)),selected=primary.find(o=>o.id===numeratorId)||primary[0];
+    return {primary,comparison:definition.denominator&&selected?rows.filter(o=>matchingMeasure(o,definition.denominator)&&sameEvidenceScope(selected,o)):[]};
+  }
+  function recordMeasurements(state,brandId,fields,values,actor){
+    const placement=entry(state,'placements',brandId,fields.placementId),p=sourcePost(state,brandId,placement.contentId);
+    const definition=state.brands.find(b=>b.id===brandId)?.operations?.kpis?.find(k=>k.id===p.measurementDefinitionId);
+    requireValue(placement.state==='verified','Verify the release before recording its results. Use Single measure for account-level evidence.');
+    const origin=placement.mode==='simulation'?'fixture':'recorded';
+    if(origin==='recorded')requireValue(fields.end<=C.localDate(placement.timezone)&&fields.collectedAt<=C.localDate(placement.timezone),'Recorded measurements cannot use future reporting or collection dates.');
+    const keys=Object.keys(values);requireValue(keys.length&&keys.every(k=>rawMeasures[k]),'Choose supported raw measures.');
+    requireValue(keys.every(key=>key==='netfollowers'||values[key]==null||String(values[key]).trim()===''||Number(values[key])>=0),'Counts cannot be negative. Use Net follower change for follows minus unfollows.');
+    const rows=keys.map(key=>({...fields,brandId,account:placement.account,contentId:p.id,placementId:placement.id,timezone:placement.timezone,origin,metric:rawMeasures[key].label,definition:rawMeasures[key].definition,unit:rawMeasures[key].unit,value:values[key]}));
+    // Validate on a copy: a missing KPI component or changed value cannot partly save a batch.
+    const next=C.clone(state),batch=ingest(next,brandId,rows,{name:fields.source,format:'manual-batch',replace:fields.replace===true},actor);
+    let result=null;
+    if(definition){
+      const options=compatibleObservations(next,brandId,definition.id,origin);
+      const a=options.primary.find(o=>o.placementId===placement.id&&o.start===fields.start&&o.end===fields.end&&o.source===fields.source&&o.segment===fields.segment&&o.aggregation===fields.aggregation);
+      const b=a&&compatibleObservations(next,brandId,definition.id,origin,a.id).comparison[0];
+      if(a&&(!definition.denominator||b)){
+        const existing=read(next).calculations.find(c=>c.definitionId===definition.id&&c.numerator.id===a.id&&(c.denominator?.id||'')===(b?.id||''));
+        result=existing||calculate(next,brandId,{definitionId:definition.id,numeratorId:a.id,denominatorId:b?.id},actor);
+      }
+    }
+    state.releaseLearning=next.releaseLearning;return {batch,result};
+  }
   function calculate(state,brandId,fields,actor){
     const definition=state.brands.find(b=>b.id===brandId)?.operations?.kpis?.find(k=>k.id===fields.definitionId);
     requireValue(definition,'Choose a saved measurement definition from Research & strategy.');
     const a=entry(state,'observations',brandId,fields.numeratorId),b=definition.denominator?entry(state,'observations',brandId,fields.denominatorId):null;
     const content=a.contentId?sourcePost(state,brandId,a.contentId):null;
     requireValue(!content?.measurementDefinitionId||content.measurementDefinitionId===definition.id,'This content is measured against its pinned KPI definition. Choose that exact version.');
-    const metricKey=v=>String(v).toLowerCase().replace(/[^a-z0-9]/g,'');
-    requireValue(metricKey(a.metric)===metricKey(definition.numerator)&&(!b||metricKey(b.metric)===metricKey(definition.denominator)),'The selected evidence must match the definition numerator and denominator.');
+    requireValue(matchesChannel(state,brandId,definition,a),'Choose content from the channel in this KPI definition.');
+    requireValue(matchingMeasure(a,definition.numerator)&&(!b||matchingMeasure(b,definition.denominator)),'Choose source measures and units that match this KPI definition.');
     requireValue(!a.supersededBy&&(!b||!b.supersededBy),'Use the current evidence revisions. Historical calculations remain preserved.');
-    if(b)requireValue(a.id!==b.id&&['account','contentId','placementId','segment','source','timezone','aggregation','origin','start','end'].every(k=>a[k]===b[k]),'Choose distinct observations from the same source, account, content, window, distribution and evidence type.');
+    if(b)requireValue(sameEvidenceScope(a,b),'Choose distinct observations from the same source, account, content, window, distribution and evidence type.');
     const distribution=String(definition.distribution||'').toLowerCase();
     requireValue(!distribution||distribution===a.segment,'Evidence distribution does not match this KPI definition.');
     const days=(Date.parse(a.end)-Date.parse(a.start))/86400000+1,windowDays=String(definition.window||'').match(/^(\d+)[ -]?day/i);
     if(windowDays)requireValue(days===Number(windowDays[1]),'The evidence window must match the KPI definition ('+definition.window+').');
     const scale=Number(definition.scale??1);requireValue(Number.isFinite(scale)&&scale>0,'The KPI scale must be positive.');
-    const unavailable=a.value===null||b?.value===null?'A required measurement is unknown.':b?.value===0?'The denominator is zero.':'';
+    const unavailable=a.value===null||b?.value===null?'A required measurement is unknown.':b?.value===0?'The comparison measure is zero.':'';
     const result=unavailable?null:b?a.value/b.value*scale:a.value;
     const baseline=definition.baseline?.value;
     const baselineValue=baseline===null||baseline===undefined||baseline===''?null:Number(baseline);
@@ -423,7 +511,7 @@
       const post=C.makePost({brandId,title:p.title,owner:actor,source:'Result proposal '+p.id,sourceId:p.id,caption:p.detail,example:p.origin==='fixture'});
       post.measurementDefinitionId=p.definitionId;post.resultProposalId=p.id;
       const source=state.posts.find(x=>x.brandId===brandId&&x.id===p.contentId);if(source?.strategyVersionId)post.strategyVersionId=source.strategyVersionId;
-      state.posts.push(post);p.targetId=post.id;C.event(post,'Proposed from measured result',result.definition.title+' · '+(result.result===null?'Unknown':result.result)+' · '+p.detail,actor);
+      state.posts.push(post);p.targetId=post.id;C.event(post,'Proposed from measured result',result.definition.title+' Â· '+(result.result===null?'Unknown':result.result)+' Â· '+p.detail,actor);
     }
     if(fields.action==='accept'&&p.kind!=='content'){
       const Ops=typeof module==='object'&&module.exports?require('./operations.js'):root.JMLOps;
@@ -489,6 +577,6 @@
     }
     for(const p of (db.proposals||[]))requireValue(['content','strategy','calendar'].includes(p.kind)&&['Proposed','Accepted','Returned'].includes(p.status)&&strings(p,['title','detail','owner','due','createdAt','actor'])&&date(p.due)&&(db.calculations||[]).some(c=>c.brandId===p.brandId&&c.id===p.calculationId)&&Array.isArray(p.decisions),'Invalid next-plan proposal.');
   }
-  const api={calculate,proposeNext,decideProposal,receiveHandoff,receiveCommunity,sealHandoff,legacyCandidates,liftPlacement,liftMetrics,groups,states,modes,workTypes,read,entry,sourcePost,isPaused,pause,currentPackage,preflight,createPlacement,advance,manifest,adapters,csvRows,normalise,preview,ingest,addWork,decideWork,watchRun,snapshot,reportDecision,validate};
+  const api={recordMeasurements,rawMeasures,observationDefaults,compatibleObservations,localToInstant,briefSchedule,placementSchedule,calculate,proposeNext,decideProposal,receiveHandoff,receiveCommunity,sealHandoff,legacyCandidates,liftPlacement,liftMetrics,groups,states,modes,workTypes,read,entry,sourcePost,isPaused,pause,currentPackage,preflight,createPlacement,advance,manifest,adapters,csvRows,normalise,preview,ingest,addWork,decideWork,watchRun,snapshot,reportDecision,validate};
   if(typeof module==='object'&&module.exports)module.exports=api;else root.JMLReleaseDomain=api;
 })(typeof window==='undefined'?globalThis:window);

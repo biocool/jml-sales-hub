@@ -10,7 +10,7 @@
     learn:[['results','Results & growth'],['observations','Earlier observations']],
     accounts:[['list','Accounts'],['people','People & access']]
   };
-  const detail=[['brief','Brief & copy'],['workflow','Production workflow'],['versions','Creative versions'],['requests','Media requests'],['history','Version history']];
+  const detail=[['brief','Brief & copy'],['workflow','Production workflow'],['versions','Creative versions'],['feedback','Review & feedback'],['requests','Media requests'],['history','Version history']];
   const titles={workflow:'Workflow views',tools:'Planning tools',reports:'Planner reports',settings:'Planner settings'};
   const definitions=[['today','Today','home'],['plan','Content Planner','calendar'],['studio','Studio','files'],['review','Review','review'],['publish','Publish','publish'],['learn','Learn','chart']];
   function permitted(ctx,route,section=''){return (!client(ctx.ui)||['today','review','learn'].includes(route))&&(!root.JMLGovernance||root.JMLGovernance.routeAllowed(ctx.state,ctx.ui,route,section));}

@@ -53,6 +53,7 @@
     }
     const reports=(state.releaseLearning?.reports||[]).filter(r=>r.brandId===brand.id && r.status==='Client ready').slice().reverse().map(r=>({
       kind:'report',id:r.id,title:r.title,version:r.version,start:r.start,end:r.end,origin:r.origin,summary:r.summary,gaps:r.gaps,ask:r.ask,
+      calculations:(r.calculations||[]).map(c=>({title:c.definition.title,version:c.definition.version,unit:c.definition.unit,value:c.result,unavailable:c.unavailable,baseline:c.baselineValue,delta:c.delta,comparable:c.baselineComparable,comparisonNote:c.comparisonNote,source:c.source,baselineSource:c.baseline?.source,start:c.start,end:c.end})),
       observations:r.observations.map(o=>({metric:o.metric,value:o.value,unit:o.unit,definition:o.definition,start:o.start,end:o.end,account:o.account})),
       deliveries:r.deliveries.map(d=>({title:d.title,platform:d.platform,account:d.account,at:d.actualAt})),
       findings:r.findings.map(f=>({title:f.title,detail:f.detail})),
@@ -139,12 +140,16 @@
 
   const fact=(label,value)=>value===undefined || value===null || value===''?'':'<div><dt>'+escape(label)+'</dt><dd>'+escape(value)+'</dd></div>';
   const para=(title,text)=>text?'<section class="persona-copy"><h3>'+escape(title)+'</h3><p>'+escape(text)+'</p></section>':'';
+  function outcomeCards(calculations){
+    const value=v=>Number(v).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1});
+    return calculations.length?'<section class="persona-copy"><h3>Measured outcomes</h3>'+calculations.map(c=>'<article class="persona-copy"><h4>'+escape(c.title)+'</h4><p><strong>'+(c.value===null?'Unavailable':escape(value(c.value)+' '+c.unit))+'</strong></p><dl class="persona-facts">'+fact('Baseline',c.baseline==null?'Not established':value(c.baseline)+' '+c.unit)+fact('Change from baseline',c.comparable&&c.delta!=null?(c.delta>=0?'+':'')+value(c.delta)+' '+c.unit:'Not comparable')+fact('Measurement period',c.start+' – '+c.end)+fact('Source',c.source)+fact('Baseline source',c.baselineSource)+fact('Definition version','V'+c.version)+'</dl>'+para('Comparison and limitations',[c.unavailable,c.comparisonNote].filter(Boolean).join(' '))+'</article>').join('')+'</section>':'';
+  }
   function details(item) {
     if(item.kind==='input')return '<dl class="persona-facts">'+fact('Requested for',item.postTitle)+fact('Due',item.due)+fact('Status',statusLabels[item.state])+'</dl>'+para('Request details',item.instructions);
     if(item.kind==='report') {
       const metrics=item.observations.map(o=>'<tr><th scope="row">'+escape(o.metric)+(o.definition?'<small>'+escape(o.definition)+'</small>':'')+'</th><td>'+(o.value===null?'Missing':escape(o.value)+' '+escape(o.unit))+'</td><td>'+escape(o.account)+'</td><td>'+escape(o.start)+' – '+escape(o.end)+'</td></tr>').join('');
       return '<p>'+escape(item.start)+' – '+escape(item.end)+' · V'+item.version+' · '+(item.origin==='fixture'?'Sample data':'Recorded data')+'</p>'+
-        para('Findings',item.summary)+para('Limitations',item.gaps)+para('Decision requested',item.ask)+
+        outcomeCards(item.calculations||[])+para('Findings',item.summary)+para('Limitations',item.gaps)+para('Decision requested',item.ask)+
         (metrics?'<div class="persona-table"><table><caption>Reported measurements</caption><thead><tr><th>Metric</th><th>Value</th><th>Account</th><th>Period</th></tr></thead><tbody>'+metrics+'</tbody></table></div>':'')+
         (item.deliveries.length?'<section class="persona-copy"><h3>Verified placements</h3><ul>'+item.deliveries.map(d=>'<li>'+escape([d.title,d.platform,d.account,dateText(d.at)].filter(Boolean).join(' · '))+'</li>').join('')+'</ul></section>':'')+
         item.findings.map(f=>para(f.title,f.detail)).join('')+
@@ -208,6 +213,6 @@
       finally {buttons.forEach(b=>b.disabled=false);}
     },true);
   }
-  const api={view,mount,shared,perform};
+  const api={view,mount,shared,perform,outcomeCards};
   if(common)module.exports=api;else root.JMLPersonas=api;
 })(typeof window!=='undefined'?window:globalThis);

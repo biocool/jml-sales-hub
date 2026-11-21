@@ -76,7 +76,7 @@
     if(notify){const canonical=custom?r.input:r.select;emit(!custom&&r.input.tagName==='TEXTAREA'?r.input:canonical,'input');if(custom)r.input.focus();}
   }
   function enhanceField(el,kind){
-    if(records.has(el)||el.closest('.form-options')||el.disabled||el.readOnly||!['INPUT','SELECT','TEXTAREA'].includes(el.tagName)||el.tagName==='INPUT'&&!['text',''].includes(el.type))return false;
+    if(records.has(el)||el.closest('.form-options')||el.hasAttribute('data-no-presets')||el.disabled||el.readOnly||!['INPUT','SELECT','TEXTAREA'].includes(el.tagName)||el.tagName==='INPUT'&&!['text',''].includes(el.type))return false;
     const doc=el.ownerDocument,originalSelect=el.tagName==='SELECT',value=el.value,name=el.name,required=el.required,originalId=el.id,label=labelText(el),originalAttrs={hidden:el.hidden,ariaLabel:el.getAttribute('aria-label'),ariaDescription:el.getAttribute('aria-describedby')},wrap=doc.createElement('span'),select=originalSelect?el:doc.createElement('select'),input=originalSelect?doc.createElement('input'):el;
     const originalChoices=originalSelect?[...el.options].map(o=>o.value):[];if(originalSelect)input.type='text';
     const marker=doc.createComment('form-options');el.before(marker);wrap.className='form-options';wrap.dataset.field=name;marker.replaceWith(wrap);wrap.append(select,input);

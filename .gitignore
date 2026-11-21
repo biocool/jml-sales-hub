@@ -1,0 +1,20 @@
+# Local agent instructions and tool configuration (at any depth).
+AGENTS.md
+AGENTS.local.md
+CLAUDE.md
+CLAUDE.local.md
+GEMINI.md
+.agents/
+.codex/
+.claude/
+
+# Keep agent plans, research, scratch scripts, logs, screenshots, and
+# verification output in these directories rather than beside site files.
+.agent-work/
+.agent-tmp/
+
+# Local browser automation state and generated reports.
+.playwright-mcp/
+.playwright-cli/
+/playwright-report/
+/test-results/

@@ -29,6 +29,8 @@
 .rl-grid dt {color:var(--muted);font-size:12px}
 .rl-grid dd {margin:3px 0;font-weight:650;overflow-wrap:anywhere}
 .rl-dialog>*+*,.rl-form>.form-grid,.rl-error:not(:empty) {margin-top:14px}
+.rl-form .form-grid>* {min-width:0}
+.rl-form input,.rl-form select,.rl-form textarea {max-width:100%;min-width:0}
 .rl-timeline {padding-left:18px}
 .rl-timeline li {margin:12px 0;overflow-wrap:anywhere}
 .rl-timeline small {display:block;color:var(--muted)}

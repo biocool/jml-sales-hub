@@ -1,0 +1,77 @@
+/* Action, work and context use the existing account palette and type system. */
+.task-section {border:0;padding:0;margin:8px 0 20px;min-width:0}
+.task-section legend {font:600 18px/1.35 var(--sans);color:var(--ink);padding:0;margin-bottom:8px}
+.task-note {color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 16px;max-width:68ch}
+.task-section .form-grid,.task-options .form-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.task-section label,.task-options label {min-width:0}
+.task-options {padding:16px 0;border-top:1px solid var(--line);margin:0;min-width:0}
+.task-options>summary {cursor:pointer;font:600 14px/1.5 var(--sans);color:var(--ink);padding:4px 0;min-height:36px}
+.task-options[open]>summary {margin-bottom:16px}
+.task-summary {background:var(--soft);border-radius:8px;padding:16px 20px;margin:0 0 16px;min-width:0}
+.task-summary strong {font:600 14px/1.5 var(--sans)}
+.task-summary p {font-size:13px;line-height:1.6;margin:4px 0 0;color:var(--muted);overflow-wrap:anywhere;max-width:70ch}
+.task-lead {display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 0;margin-bottom:24px;border-block:1px solid var(--line)}
+.task-lead h2 {font:600 22px/1.3 var(--sans);margin:0 0 8px;color:var(--ink)}
+.task-lead p {margin:0;color:var(--muted);max-width:65ch;line-height:1.6}
+.task-lead>.btn {flex-shrink:0}
+.task-section input,.task-section select,.task-section textarea,.task-options input,.task-options select,.task-options textarea {max-width:100%;min-width:0;caret-color:var(--purple)}
+.task-section input[readonly] {background:var(--soft);color:var(--muted)}
+.task-options summary:focus-visible,.task-lead a:focus-visible {outline:2px solid var(--purple);outline-offset:4px}
+.task-options[hidden],.task-section[hidden] {display:none}
+form:has(.task-section)>.modal-actions {position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);z-index:2}
+.task-checklist {display:grid;gap:0}
+.task-checklist label {display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;font-weight:400}
+.task-checklist input {width:20px;height:20px;flex:none;accent-color:var(--purple)}
+.task-checklist label:has(input:checked) {color:var(--muted)}
+.task-checklist .task-gate {font-weight:600}
+.task-outcome {font:600 24px/1.35 var(--sans);font-variant-numeric:tabular-nums;margin:12px 0}
+.research-panel .research-grid {display:block}
+.research-panel .research-card {border:0;border-radius:0;box-shadow:none;padding:20px 0;margin:0;border-bottom:1px solid var(--line);background:transparent}
+.research-panel .research-card:first-child {padding-top:0}
+.research-panel .research-card:last-child {border-bottom:0;padding-bottom:0}
+.research-panel .research-card h3 {font:600 18px/1.4 var(--sans);max-width:65ch;margin:8px 0}
+.research-panel .research-copy {max-width:70ch}
+.research-card .task-options {border:0;padding:4px 0;margin-top:8px}
+.research-card .task-options>summary {font-weight:400;color:var(--muted)}
+.task-options .ops-panel,.task-options .research-panel {border:0;margin:0;background:transparent}
+.task-options .panel-body {padding:12px 0}
+.task-options .panel-head {padding:12px 0}
+.task-section .research-checks {max-height:none}
+.measurement-values {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.measurement-values input {font-variant-numeric:tabular-nums;font-size:20px;min-height:48px}
+@media(max-width:760px){
+ .task-lead {align-items:flex-start;flex-direction:column;gap:16px;padding:20px 0}
+ .task-section .form-grid,.task-options .form-grid {grid-template-columns:minmax(0,1fr)}
+ .task-section legend {font-size:18px}
+ .task-options>summary {min-height:44px}
+ .task-summary {padding:16px}
+ .measurement-values {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .task-checklist label {min-height:48px}
+}
+
+.ops-facts {grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 32px;margin:8px 0 24px}
+.ops-facts dt {font-size:12px;color:var(--muted);margin-bottom:8px}
+.ops-facts dd {margin:0;font-size:15px;line-height:1.65;overflow-wrap:anywhere;white-space:pre-wrap}
+[data-ops-form="foundation"] .task-section label.full,[data-research-form="strategy"] .task-section label.full {grid-column:auto}
+[data-ops-form="foundation"] .task-section textarea {min-height:96px}
+.strategy-direction>h3 {font:600 21px/1.4 var(--sans);margin-bottom:12px}
+.strategy-direction>.ops-facts {margin-top:24px}
+.outcome-list {padding:0 24px}
+.outcome-row {display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
+.outcome-row:last-child {border-bottom:0}
+.outcome-row h3 {font:500 15px/1.5 var(--sans);margin-top:8px}
+.outcome-row .task-outcome {color:var(--ink);margin:8px 0}
+.outcome-row .actions {flex-shrink:0;flex-direction:column;align-items:stretch}
+@media(max-width:760px){
+ .ops-facts {grid-template-columns:1fr;gap:20px}
+ .outcome-list {padding:0 18px}
+ .outcome-row {flex-direction:column;align-items:flex-start;gap:16px}
+ .outcome-row .actions {flex-direction:row;flex-wrap:wrap}
+}
+
+.report-narrative {margin:24px 0}
+.report-narrative h3 {font:600 18px/1.4 var(--sans);margin:0 0 10px}
+.report-narrative>p {max-width:70ch;line-height:1.75;white-space:pre-wrap}
+.report-result {padding:16px 0;border-bottom:1px solid var(--line)}
+.report-result:last-child {border:0}
+.report-result .task-outcome {color:var(--ink)}

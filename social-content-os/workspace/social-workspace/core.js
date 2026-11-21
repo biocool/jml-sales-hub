@@ -4,6 +4,11 @@
   const clone = value => JSON.parse(JSON.stringify(value));
   const id = prefix => prefix + '-' + (globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + Math.random().toString(36).slice(2));
   const now = () => new Date().toISOString();
+  function localDate(timezone, instant=new Date()) {
+    const zone=timezone||Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(instant)).map(p=>[p.type,p.value]));
+    return parts.year+'-'+parts.month+'-'+parts.day;
+  }
   const brands = [
     {id:'demo',name:'Demo studio',initials:'DS',description:'An example workflow to explore',timezone:'America/Los_Angeles'},
     {id:'brand_jay',name:'Jay Zahiri',initials:'JZ',description:'Personal brand',timezone:'America/Los_Angeles'},
@@ -243,6 +248,6 @@
     }
     return rows;
   }
-  const api={clone,id,now,brands,qcKeys,qcLabels,event,latest,isApproved,status,readiness,permissionGaps,briefSnapshots,restoreBrief,makePost,seed,addDays,saveBrief,approvePlan,addVersion,submit,decide,publish,packageFor,safeMedia,validate,validateMetrics};
+  const api={clone,id,now,localDate,brands,qcKeys,qcLabels,event,latest,isApproved,status,readiness,permissionGaps,briefSnapshots,restoreBrief,makePost,seed,addDays,saveBrief,approvePlan,addVersion,submit,decide,publish,packageFor,safeMedia,validate,validateMetrics};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.JMLCore=api;
 })(typeof window!=='undefined'?window:globalThis);
