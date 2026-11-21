@@ -32,7 +32,7 @@
     return 'draft';
   }
   function readiness(p) {
-    const b=p.brief, gaps=[];
+    const b=p.brief, gaps=[...(globalThis.JMLBriefTemplate?.missing(p)||[])];
     for(const [key,label] of Object.entries({objective:'Objective',audience:'Audience',cta:'Call to action',owner:'Content owner',approver:'Final approver',direction:'Creative direction'})) if(!b[key]?.trim()) gaps.push(label+' is missing');
     if(!p.date) gaps.push('Planned date is missing');
     if(!p.planApproval || p.planApproval.revision!==p.briefRevision) gaps.push('Current brief needs plan approval');
@@ -145,6 +145,7 @@
   }
   function approvePlan(p, actor) {
     if(!actor?.trim())throw Error('Enter the name of the person recording this decision.');
+    const missing=globalThis.JMLBriefTemplate?.missing(p)||[];if(missing.length)throw Error(missing.join('; ')+'.');
     if(!p.planDecisions)p.planDecisions=p.planApproval?[clone(p.planApproval)]:[];
     p.planApproval={id:id('plan-decision'),revision:p.briefRevision,actor,at:now()};
     p.planDecisions.push(clone(p.planApproval));

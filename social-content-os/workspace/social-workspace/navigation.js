@@ -8,7 +8,7 @@
     review:[['internal','Internal QA'],['client','Client decisions'],['planning','Planning decisions']],
     publish:[['desk','Publishing desk'],['packages','Packages & earlier log']],
     learn:[['results','Results & growth'],['observations','Earlier observations']],
-    accounts:[['list','Accounts'],['people','People & access']]
+    accounts:[['list','Accounts'],['people','People & access'],['brief-template','Brief template']]
   };
   const detail=[['brief','Brief & copy'],['workflow','Production workflow'],['versions','Creative versions'],['requests','Media requests'],['history','Version history']];
   const titles={workflow:'Workflow views',tools:'Planning tools',reports:'Planner reports',settings:'Planner settings'};

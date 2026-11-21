@@ -493,7 +493,7 @@
         if(kind==='convert-slot' && item.contentId)throw Error('This slot already has an idea.');
         const recordId=C.id('content');
         const content=C.makePost({...f,id:recordId,brandId,timezone:next.brands.find(b=>b.id===brandId).timezone,source:(kind==='convert-slot'?'Selected trend slot':'Research evidence')+' · '+item.title,sources:item.reference?[item.reference]:[],example:brandId==='demo'});
-        content.planningSourceId=item.id;next.posts.push(content);if(kind==='convert-slot')item.contentId=content.id;
+        content.planningSourceId=item.id;root.JMLBriefTemplate?.adopt(next,content);next.posts.push(content);if(kind==='convert-slot')item.contentId=content.id;
         record(ops,actor,'Created linked draft',content.title);opened=content.id;
       }else if(kind==='route'){
         if(f.route==='G' && !f.disclosure)throw Error('Record your AI-use and disclosure plan.');

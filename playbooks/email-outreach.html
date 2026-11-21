@@ -16,7 +16,15 @@
 @media(max-width:900px){#playbook-video{scroll-margin-top:125px}.jml-pbv-actions{gap:8px}.jml-pbv-watch{font-size:12px}}
 @media(max-width:560px){.jml-pbv-actions .jml-document-version,.jml-pbv-actions .version-tag{display:none}.jml-pbv-wrap{padding-inline:16px}}
 @media print{#playbook-video,.jml-pbv-watch{display:none!important}}
-</style></head><body class="jml-nav-upgrade jml-legacy-nav">
+</style><style>
+.jml-lifecycle{scroll-margin-top:100px;margin-block:26px;padding:clamp(15px,3vw,26px);border:1px solid #dcd3e7;border-inline-start:4px solid #6e2a9b;border-radius:8px;background:#fff;color:#251837}
+.jml-lifecycle .jml-life-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-block:16px 0}
+.jml-lifecycle .jml-life-item{padding:13px 15px;border:1px solid #e4dae9;border-radius:6px;background:#faf7fc;min-width:0}
+.jml-lifecycle .jml-life-item h3{margin:0 0 6px}.jml-lifecycle .jml-life-item p{margin:6px 0}.jml-lifecycle>p{margin:6px 0}
+@media(max-width:680px){.jml-lifecycle .jml-life-grid{grid-template-columns:1fr}}
+@media print{.jml-lifecycle{break-inside:auto}.jml-life-item{break-inside:avoid}}
+</style>
+</head><body class="jml-nav-upgrade jml-legacy-nav">
 <title>JML Email &amp; Outreach Playbook</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -390,7 +398,7 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding-block:18px;color
 .gantt.g7{grid-template-columns:150px repeat(7,minmax(40px,1fr));min-width:560px}
 </style>
 
-<div class="jml-mobile-nav"><a href="#jml-cover">Jay Marketing Lab</a><button data-jml-menu aria-controls="jml-contents" aria-expanded="false">Contents ☰</button></div><nav class="jml-left-toc" id="jml-contents" aria-label="Table of contents"><a class="jml-toc-brand" href="#jml-cover" aria-label="Back to cover"><img src="../ad-intelligence/assets/jml-logo-light.svg" alt="Jay Marketing Lab"></a><div class="jml-toc-body"><div class="jml-toc-title">Inside the playbook</div><div class="jml-toc-links">
+<div class="jml-mobile-nav"><a href="#jml-cover">Jay Marketing Lab</a><button data-jml-menu aria-controls="jml-contents" aria-expanded="false">Contents ☰</button></div><nav class="jml-left-toc" id="jml-contents" aria-label="Table of contents"><a class="jml-toc-brand" href="#jml-cover" aria-label="Back to cover"><img src="../ad-intelligence/assets/jml-logo-light.svg" alt="Jay Marketing Lab"></a><div class="jml-toc-body"><div class="jml-toc-title">Inside the playbook</div><div class="jml-toc-links"><a href="#brand-team-handoffs">Brand &amp; team handoffs</a>
       <a href="#map">Map</a><a href="#basics">Basics</a><a href="#tools">Tools</a><a href="#p0">0 Intake</a><a href="#p1">1 Foundation</a><a href="#p2">2 Lists</a><a href="#p3">3 Messages</a><a href="#p4">4 Launch</a><a href="#p5">5 Replies</a><a href="#p6">6 Grow</a><a href="#p7">7 Measure</a><a href="#p8">8 Protect</a><a href="#p9">9 Review</a><a href="#never">Never do</a><a href="#rules">Numbers</a>
     </div></div><div class="jml-toc-footer"><span>Internal / JML team</span><button data-jml-print>Print / Save PDF</button></div></nav><header class="mast" id="jml-cover">
   <div class="wrap">
@@ -1005,7 +1013,9 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding-block:18px;color
     </video>
     <p class="jml-pbv-direct"><a href="media/jml-email-outreach-playbook-video.mp4">Open the video directly</a></p>
   </details>
-</section></main>
+</section>
+<section class="jml-lifecycle" id="brand-team-handoffs" aria-labelledby="brand-team-handoffs-title"><h2 id="brand-team-handoffs-title">Brand and team handoffs</h2><p>Use these four checklists whenever the brand engagement or a participating team member changes. Record the effective date, named owner, access/asset checklist, receiving owner and signoff in the engagement record. File links and evidence, not passwords or API keys.</p><div class="jml-life-grid"><div class="jml-life-item"><h3>Brand onboarding</h3><p><strong>Owner:</strong> Email Lead + brand consent owner</p><p><strong>Checklist:</strong> Confirm sending domains, reply inboxes, CRM/list ownership, opt-in evidence, suppression rules and message approval. Inventory mailboxes and grant scoped roles; coordinate SPF, DKIM and DMARC with the domain owner.</p><p><strong>Signoff:</strong> Send approved seed tests, validate unsubscribe, replies, bounce handling and reporting. Brand approver signs off on sender, audience and launch volume.</p></div><div class="jml-life-item"><h3>Brand offboarding</h3><p><strong>Owner:</strong> Email Lead + brand consent owner</p><p><strong>Checklist:</strong> Stop queued sends and sequences on the agreed date; separate transfer of opted-in lists from suppression and unsubscribe records. Export templates, reporting, consent records and owner-approved contacts with secure delivery.</p><p><strong>Signoff:</strong> New owner verifies reply routing and suppression behavior. Revoke ESP, mailbox, CRM and vault roles only after handoff; do not remove DNS records without a coordinated cutover.</p></div><div class="jml-life-item"><h3>Team member onboarding</h3><p><strong>Owner:</strong> ESP Admin + Email Lead</p><p><strong>Checklist:</strong> Assign workspaces, sender permissions and audience restrictions separately; show test send, opt-out, proofing and complaint escalation. No raw CSV exports unless needed for the role.</p><p><strong>Signoff:</strong> Lead signs off on a supervised seed send and test unsubscribe before production send access.</p></div><div class="jml-life-item"><h3>Team member offboarding</h3><p><strong>Owner:</strong> ESP Admin + Email Lead</p><p><strong>Checklist:</strong> Reassign campaigns, approvals, replies, reports and scheduled sends; revoke ESP, inbox, CRM, DNS and credential access. Review recurring automations for personal tokens or owners.</p><p><strong>Signoff:</strong> Replacement confirms scheduled sends and reply queue ownership; admin verifies removal and documents it.</p></div></div></section>
+</main>
 
 <div class="jml-document-strip" role="banner" aria-label="Document title and version"><span class="jml-document-title">Email &amp; Outreach Playbook</span><span class="jml-pbv-actions"><span class="jml-document-version">v1.1<small>November 2026</small></span><a class="jml-pbv-watch" href="#playbook-video" aria-controls="jml-pbv-player">Watch video</a></span></div>
 <style>

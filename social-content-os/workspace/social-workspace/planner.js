@@ -115,7 +115,7 @@
       if (!p) {
         if (before) throw Error('This content item has changed. Reopen Plan and retry.');
         p=C.makePost({...after,...sourceFields(after).brief,brandId:after.brand_id});
-        p.planner=extraFields(after); state.posts.push(p); byId.set(p.id,p);
+        root.JMLBriefTemplate?.adopt(state,p); p.planner=extraFields(after); state.posts.push(p); byId.set(p.id,p);
         continue;
       }
       if (!before || p.brandId!==after.brand_id) throw Error('Duplicate planner content ID.');

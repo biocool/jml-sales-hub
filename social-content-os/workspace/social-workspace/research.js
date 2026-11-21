@@ -97,7 +97,7 @@
     Object.assign(p,{planningAngleId:a.id,strategyVersionId:strategy.id,measurementDefinitionId:a.kpiDefinitionId,researchCitations:C.clone(a.citations),researchStatus:a.evidenceType,planningProposal:true});
     Object.assign(p.brief,{direction:a.hook,approver:ops.foundation.finalApprover||'',researchCitations:C.clone(a.citations),researchUncertainty:a.uncertainty});
     if(data.adaptation){p.adaptedFrom=a.contentId;p.source='Adaptation · '+p.source;(a.adaptations||=[]).push(p.id);}else a.contentId=p.id;
-    a.status='used';state.posts.push(p);C.event(p,'Research promoted to calendar','Angle '+a.id+' · Strategy V'+strategy.number+' · KPI '+a.kpiDefinitionId,actor);
+    a.status='used';root.JMLBriefTemplate?.adopt(state,p);state.posts.push(p);C.event(p,'Research promoted to calendar','Angle '+a.id+' · Strategy V'+strategy.number+' · KPI '+a.kpiDefinitionId,actor);
     history(ops,actor,data.adaptation?'Angle adapted':'Angle used in calendar',p.title,null,{contentId:p.id,angleId:a.id,strategyVersionId:strategy.id,measurementDefinitionId:a.kpiDefinitionId});return p;
   }
   function linkCitations(state,brandId,postId,ids,actor){

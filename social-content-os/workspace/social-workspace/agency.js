@@ -75,7 +75,7 @@ window.JMLAgency = (() => {
       try{Intl.DateTimeFormat('en',{timeZone:data.timezone});}catch{throw Error('Enter a valid time zone, such as America/Los_Angeles.');}
       const brand={...data,id:C.id('client'),name:data.name.trim(),initials:data.name.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase()};
       await commit(next=>{if(next.brands.some(b=>b.name.toLowerCase()===brand.name.toLowerCase()))throw Error('An account with this name already exists.');next.brands.push(brand);},'Client account created.');
-      ctx.setBrand(brand.id);ctx.navigate('#plan/foundation');return;
+      await ctx.setBrand(brand.id);await ctx.navigate('#plan/foundation');return;
     }
     if(data.url&&!safeLink(data.url))throw Error('Use an HTTP or HTTPS reference URL.');
     const version={...data,actor:ui.actor,at:C.now()};
@@ -96,5 +96,5 @@ window.JMLAgency = (() => {
       }
     }
   }
-  return {applyTheme,accounts,resources,handles,isForm,action,submit,validate};
+  return {applyTheme,colors:palette,accounts,resources,handles,isForm,action,submit,validate};
 })();

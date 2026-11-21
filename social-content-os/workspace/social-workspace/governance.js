@@ -62,6 +62,7 @@
   function routeAllowed(state,ui,route,section=''){
     if(['client','viewer'].includes(ui.role))return ['today','review','learn'].includes(route);
     if(!membership(state,ui))return false;
+    if(route==='accounts'&&section==='brief-template')return can(state,ui,'admin');
     if(route==='plan'&&section.startsWith('planner-settings-'))return can(state,ui,'admin');
     if(route==='plan'&&section==='planner-report-portfolio')return can(state,ui,'directory');
     if(route==='plan'&&section.startsWith('planner-report-'))return ['analyze','coordinate','strategy'].some(cap=>can(state,ui,cap));

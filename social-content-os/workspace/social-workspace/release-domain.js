@@ -282,7 +282,7 @@
   }
   function draft(state,brandId,title,detail,sourceId,actor,origin){
     const post=C.makePost({brandId,title,source:(origin==='fixture'?'Fixture learning decision ':'Learning decision ')+sourceId,caption:detail,owner:actor,example:brandId==='demo'||origin==='fixture'});
-    C.event(post,'Proposed from learning',sourceId,actor);state.posts.push(post);return post;
+    C.event(post,'Proposed from learning',sourceId,actor);root.JMLBriefTemplate?.adopt(state,post);state.posts.push(post);return post;
   }
   function decideWork(state,brandId,id,f,actor){
     const item=entry(state,'work',brandId,id);
@@ -423,7 +423,7 @@
       const post=C.makePost({brandId,title:p.title,owner:actor,source:'Result proposal '+p.id,sourceId:p.id,caption:p.detail,example:p.origin==='fixture'});
       post.measurementDefinitionId=p.definitionId;post.resultProposalId=p.id;
       const source=state.posts.find(x=>x.brandId===brandId&&x.id===p.contentId);if(source?.strategyVersionId)post.strategyVersionId=source.strategyVersionId;
-      state.posts.push(post);p.targetId=post.id;C.event(post,'Proposed from measured result',result.definition.title+' · '+(result.result===null?'Unknown':result.result)+' · '+p.detail,actor);
+      root.JMLBriefTemplate?.adopt(state,post);state.posts.push(post);p.targetId=post.id;C.event(post,'Proposed from measured result',result.definition.title+' · '+(result.result===null?'Unknown':result.result)+' · '+p.detail,actor);
     }
     if(fields.action==='accept'&&p.kind!=='content'){
       const Ops=typeof module==='object'&&module.exports?require('./operations.js'):root.JMLOps;
