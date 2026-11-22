@@ -81,7 +81,15 @@ footer span:first-child{font-weight:700;letter-spacing:.09em}
 .mini span.mini-arrow{color:#b8e000;width:2rem;line-height:0;margin:0 .2rem 0 0;display:grid;place-items:center}
 :root[data-theme="light"] .mini span.mini-arrow{color:#634083}
 .mini-arrow svg{display:block;width:100%;height:auto}
-.intro-arrow-slot svg{animation:jml-arrow-float 3.0s ease-in-out 2}
-.mini.active .mini-arrow svg{animation:jml-arrow-float 3.0s ease-in-out 2}
+.intro-arrow-slot svg{animation:jml-arrow-float 4.8s ease-in-out infinite}
+.mini.active .mini-arrow svg{animation:jml-arrow-float 4.8s ease-in-out infinite}
 @keyframes jml-arrow-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.intro-arrow-slot svg,.mini.active .mini-arrow svg{animation:none}}
+
+/* A gentle repeated growth cue; keep a static glyph with reduced motion. */
+@media(prefers-reduced-motion:no-preference){
+  .mini.active .mini-arrow .jml-arrow-line{animation:jml-grow-line 4.8s ease-in-out infinite}
+  .mini.active .mini-arrow .jml-arrow-tip{animation:jml-grow-tip 4.8s ease-in-out infinite}
+}
+@keyframes jml-grow-line{0%{stroke-dasharray:1;stroke-dashoffset:.68}16%,88%{stroke-dasharray:1;stroke-dashoffset:0}100%{stroke-dasharray:1;stroke-dashoffset:.68}}
+@keyframes jml-grow-tip{0%,7%{opacity:.45}18%,88%{opacity:1}100%{opacity:.45}}

@@ -83,11 +83,11 @@ function compactIntro(){
     top:rect.top+'px', left:rect.left+'px', width:rect.width+'px', height:rect.height+'px',
     borderRadius:radius, objectPosition:position, border
   });
-  const timing = {duration:560,easing:'cubic-bezier(.22,.82,.24,1)',fill:'both'};
+  const timing = {duration:1120,easing:'cubic-bezier(.22,.82,.24,1)',fill:'both'};
   const move = flight.animate([frame(opening,'0px','50% 40%','0 solid transparent'),frame(ending,'.34rem','50% 42%','1px solid #b8e000')],timing);
   photo.animate([{height:opening.height+'px'},{height:'0px'}],timing);
   const profile=document.querySelector('.profile');
-  profile.animate([{opacity:.55},{opacity:1}],{duration:520,easing:'ease-out'});
+  profile.animate([{opacity:.55},{opacity:1}],{duration:1040,easing:'ease-out'});
   const cleanup = () => {flight.remove();root.classList.remove('intro-moving');};
   move.finished.then(cleanup,cleanup);
 }
