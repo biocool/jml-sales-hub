@@ -1,4 +1,11 @@
 'use strict';
+// iOS Messages uses a different separator than the standard SMS URI.
+const textLink = document.getElementById('text');
+const appleMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+if (textLink && appleMobile) {
+  textLink.setAttribute('href',textLink.getAttribute('href').replace('?body=','&body='));
+}
 const modes=[...document.querySelectorAll('[data-mode]')];
 const preferred=matchMedia('(prefers-color-scheme: dark)');
 let explicitMode=null;

@@ -75,7 +75,7 @@ footer span:first-child{font-weight:700;letter-spacing:.09em}
 .intro-flight{position:fixed;z-index:9;pointer-events:none;object-fit:cover;object-position:center 40%;box-sizing:border-box;max-width:none;max-height:none}
 @media(prefers-reduced-motion:reduce){.intro-arrow-slot{display:none}}
 
-/* The upward-growth artwork is the pair of original SVG polylines from the JML home hero. */
+/* The JML growth arrow uses one connected stroke. */
 .intro-arrow-slot{color:#f7ed33;width:2.65rem;height:1.4rem;filter:drop-shadow(0 1px 2px #1a0030)}
 .mini-inner{grid-template-columns:minmax(0,1fr) auto auto}
 .mini span.mini-arrow{color:#b8e000;width:2rem;line-height:0;margin:0 .2rem 0 0;display:grid;place-items:center}
@@ -86,10 +86,8 @@ footer span:first-child{font-weight:700;letter-spacing:.09em}
 @keyframes jml-arrow-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.intro-arrow-slot svg,.mini.active .mini-arrow svg{animation:none}}
 
-/* A gentle repeated growth cue; keep a static glyph with reduced motion. */
+/* One animated stroke keeps the arrowhead attached throughout the loop. */
 @media(prefers-reduced-motion:no-preference){
-  .mini.active .mini-arrow .jml-arrow-line{animation:jml-grow-line 4.8s ease-in-out infinite}
-  .mini.active .mini-arrow .jml-arrow-tip{animation:jml-grow-tip 4.8s ease-in-out infinite}
+  .mini.active .jml-growth-stroke{stroke-dasharray:1;animation:jml-growth-draw 4.8s ease-in-out infinite}
 }
-@keyframes jml-grow-line{0%{stroke-dasharray:1;stroke-dashoffset:.68}16%,88%{stroke-dasharray:1;stroke-dashoffset:0}100%{stroke-dasharray:1;stroke-dashoffset:.68}}
-@keyframes jml-grow-tip{0%,7%{opacity:.45}18%,88%{opacity:1}100%{opacity:.45}}
+@keyframes jml-growth-draw{0%,100%{stroke-dashoffset:.68}24%,86%{stroke-dashoffset:0}}
