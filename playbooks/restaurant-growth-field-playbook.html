@@ -204,6 +204,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 .pilot{margin:0 0 28px}.pilot .pilot-checkpoints{padding-left:1.25rem;margin:.65rem 0}.pilot .pilot-checkpoints li{margin:.23rem 0}.pilot p{color:var(--muted)}
 .field-anatomy{container-type:inline-size}.anatomy-roles,.anatomy-steps{display:flex;justify-content:space-between;gap:8px}.anatomy-roles{font-size:clamp(.65rem,1.4vw,.82rem);font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#f2eaf5;margin:0 0 6px}.anatomy-roles span:last-child{text-align:right}.anatomy-scene{display:block;width:100%;height:auto;aspect-ratio:3/2;border:1px solid #94809f;border-radius:12px}.anatomy-steps{list-style:none;padding:0;margin:.65rem 0 0;color:#f2eaf5;font-size:.82rem}.anatomy-steps li{display:flex;align-items:center;gap:5px;line-height:1.2}.anatomy-steps b{display:grid;place-items:center;flex:none;width:20px;height:20px;border-radius:50%;color:var(--ink);background:var(--lime)}@container (max-width:340px){.anatomy-steps{font-size:.70rem}.anatomy-steps b{width:17px;height:17px}.anatomy-roles{letter-spacing:.025em}}@media print{.anatomy-roles,.anatomy-steps,.hero figcaption{color:#222}}
 .decline-help{margin-top:1.1rem;padding:14px 15px;border:1px solid var(--line);border-left:3px solid #bea2d0;border-radius:9px;background:#faf7fc}.decline-help[hidden],.decline-help [hidden]{display:none}.decline-help h3{margin:0 0 .45rem;font-size:1.05rem}.decline-help p{margin:.35rem 0;color:var(--muted);font-size:.91rem}.decline-help .sample{color:var(--ink)}.decline-help .quick{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:.7rem}.decline-help a{padding:.48rem 0}.decline-help ul{padding-left:1.2rem;margin:.55rem 0 .15rem}.decline-help li{font-size:.91rem;margin:.3rem 0}
+.handout-quick{margin-top:1rem;border:1px solid var(--line);background:#fbf8fe;border-radius:9px;padding:.6rem .8rem}.handout-quick summary{cursor:pointer;color:var(--purple);font-weight:800;min-height:37px;padding:.42rem 0}.handout-quick p{margin:.4rem 0;font-size:.9rem;color:var(--muted)}.handout-quick blockquote{margin:.55rem 0;padding:.5rem .7rem;border-left:3px solid #a3bc2f;color:var(--ink);font-size:.92rem}.handout-quick [hidden]{display:none}@media print{.handout-quick{display:none}}
 </style>
 </head>
 <body>
@@ -230,7 +231,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <blockquote id="script" class="script">Hi, I’m Elia with JML Restaurant Growth. Our visibility team checked how your restaurant shows up on Google and in ChatGPT. We spotted a few things on your Google Business Profile that could make it harder for people to find you. Can I show you one quick example?</blockquote>
 <p class="cue" id="cue">Say “a few things” only if you verified multiple findings. For one finding, say “We spotted one thing on your Google Business Profile that could make it harder for people to find you.” For none, use the no-verified-finding path.</p>
 <div class="actions"><button class="solid" id="copy" type="button">Copy wording</button><button class="ghost" id="back" type="button" disabled>Back</button><button class="ghost" id="reset" type="button">Start over</button><span class="status" id="status" role="status"></span></div>
-<div id="fallback"></div><section class="decline-help" id="decline-help" aria-labelledby="decline-help-title" hidden><h3 id="decline-help-title">If they only declined the offer, not the conversation</h3><p>Use these only if they are still willingly talking. A clear no, silence, or a busy room means thank them and go.</p><p class="sample"><strong>Ask permission:</strong> “No problem. Would you mind if I asked one quick question before I go?” If they agree, choose <strong>one</strong> question:</p><ul><li><strong>Reason:</strong> “What made this not a fit for you today?”</li><li><strong>Who handles it:</strong> “Do they also handle your Google listing day to day, or does someone here take care of it?”</li><li><strong>Unmet need:</strong> “Is there anything about your Google listing you wish were easier to manage?”</li></ul><p class="sample" id="decline-paper-sample" hidden></p><div class="quick"><button type="button" class="ghost" id="decline-learning">They welcome one question</button><button type="button" class="ghost" id="decline-paper" hidden>They’re open to a handout</button><a href="#materials-setup" id="decline-setup" hidden>Set up printed materials</a></div><p><strong>Log in your existing tracker:</strong> role; saw the audit (yes/no); reason in their words or unknown; handout or agreed next step (or none).</p></section><div class="mobileChoices" id="mobile-choices"></div>
+<div id="fallback"></div><details class="handout-quick" id="handout-quick"><summary>Leave a flyer or audit <span class="materials-status"> · optional</span></summary><p id="handout-rule">Leave a printout only if they say it’s okay.</p><blockquote id="handout-ask" hidden></blockquote><p id="handout-accept-label" hidden><strong>Once they agree or explicitly ask for a copy:</strong></p><blockquote id="handout-accept" hidden></blockquote></details><section class="decline-help" id="decline-help" aria-labelledby="decline-help-title" hidden><h3 id="decline-help-title">If they only declined the offer, not the conversation</h3><p>Use these only if they are still willingly talking. A clear no, silence, or a busy room means thank them and go.</p><p class="sample"><strong>Ask permission:</strong> “No problem. Would you mind if I asked one quick question before I go?” If they agree, choose <strong>one</strong> question:</p><ul><li><strong>Reason:</strong> “What made this not a fit for you today?”</li><li><strong>Who handles it:</strong> “Do they also handle your Google listing day to day, or does someone here take care of it?”</li><li><strong>Unmet need:</strong> “Is there anything about your Google listing you wish were easier to manage?”</li></ul><p class="sample" id="decline-paper-sample" hidden></p><div class="quick"><button type="button" class="ghost" id="decline-learning">They welcome one question</button><button type="button" class="ghost" id="decline-paper" hidden>They’re open to a handout</button><a href="#materials-setup" id="decline-setup" hidden>Set up printed materials</a></div><p><strong>Log in your existing tracker:</strong> role; saw the audit (yes/no); reason in their words or unknown; handout or agreed next step (or none).</p></section><div class="mobileChoices" id="mobile-choices"></div>
 </section><section class="panel" aria-labelledby="flow-title"><p class="eyebrow">Decision flow</p><h2 class="flow-title" id="flow-title">Your path</h2><ol class="trace" id="trace"></ol><div class="desktopChoices" id="desktop-choices"></div></section>
 </div>
 <noscript><p>The opener is readable above. Enable JavaScript in a browser to use the decision flow and copy controls.</p></noscript>
@@ -306,6 +307,7 @@ function getNode(key){
 const el=(name,text)=>{const n=document.createElement(name);if(text!==undefined)n.textContent=text;return n};
 function sync(focus){
  const key=path.at(-1),n=getNode(key);
+ updateHandout(key);
  id('decline-help').hidden=key!=='decline';
  id('decline-paper').hidden=printStatus==='none';
  id('decline-setup').hidden=printStatus!=='none';
@@ -332,6 +334,24 @@ function sync(focus){
    target.append(h,list);
  }
  if(focus){id('script-title').focus({preventScroll:true});id('script-title').scrollIntoView({block:'nearest'});}
+}
+function updateHandout(key){
+ const hasPrint=printStatus!=='none';
+ const explicitOnly=key==='decline'||key==='busy';
+ const alreadyHandled=key==='leave';
+ id('handout-rule').textContent=alreadyHandled
+   ?'You’ve already reached the handout step. Don’t ask twice, and don’t assume it includes follow-up.'
+   :!hasPrint
+   ?'Nothing printed? Don’t promise or leave a handout. Only offer to send an approved copy if they ask for one.'
+   :explicitOnly
+   ?'Respect the close. Don’t offer a handout or restart the conversation unless they explicitly ask for one.'
+   :'If it would help and they’re still engaged, ask once. Leave it only if they say yes. No answer is not permission.';
+ const kind=printStatus==='flyer'?'general flyer':'one-page audit';
+ id('handout-ask').hidden=!hasPrint||explicitOnly||alreadyHandled;
+ id('handout-ask').textContent='Would it be helpful if I left this '+kind+' with you?';
+ id('handout-accept-label').hidden=!hasPrint||alreadyHandled;
+ id('handout-accept').hidden=!hasPrint||alreadyHandled;
+ id('handout-accept').textContent=hasPrint?getNode('leave').say:'';
 }
 function chooseDeclineAlternative(next){path=[...path,next];sync(true)}
 id('decline-learning').onclick=()=>chooseDeclineAlternative('exitlearn');
